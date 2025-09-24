@@ -7,263 +7,756 @@
 
 </details>
 
-For the RethinkDNS android app configuration, you can jump to
-[Configuring the Rethink Firewall](#configuring-the-rethink-firewall).
+![RethinkDNS Logo](../images/rethinkdns.cleaned.png)
 
-If you're in a hurry, jump to the headers that say `Configuring ...` or, check
-out the Forum post by a Rethink Dev:
+> I'm not affiliated with RethinkDNS in any way, I'm just a technologist and
+> privacy advocate.
+
+### 🔑 Key Terms
+
+<details>
+
+<summary> ✔️ Click to Expand Key Terms </summary>
+
+- **HTTP** (HyperText Transfer Protocol): The standard protocol used by web
+  browsers and servers to transfer web pages and related resources over the
+  internet.
+
+- **IP** (Internet Protocol): The address system of the internet that routes
+  data packets from source to destination devices. IP operates at the network
+  layer and does not guarantee delivery order or error checking, which is
+  handled by TCP.
+
+- **IP Address** (Internet Protocol Address): A unique numeric label assigned to
+  each device on a network, used to identify and locate the device for
+  communication.
+
+- **Subnet** (Subnet Range): represents a block of IP addresses grouped together
+  under a single rule. Instead of allowing or blocking individual IP addresses
+  one by one, you define a subnet to include a wide range of IPs within that
+  block.(Useful for apps that you `Isolate`).
+
+- **Host**: Any device connected to a network with an IP address, capable of
+  sending and receiving data, including computers, phones, or servers.
+
+- **Client**: A device or software (often your computer or phone) that initiates
+  requests to servers to access resources or services, forming the client-server
+  model of communication.
+
+- **Port**: A port in networking is a virtual communication endpoint managed by
+  a computer's operating system that helps direct network traffic to specific
+  apps or services. While an IP address identifies a device on a network, ports
+  allow the system to know exactly which app or service should handle the
+  incoming or outgoing data. Web traffic commonly uses port 80 (HTTP) or 443
+  (HTTPS), so when data arrives for those ports, it's routed to the web server
+  application on the device. When we block port 80, we block insecure HTTP
+  connections.
+
+- **TCP** (Transmission Control Protocol) is responsible for maintaining a
+  connection through a handshake and putting the packets in the correct order.
+  TCP will also ask for missing pieces and is known as a reliable but slow
+  protocol.
+
+- **UDP** (User Datagram Protocol) (UDP/IP): is a fast protocol used across the
+  internet for time-sensitive transmissions such as DNS lookups or VoIP. UDP
+  allows a computer to send data straight to another without requiring a
+  handshake.
+
+- **DNS** (Domain Name System): stores domain information in a distributed
+  database and translates domain names into IP addresses and vice versa. This
+  enables us to only have to remember simple domain names rather than complex IP
+  addresses.
+
+> Domain Name
+>
+> ```text
+> ssd.eff.org
+>  |   |   |
+>  |   |  top-level domain
+>  |   |
+>  |   second-level domain
+>  |
+> subdomain
+> ```
+>
+> ☝️ The hierarchy is read from right to left, the TLD is the highest-level
+> domain (`.org` here), the second-level domain (`eff`) is directly to the left
+> of the TLD, and anything further left (like `ssd`) is a subdomain under that
+> second-level domain.
+
+- **DNS Server**: When you search for a domain name (rethinkdns.com) it triggers
+  a DNS lookup. Several different types of DNS servers typically work together
+  to complete a single DNS lookup.
+
+- **DNS Resolver**: is a server or software component that translates domain
+  names into IP addresses that devices use to communicate.
+
+- **Recursive resolver** (DNS recursor): is typically the first stop in the
+  series of the above servers.
+
+- **Iterative resolver**: In an iterative DNS query, each DNS server responds
+  directly to the client with a referral to another server, and the client
+  continues querying successive servers until it receives the IP address for the
+  requested domain.
+
+- **Proxy**: A proxy, in relation to Orbot with Rethink, is an intermediary
+  service that routes internet traffic from your device through the Tor network
+  to provide privacy and anonymity.
+
+- **HTTP(S) Proxy**: An HTTP proxy is an intermediary server that forwards
+  HTTP/HTTPS web traffic from a client (e.g., a browser or app) to destination
+  servers, allowing for privacy, filtering, or routing control while masking the
+  user's IP. HTTP proxies only work with web traffic (HTTP/HTTPS).
+
+- **SOCKS5** (Socket Secure 5): Is an internet proxy protocol that transfers
+  info from one server to another while redirecting the user's IP address. It
+  supports both UDP and TCP and can actually improve speed in some cases.
+
+- [pi-hole](https://github.com/pi-hole/pi-hole): a DNS sinkhole that protects
+  your devices content without installing any client-side software.
+
+- [OpenSnitch](https://github.com/evilsocket/opensnitch): is a GNU/Linux
+  application firewall.
+
+- _proxifier_: a proxifier acts as a proxy client, routing specific application
+  traffic through proxy servers without encrypting data or providing global IP
+  masking.
+
+- _VPN_ (Virtual Private Network): a VPN creates an encrypted tunnel that routes
+  all network traffic from your device through a remote server, masking your IP
+  address and securing your entire connection.
+
+- WireGuard: a modern VPN encryption protocol, its fast and has gained
+  widespread adoption among VPN providers.
+
+- OpenVPN: an older, more mature VPN protocol that uses SSL/TLS for encryption.
+  It's known for being very reliable and highly configurable but tends to be
+  slower and more complex than WireGuard. Good VPNs often give you the choice
+  between protocols.
+
+- `Bypass DNS and Firewall`: Bypass the DNS and Firewall for this app, **this
+  only works with Rethink's DNS**.
+
+- `Bypass Universal`: Bypass the Universal firewall for this app.
+
+- `Exclude`: The app is excluded from the dns and firewall, Rethink is unaware
+  of this app.
+
+- `Isolate`: When an app is isolated, only trusted IPs are allowed. (i.e., IPs
+  or domains you explicitly set trust rules for).
+
+- 🛜(Unmetered Wi-Fi): Wi-Fi settings, either blocked or allowed.
+
+- 📶 (Metered mobile): Mobile data settings, either blocked or allowed.
+
+</details>
+
+---
+
+## [RethinkDNS Overview](#rethinkdns-overview)
+
+The DNS mode routes all DNS traffic generated by all apps to **any** user chosen
+DNS-over-HTTPS, DNS-over-TLS, DNSCrypt, or Oblivious DNS-over-HTTPS resolver.
+
+Firewalls like Rethink that block both UDP and TCP connections are usually
+sufficient because nearly all applications rely on these two protocols for their
+networking and communication. Almost every app communicates over TCP or UDP, so
+blocking these protocols effectively restricts most network traffic from and to
+apps, preventing them from connecting without permission.
+
+I will share how I use RethinkDNS, obviously feel free to make changes based on
+your threat model and needs.
+
+## Getting Started
+
+### DNS
+
+> ❗ NOTE: When you switch to an encrypted DNS resolver, you are shifting your
+> trust from your ISP's DNS servers to the third-party DNS provider you choose.
+> Encryption protects your DNS queries from being seen or intercepted by
+> outsiders, like your ISP or network eavesdroppers, which improves privacy.
+> However, the DNS resolver itself still sees all your queries and could
+> potentially log, analyze, or misuse that data.
+
+That said, it's quite common for ISPs to engage in practices that compromise
+user privacy. Do some research, whats their business model, privacy policy, etc.
+Unfortunately, with a VPN you are also just shifting the trust. Don't blindly
+choose a VPN either, I haven't found a free VPN that I would trust...
+
+`Configure -> DNS -> Other DNS`:
+
+- Choose the type of resolver you want, I use DNSCrypt. Once you click you can
+  choose the specific resolver you want such as Quad9. You may notice that it
+  says `Failed: using fallback DNS`. This is only because we haven't turned it
+  on yet, we will recheck this once we turn it on.
+- If you want a relay in a specific country, you can click the `Relays` tab. For
+  DNSCrypt you are given the choice between the Netherlands, France, Sweden, Los
+  Angeles, and Singapore. You might do this if you were trying to circumvent
+  censorship.
+
+**Rules** set the following:
+
+- `Advanced DNS filtering (experimental)`: Assign unique IP per DNS request.
+- `Prompt on blocklist updates`: This is for if you use Rethink's custom
+  blocklists.
+
+Leave all the `Advanced` defaults unless you plan on setting up a SOCKS5 proxy,
+in which case you will want to enable `Configure -> DNS -> Never proxy DNS`.
+
+---
+
+### Network
+
+`Configure -> Network`:
+
+- Set `Use all available networks` to ON. This enables Wifi and mobile data to
+  be used at the same time by Rethink. (Optional, may use more battery)
+- **Set your IP version**: The default is `IPv4`, you can choose between
+  `IPv6 (experimental)` and `Auto (experimental)`.
+- Using the `Loopback` sounds like a good idea but it makes many of the
+  resolvers fail. You may have better luck, just remember that this could be
+  what's causing your connectivity issues if you're having any.
+- **Choose fallback DNS**: When your user-preferred DNS is not reachable,
+  fallback DNS will be used. I typically choose RethinkDNS as the fallback.
+- You may want to experiment with shutting off `Enable network visibility`, just
+  keep in mind that some apps may break. "Shutting this off prevents apps from
+  accessing all available networks, stopping them from bypassing Rethinks
+  tunnel". This caused issues with the browser when turned off.
+
+---
+
+### Firewall
+
+`Configure -> Firewall -> Universal firewall rules` and set the following to ON:
+
+- `Block all apps when device is locked`
+- `Block when DNS is bypassed`
+- `Block port 80 (insecure HTTP) traffic`
+
+You can get more restrictive from here, but it will take some manual
+intervention to get everything working correctly.
+
+---
+
+## Turn ON DNS and Firewall
+
+`Home` 🏠:
+
+- Click the big `Start` button on the bottom of the screen and leave it set to
+  the default `DNS and Firewall (default)`
+
+Now that we've started the DNS and Firewall, we can go back to
+`Configure -> DNS` and ensure the provider we chose started successfully. You
+can also experiment with different types of resolvers, make sure to wait for
+below the chosen resolver to say `Connected`.
+
+Now, all apps on your device by default allow both Wi-Fi and mobile data access
+**through the RethinkDNS encrypted tunnel**. Try some of your most used Apps to
+see if they function correctly.
+
+RethinkDNS’s firewall blocks or restricts any network traffic that isn’t
+explicitly allowed. Although by default all apps are allowed network access,
+some apps require special permissions or bypasses due to their network behavior.
+Many apps rely on multiple external services, backend APIs, etc. that may be
+blocked by the firewall.
+
+---
+
+### Apps that Don't work
+
+I will use Reddit as an example, the process is the same for any app. Reddit’s
+app and website rely on multiple third-party services and external domains
+beyond just `reddit.com` itself.
+
+For apps that don't work it's important to ensure that your Android systems
+`Private DNS` is set to `Automatic`.
+
+`Home -> Apps`:
+
+Search for `Reddit`, click on it and the Firewall Rules For Reddit will pop up.
+Since it is already allowed `Unmetered` and `Metered` connections and still
+doesn't work, we can try one setting at a time until it does work and this is
+the same process for other Apps that aren't working.
+
+- First, you should check your logs and see why it's being blocked. Look at the
+  domains involved and set trust rules for said domains. If it is unclear why
+  networking still isn't working, you can:
+
+- `Bypass Universal`, this allows it to bypass any Universal Firewall rules you
+  have set.
+
+- If you're using Rethink's DNS, you can try allowing the app to
+  `Bypass DNS & Firewall`. Try the app again, does it work? If not:
+
+- `Exclude` the app. This makes RethinkDNS completely unaware of the app and is
+  often what is required for Reddit. It is my understanding that after you
+  `Exclude` Reddit for example, your systems Automatic Secure DNS will pick it
+  up.
+
+- You can also `Isolate` an App, you then have to set up _trust | allow_ rules
+  for domains or IPs over a period of time which can take a while. You can go to
+  `Apps` and search for the app in question, click on it and at the bottom of
+  the screen you'll see `IP Logs`, and `Domain Logs` to help with this.
+
+### Other Methods
+
+Rather than watching the logs and setting trust rules over time, you could use
+tools like `nslookup` and `dig` to resolve said domain and reveal IP ranges
+used.
+
+```bash
+nslookup reddit.com
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Non-authoritative answer:
+Name:   reddit.com
+Address: 151.101.129.140
+Name:   reddit.com
+Address: 151.101.193.140
+Name:   reddit.com
+Address: 151.101.1.140
+Name:   reddit.com
+Address: 151.101.65.140
+Name:   reddit.com
+Address: 2a04:4e42::396
+Name:   reddit.com
+Address: 2a04:4e42:600::396
+Name:   reddit.com
+Address: 2a04:4e42:200::396
+Name:   reddit.com
+Address: 2a04:4e42:400::396
+```
+
+Resolving a domain (like `reddit.com`) using tools like `nslookup` or `dig`
+reveals multiple IPs because large services use multiple servers across CDNs and
+networks for redundancy and performance.
+
+You can then run `whois` on one of those IPs (e.g., `whois 151.101.129.140`) to
+identify the subnet ranges owned by Reddit's CDN provider (Fastly in this case),
+which helps when setting up subnet range allow rules in Rethink.
+
+<details>
+
+<summary> ✔️ Click to Expand `whois` Example Output </summary>
+
+```bash
+whois 151.101.129.140
+
+#
+# ARIN WHOIS data and services are subject to the Terms of Use
+# available at: https://www.arin.net/resources/registry/whois/tou/
+#
+# If you see inaccuracies in the results, please report at
+# https://www.arin.net/resources/registry/whois/inaccuracy_reporting/
+#
+# Copyright 1997-2025, American Registry for Internet Numbers, Ltd.
+#
+
+
+NetRange:       151.101.0.0 - 151.101.255.255
+CIDR:           151.101.0.0/16
+NetName:        SKYCA-3
+NetHandle:      NET-151-101-0-0-1
+Parent:         RIPE-ERX-151 (NET-151-0-0-0-0)
+NetType:        Direct Allocation
+OriginAS:
+Organization:   Fastly, Inc. (SKYCA-3)
+RegDate:        2016-02-01
+Updated:        2021-12-14
+Ref:            https://rdap.arin.net/registry/ip/151.101.0.0
+
+
+OrgName:        Fastly, Inc.
+OrgId:          SKYCA-3
+Address:        PO Box 78266
+City:           San Francisco
+StateProv:      CA
+PostalCode:     94107
+Country:        US
+RegDate:        2011-09-16
+Updated:        2025-03-25
+Ref:            https://rdap.arin.net/registry/entity/SKYCA-3
+
+
+OrgNOCHandle: FNO19-ARIN
+OrgNOCName:   Fastly Network Operations
+OrgNOCPhone:  +1-415-404-9374
+OrgNOCEmail:  noc@fastly.com
+OrgNOCRef:    https://rdap.arin.net/registry/entity/FNO19-ARIN
+
+OrgTechHandle: FRA19-ARIN
+OrgTechName:   Fastly RIR Administrator
+OrgTechPhone:  +1-415-518-9103
+OrgTechEmail:  rir-admin@fastly.com
+OrgTechRef:    https://rdap.arin.net/registry/entity/FRA19-ARIN
+
+OrgAbuseHandle: ABUSE4771-ARIN
+OrgAbuseName:   Abuse Account
+OrgAbusePhone:  +1-415-496-9353
+OrgAbuseEmail:  abuse@fastly.com
+OrgAbuseRef:    https://rdap.arin.net/registry/entity/ABUSE4771-ARIN
+
+
+#
+# ARIN WHOIS data and services are subject to the Terms of Use
+# available at: https://www.arin.net/resources/registry/whois/tou/
+#
+# If you see inaccuracies in the results, please report at
+# https://www.arin.net/resources/registry/whois/inaccuracy_reporting/
+#
+# Copyright 1997-2025, American Registry for Internet Numbers, Ltd.
+```
+
+We can see that:
+
+- The subnet range for that IP: `151.101.0.0 - 151.101.255.255` (CIDR notation:
+  `151.101.0.0/16`)
+
+So as a starting point to get Reddit working we could trust the following subnet
+range:
+
+- IPv4: `151.101.0.0/16`
+- This subnet covers the full range from `151.101.0.0` to `151.101.255.255`,
+  which includes all related IPs Reddit uses via Fastly’s CDN.
+- The owning organization: `Fastly, Inc.` & More...
+
+</details>
+
+---
+
+### Firefox Encrypted DNS through Rethink
+
+First, make sure you can visit a few sites in Firefox. If you can, then your
+browser traffic should be routed through the Rethink tunnel, we will check here.
+If you can't, go to `Home -> Apps` and search for Firefox, is networking
+enabled?
+
+**RethinkDNS Settings**
+
+For the best experience routing your browser traffic through your custom
+endpoint (e.g., DNSCrypt) on both Wi-Fi and mobile data ensure the following are
+set:
+
+- Do not turn on `Block any app not in use` in the Universal firewall. After
+  some Log digging, I found that this causes the browser to fail more often than
+  not.
+- `Configure -> Network -> Enable network visibility` set to ON. I had
+  experimented with turning this off and certain websites wouldn't load when on
+  Wi-Fi and none would load on mobile data. Turning it back on seemed to fix
+  both with no leaks detected.
+
+Double check that in Rethink's `Configure -> DNS -> Prevent DNS leaks` is ON, as
+well as the Universal Firewalls `Block when DNS is bypassed` ON.
+
+**Firefox Settings**
+
+> In Firefox, plug `about:config` into the URL bar and scroll down to
+> `network.ttr.mode` and change its value to `3` to prevent leaking DNS queries
+> to the System resolver. Also in `about:config` scroll down to
+> `media.peerconnection.enabled`, double-click to set it to false to prevent
+> WebRTC leaks.
+
+- The trade-off is that disabling WebRTC also disables any websites or apps
+  using WebRTC for real-time communication (like video calls or chat functions)
+  from working correctly.
+  [Wikipedia WebRTC](https://en.wikipedia.org/wiki/WebRTC)
+
+In Firefox `Settings -> Privacy & Security`, set `DNS over HTTPS` to
+`Default Protection`, this enables Firefox to use RethinkDNS's DNSCrypt resolver
+or whatever you chose.
+
+**Checking for DNS Leaks**
+
+Go to:
+
+```text
+https://dnsleaktest.com
+```
+
+Also crosscheck with:
+
+```text
+https://ipleak.net
+```
+
+`ipleak.net` may show many more servers but as long as they are all related to
+your resolver (i.e., WoodyNet for Quad9) you are not leaking to your ISP or
+other third-parties.
+
+For DNSCrypt with Quad9 Security, `dnsleaktest` found 5 servers all with the ISP
+`WoodyNet` indicating success through Quad9. Quad9 relies on Packet Clearing
+House, that's where the `WoodyNet` name comes from.
+
+When on mobile data, when going to `https://dnsleaktest.com` the results may
+show more servers. As long as they are all the same ISP you're good.
+
+A different solution could be to experiment with more strict RethinkDNS settings
+and just use the browsers built-in DNS over HTTPS on max protection. Having more
+strict defaults for Rethink with all of your apps and configuring your browser
+separate may be a better option, the choice is yours.
+
+When hunting down a solution you can go to `Configure -> Logs`, then try to
+visit the site that wouldn't work while watching the logs. You should see
+`Firefox` pop up, click it, in the top right of the pop up should be the reason
+it was blocked.
+
+---
+
+### [DuckDuckGo](#duckduckgo)
+
+I also tested DuckDuckGo with its stock configuration and `dnsleaktest.com`
+showed that DDGs traffic was successfully tunneled through Rethink to Quad9s'
+servers.
+
+`dnsleaktest.com` showed all `WoodyNet` ISPs indicating success.
+
+---
+
+#### [Chromium Based Browsers (Brave)](#chromium-based-browsers-brave)
+
+Brave would not work when routed through Rethink and Chrome completely ignored
+it. Brave is definitely better if you must use a Chrome derivative.
+
+- I tried disabling the Brave Shield `Use Secure DNS` to see if that helped, it
+  didn't. There may be more you could do here to get it working...
+
+- I do have Chrome and google apps disabled on my main device and only active in
+  the Secure Folder which is like a sandboxed environment. This could very well
+  be the reason it ignored Rethink, I don't care to test further...
+
+- [EU Hits Google with 3.5 Billion Antitrust](https://techstory.in/eu-hits-google-with-3-5-billion-antitrust-fine-over-adtech-practices/)
+
+---
+
+### [More Fine Grained Control & Enhanced Privacy](#more-fine-grained-control--enhanced-privacy)
+
+> ❗ NOTE: If you are happy with the functionality as is it is unnecessary to
+> follow these steps. If you already only install the minimal apps needed on
+> your phone (i.e. Only install what you use) you can probably just go to
+> individual Apps and block their networking that you are worried about such as
+> Facebook and Google. Routing all of your Apps through RethinkDNS + Firewall
+> already gives you great privacy and security benefits.
+
+If you read the following GrapheneOS discussion forum written by an RDNS dev:
 
 - [GrapheneOS Discussion Forum on Rethink](https://discuss.grapheneos.org/d/12728-proton-apps-pinging-google-api-sending-reports-back-after-opting-out/54)
 
-## RethinkDNS Overview
+The post suggests you go to `Home -> Apps` and right under `Showing all apps`
+click on the grayed out 🛜📶 to set a rule to **block both Metered and Unmetered
+connections to all apps by default**. This will block both Wi-Fi and mobile data
+connections to **all apps** on your device.
 
-RethinkDNS is a DNS Resolver service with custom rules and blocklists as well as
-a firewall.
+The point here is that not every App on your device needs network access all the
+time or at all in some cases. Watch your Logs and see which apps "phone home"
+the most. Think about which Apps would leave you the most vulnerable and either
+block network access completely or block and unblock as needed based on your
+threat model.
 
-The DNS mode gives the end-user their own unique server-endpoint and routes all
-DNS traffic from the mobile device to their assigned endpoint encrypted over
-TLS.--[the-one-pager](https://blog.rethinkdns.com/the-2021-one-pager)
+I would recommend removing network access from your password manager until you
+need it or better yet use something completely offline like
+[KeePassDX](https://www.keepassdx.com/).
 
-A **DNS resolver** is an address book of the internet, it helps locate IP
-addresses of the servers given a domain name. For example, dns.google.com (a
-domain name) is located at 8.8.8.8 (IP address). This mapping is retrieved by a
-DNS resolver.
+I have never used `Link to Windows` and I `Disable` & `Force Stop` it and
+`Link to Windows` is still my most blocked App of all time by Rethink...
 
-The DNS resolver runs on `Fly.io` and on Cloudflare Workers, a low-latency
-serverless environment available in over 300 cities worldwide. This broad
-distribution helps enhance anonymity for people using Orbot.
-
-Orbot (Tor) can be used along side RethinkDNS as a Proxy server to change the IP
-address. See [Orbot Integration](https://docs.rethinkdns.com/firewall/orbot/)
-
-You can also add a WireGuard configuration to the Rethink DNS + Firewall + VPN
-app. See [WireGuard](https://docs.rethinkdns.com/proxy/wireguard/)
-
-You can configure Rethink in your device / internet browser that supports Secure
-DNS (aka DNS over HTTPS).
+If you go for the default deny, you will have to search for every app that you
+use and start by enabling networking and then following the
+`Apps that don't work` section for each app until they work as expected. If you
+really think about it, the number of apps that require constant networking
+should be limited.
 
 ---
 
-## Configure a Custom DNS resolver with Custom blocklists through Rethink website
+### [Tor](#tor)
 
-{{< details title=" ✔️ Click to Expand Rethink Website Section">}} The website
-is for devices that support Secure DNS that don't support the app. And
-eventually for when they accept registered, paying customers in the
-private-beta.
+If you want to learn how Tor works, I suggest reading the following in this
+order:
 
-1. Go to: [RethinkDNS Configure](https://www.rethinkdns.com/configure)
+1.  [PrivacyGuides In Praise of Tor](https://www.privacyguides.org/articles/2025/04/30/in-praise-of-tor/)
 
-2. Use either the `simple ->` for groups of blocklists, or `advanced ->` for
-   more fine grained control.
+2.  [PrivacyGuides Tor Overview](https://www.privacyguides.org/en/advanced/tor-overview/)
 
-3. Once you have them all selected, decide if you want to use DoH or DoT by
-   clicking the `DoH` button under the Rethink Logo.
+3.  [EFF How to: Use Tor](https://ssd.eff.org/module/how-to-use-tor)
 
-- DoH resolver addresses' look like: `https://sky.rethinkdns.com/`
+**Tor is at risk, and needs our help**. Despite its strength and history, Tor
+isn't safe from the same attacks oppressive regimes and misinformed legislators
+direct at encryption and many other privacy-enhancing
+technologies.--[How to Support Tor](https://www.privacyguides.org/articles/2025/04/30/in-praise-of-tor/#how-to-support-tor)
 
-- DoT resolver addresses' look like: `1-cbycee6juakjaaa`
+<details>
+<summary>
+✔️ Click to Expand Tor Section
+</summary>
 
-For Firefox, open Settings, Privacy & Security, scroll down to Enable DNS over
-HTTPS using: Max Protection, Custom, and enter `https://sky.rethinkdns.com/`
+The following is a summary of some of the Tor Overview, all credit goes to them.
+It is important to spread the word when you can!
 
-Firefox doesn't support DoT natively yet.
+If you are fortunate to live outside of oppressive regimes with extreme
+censorship, using Tor for every day, mundane activities is likely safe and won’t
+put you on any harmful “list.” Even if it did, you'd be in good company, these
+lists mostly contain great people working tirelessly to defend human rights and
+online privacy worldwide.
 
-{{</details>}}
+By using Tor regularly for ordinary browsing, you help strengthen the network,
+making it more robust and anonymous for everyone. This collective support makes
+staying private easier for activists, journalists, and anyone facing online
+surveillance or censorship. The writer of the PrivacyGuides article mentions
+using Tor when he needs to access Google Maps to protect his privacy
 
----
+So, consider embracing Tor not only for sensitive browsing but also for daily
+routine tasks. Every user adds valuable noise to the network, helping protect
+privacy and freedom for all.
 
-## Rethink on Android
+</details>
 
-The front-end Android app is open-source:
-[rethink-app](https://github.com/celzero/rethink-app)
+### [Setting up Orbot with a TCP-only Proxy](#setting-up-orbot-with-a-tcp-only-proxy)
 
-RethinkDNS doesn't capture or send any user analytics from the app.
+![Orbot Logo](../images/orbot.png)
 
-RethinkDNS takes over your VPN Slot, it works by creating a local VPN on your
-device. It's not a traditional VPN that routes your traffic to a remote server.
-Instead, it creates a secure tunnel on your phone that all network traffic
-(including DNS queries) must pass through.
+TCP-Only Proxies forward all TCP-level connections from selected apps to Orbot.
 
-Unlike Android's Private DNS, which is a system-wide setting, Rethink gives you
-more granular control over how each individual app handles its network traffic.
-This enables you to:
+TCP-Only Proxies work best for Apps that use multiple TCP protocols beyond just
+basic web browsing (HTTP/HTTPS) like messaging apps (Signal), search apps (DDG),
+etc. Because it proxies all TCP traffic, it can cause some apps to slow down or
+break if they expect direct DNS or UDP.
 
-- Force all apps to use the same DNS server you've configured through Rethink.
+First install Orbot, Open `Orbot -> More -> Orbot Settings` and turn on
+`Power User Mode`. **This is important**, if you forget this Rethinks auto Orbot
+will not let you choose between SOCKS and HTTP proxies.
 
-- Block apps that try to bypass your settings.
+You should also check `Allow Background Starts` ON.
 
-- Apply different rules to different apps.
+In `Configure -> Proxy -> Setup Orbot`:
 
-- Analyze and log the DNS and network activity for every app, giving you a clear
-  view of what your phone is doing in the background.
-  - I have never used the Microsoft Link to Windows and even went into settings
-    and disabled it and force stopped it and Link to Windows is still the most
-    blocked app on my device constantly trying to phone home.
+- Click `Add / Remove 0 apps`, search for an app that you want to run through
+  Orbot. For simple testing I chose DuckDuckGo with a TCP-only Proxy.
 
-## Rethink Firewall
+- In `Home -> Apps` search for `Orbot` and set `Orbot -> Bypass Universal` ON
 
-It's not a traditional firewall, but blocks TCP and UDP connections. This is
-sufficient for most apps as they rarely use other forms of TCP/IP transport.
+- On the first time starting Orbot through Rethink, you'll have to click the
+  `Configure -> Proxy -> Setup Orbot -> Orbot>` to `Connect` as well as grant
+  initial permissions. After you start Orbot successfully, check out Rethinks
+  `Home` and below the STOP button should say `Protected With Tor`.
 
-The Firewall app lets you view searchable network logs per connection; lets you
-know which apps were blocked and when, and which apps are connected where.
+Open DuckDuckGo and go to:
 
-With the Firewall, you can set Universal Rules.
+```text
+https://dnsleaktest.com
+# CrossCheck
+https://ipcheck.net
+```
 
-### Configuring the Rethink Firewall
+> ❗ You may see that ipleaktest initially shows a Tor exit relay location such
+> as the Netherlands, once you complete a Standard Test, it still shows WoodyNet
+> ISPs. Since I configured Rethink to use DNSCrypt with Quad9 this is completely
+> expected. This confirms that my DNS traffic is not leaking to my ISP and is
+> properly anonymized through Tor and Quad9. As long as you don't see your
+> actual ISP's servers in the results, your setup is working as intended.
 
-Go to `Configure`, `Firewall`, `Universal firewall rules` and set:
+Now you can add more apps that would benefit from anonymity such as FairMail,
+RSS feeds, and crypto wallets. I believe for Signal, it requires that you to set
+up the SOCKS5 proxy to work correctly which is pretty straightforward.
 
-- **Block all apps when device is locked**
+Look into an RSS Feed, they give you complete control of the content you
+consume, no algorithm involved!
 
-- **Block newly Installed Apps**
+This can also be useful on public Wi-Fi or other insecure networks.
 
-- **Block port 80 (insecure HTTP) traffic** It's said that over 90% of the web
-  now uses HTTPS. Don't visit HTTP sites, it's unnecessary.
+- You can also open Orbot and `Choose How to Connect`, if you want to hide Tor
+  use.
+- When you're done, you can switch `Setup Orbot` back to `None (default)`. If
+  you're completely done with it you can click `Add / Remove (1 app)`, search
+  for the Apps you've added and de-select them.
+- Go to `Home` and now below `Stop` it should just say `Protected`.
+- If you live in an area where Tor use isn't discriminated against, consider
+  Activating your Orbot `Kindness` tab so others that are in oppressive regimes
+  can use your device as a bridge. This is a great way to give back!
+- A good use for this could to switch it on and off as needed such as when you
+  check your online banking, want to send a private email, or browse sensitive
+  topics. It has been proven that people that feel like they are being watched
+  are less creative and curious.
+- When it really matters consider using Tor Browser through Tails OS or Whonix.
 
-- **Block when DNS is bypassed** (as a website a user loads in Firefox won't use
-  resolvers set in Resolvers set in Rethink's `Configure -> DNS`)--Rethink dev
+## [Setting up a SOCKS5 Proxy](#setting-up-a-socks5-proxy)
 
-- From here you can get more restrictive if you so choose, I choose to block
-  apps not in use.
+If you have Orbot set up through auto mode, you'll have to disable it.
 
-By default after enabling the Universal firewall, all the apps on your device
-are set to allow networking traffic. This will give you an idea of which apps
-will need more than to allow traffic rule to work. (i.e., Bypass)
+Open `Orbot -> More`: Near the bottom of the screen you'll see `HTTP: 8118`, and
+`SOCKS: 9050`, these are the Port numbers. We will compare these to Rethinks
+defaults. (They match).
 
-## Configuring Rethink App rules
+Back in Rethink, `Configure -> Proxy -> Setup SOCKS5 Proxy`.
 
-To restrict which Apps have network access, you will have to change that default
-enable rule by following the next steps:
+In the App dropdown choose `Orbot`.
 
-- Go to `Configure -> Apps`, and tap the 🛜📶 to block all apps.
+- Hostname: `127.0.0.1`
 
-- Now, search for the apps you use. Think if they need network access and see if
-  they function. If the app does need network access, search for the app and tap
-  the 🛜📶 to allow networking. Try the app again to see if it functions
-  properly, if it doesn't you can either `Bypass DNS and Firewall`, or `Isolate`
-  them.
+- Port Number: `9050`
 
-- If you've done all the above steps and your app still isn't working, you can
-  `Exclude` the app which is like you're not using Rethink at all for that app.
+- Leave the rest of the defaults and Hit `Set`
 
-- I was able to get my browser working without bypassing anything. All that was
-  required was to go to Apps, search for Firefox and tap the 🛜📶 to allow
-  networking. This seems to be a good series of steps to first enable networking
-  if necessary and only bypass when functionality requires it.
+- Go `Home`, below the STOP button you should see `Protected With SOCKS Proxy`.
+  Now all of your devices traffic that doesn't bypass Rethink is routed through
+  the SOCKS5 proxy.
 
-- After some tweaking, I was able to get my browser working without bypassing
-  anything.
+- In `Configure -> DNS` and turn `Never proxy DNS` ON
 
-- Bypass Universal the `Google Play services` app, this is required for updates
-  and more.
+- Open your browser and visit `https://dnsleaktest.com`, your public IP should
+  no longer be your ISPs.
 
-## Configuring Networking
+- SOCKS5 alone doesn't encrypt the traffic; it only proxies or routes it. Orbot
+  uses SOCKS5 to let apps route traffic into the Tor network. Once inside the
+  Tor network, the traffic is encrypted in layers.
 
-Go to `Configure -> Network`:
+- There is a misconception that Orbot is a "free VPN". It’s actually part of an
+  anonymity network designed to hide your identity by sending your traffic
+  through multiple servers. And the SOCKS5 proxy that Orbot uses isn’t a VPN
+  either, it simply directs certain app traffic through a proxy server without
+  creating a full encrypted tunnel from your device like a VPN does.
 
-From here you can choose a fallback DNS
+### [Logs](#logs)
 
-- The app defaults to using IPv4, you can either set it to `IPv6(experimental)`,
-  or `Auto (experimental)`.
+On-device logging is on by default. You can find it in `Configure -> Settings`.
+From there, you can set the log level and choose a notification action.
 
-- If you want Rethink to use either wifi or mobile data at the same time, turn
-  on `Use all available networks`
+If anyone else uses your phone, it's probably a good idea to enable app lock.
 
-- Many of these tips come from the following Forum:
-  - [GrapheneOS Discussion Forum on Rethink](https://discuss.grapheneos.org/d/12728-proton-apps-pinging-google-api-sending-reports-back-after-opting-out/54)
-
-## Understanding Encrypted DNS in the RethinkDNS App
-
-It's my understanding that the website is for computer use and you use the
-RethinkDNS app for your phone. They are completely separate and not used
-together for the time being.
-
-When you configure and enable Rethink to control DNS over HTTPS, if your browser
-is also enforcing strict DNS over HTTPS to a different DNS resolver, they will
-be blocked by Rethink as a `DNS bypass`.
-
-For Android Firefox, switch the DNS over HTTPS setting to "Default Protection
-Firefox will use your system's DNS resolver". This will allow Firefox to use
-Rethink's DNS resolver.
-
-## Configuring a Custom DNS
-
-Go to `Configure -> DNS`, `Other DNS`. From there you have quite a few choices.
-
-Let's say you chose DoT for DNS-over-TLS, from there you can choose between 5
-providers. Mullvad has a good reputation for keeping minimal data.
-
-If Firefox is set to its default DNS-over-HTTPS (DoH) mode, it should now use
-DNS-over-TLS (DoT) through the RethinkDNS app.
-
-While Firefox natively supports only DoH, using the RethinkDNS app unlocks many
-more choices.
-
-> In Firefox, plug `about:config` into the URL bar and scroll down to
-> `network.ttr.mode` and change its value to `3`. To prevent leaking DNS queries
-> to the System resolver. I say scroll because when I did it, the search didn't
-> find `network.ttr.mode`.
-
-### Configuring DNS
-
-When you set a user-specified DNS endpoint (like you do with Rethink), the DNS
-resolver runs locally on your device or network. Your system is configured to
-send DNS queries to this local endpoint (loopback e.g., 127.0.0.1), instead of
-directly to a public DNS server like 1.1.1.1
-
-This setup prevents DNS query leaks, meaning no DNS queries bypass the
-configured resolver. (What we chose in Configuring a Custom DNS).
-
-In `Configure -> DNS` you can:
-
-- Turn ON `Advanced DNS filtering` to make sure domain to IP address mapping
-  isn't polluted.(experimental)
-
-- Turn ON `Prevent DNS leaks` to ensure all DNS queries go through the apps
-  secure tunnel.
-
-DNS uses port 53 as its standard communication channel for translating domain
-names into DNS queries. Preventing DNS leaks works by capturing all outgoing
-packets on port 53 and redirecting them to a user-specified secure DNS endpoint
-rather than the system or network default.
-
-## Logs
-
-**By default, no logs are sent or stored**. Only if a paying customer enables
-logs are they even captured; otherwise; there's zero information that's stored
-on their servers with respect to the DNS requests sent to the Rethink DNS'
-resolver.
-
-Currently, you can
-[drop them a note](https://rethinkdns.com/cdn-cgi/l/email-protection#b6ded3dadad9f6d5d3daccd3c4d998d5d9db)
-to purge the system of your logs.
-
-Go to `Configure`, `Logs`, and try to access the app that's not working. You
+Go to `Configure -> Logs`, and try to access the app that's not working. You
 should see said app at the top of the Network Logs, click it. In the top right
 of the tab, you'll see the reason why it's not working such as: `App Blocked`,
 or `DNS Bypass`.
+
+This `DNS Bypass` means that the App in question is trying to bypass the Rethink
+Tunnel and being actively blocked. You can search for said app and try setting
+IP or Port Trust rules.
+
+You can also go to `Home -> Apps` and search for the App you need, click on it
+and at the bottom of the screen you will see `IP Logs`, and `Domain Logs`.
 
 Once you click on the log of the app in question, you'll be given 3 drop down
 options. If you set an app to Bypass DNS and Firewall settings, you will see
 that in the first dropdown box.
 
-The next drop down is 'Block,trust this IP for this app' where you can set a
-rule to 'Block' or 'Trust'.
+The next drop down is `Block,trust this IP for this app` where you can set a
+rule to `Block` or `Trust`.
 
-Apps like Reddit rely on many third-party services, backend APIs etc. to work.
-It's my understanding that this fine grained control isn't fully worked out yet
-and some connections or domains will stay blocked even with an explicit Trust
-Rule. I was eventually able to get Reddit working like normal by Bypassing the
-DNS and Firewall Rules.
+---
 
-### Resources
+### [Resources](#resources)
 
-{{< details title=" ✔️ Click to Expand Resources Section">}}
+<details>
+<summary>
+✔️ Click to Expand Resources
+</summary>
 
 - [Oblivious DNS over HTTPS](https://research.cloudflare.com/projects/network-privacy/odns/)
 
 - [DNSCrypt Protocol](https://www.ietf.org/archive/id/draft-denis-dprive-dnscrypt-06.html)
+
+- [PrivacyGuides In Praise of Tor](https://www.privacyguides.org/articles/2025/04/30/in-praise-of-tor/)
+
+- [PrivacyGuides Tor Overview](https://www.privacyguides.org/en/advanced/tor-overview/)
 
 - [Orbot app](https://orbot.app/en/)
 
@@ -273,11 +766,31 @@ DNS and Firewall Rules.
   the world.
   --[TorProject Orbot](https://support.torproject.org/glossary/orbot/)
 
+- [Guardian Project Orbot](https://guardianproject.info/apps/org.torproject.android/)
+
 - WireGuard is an extremely simple yet fast and modern VPN that utilizes
   state-of-the-art cryptography. --[Wireguard.com](https://www.wireguard.com/)
 
 - [EFF Surveillance Self Defense](https://ssd.eff.org/)
 
+- [EFF Cover Your Tracks](https://coveryourtracks.eff.org/)
+
+- [AmIUnique?](https://amiunique.org/)
+
+- [What is NoScript?](https://noscript.net/)
+
 - [PrivacyGuides DNS Recommendations](https://www.privacyguides.org/en/dns/)
 
-{{</details>}}
+- [What is a DNS Server?](https://www.cloudflare.com/learning/dns/what-is-a-dns-server/)
+
+- [What is UDP?](https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/)
+
+- [Networking-Guides TCP/IP Basics](https://network-guides.com/tcp-ip-basics/)
+
+- [Cloudflare What is recursive DNS?](https://www.cloudflare.com/learning/dns/what-is-recursive-dns/)
+
+- [OpenSnitch](https://github.com/evilsocket/opensnitch)
+
+- [pi-hole](https://github.com/pi-hole/pi-hole)
+
+</details>
