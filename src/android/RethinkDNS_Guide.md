@@ -167,6 +167,8 @@ apps, preventing them from connecting without permission.
 I will share how I use RethinkDNS, obviously feel free to make changes based on
 your threat model and needs.
 
+---
+
 ## Getting Started
 
 ### DNS
@@ -297,6 +299,8 @@ the same process for other Apps that aren't working.
   for domains or IPs over a period of time which can take a while. You can go to
   `Apps` and search for the app in question, click on it and at the bottom of
   the screen you'll see `IP Logs`, and `Domain Logs` to help with this.
+
+---
 
 ### Other Methods
 
@@ -449,6 +453,8 @@ set:
 Double check that in Rethink's `Configure -> DNS -> Prevent DNS leaks` is ON, as
 well as the Universal Firewalls `Block when DNS is bypassed` ON.
 
+---
+
 **Firefox Settings**
 
 > In Firefox, plug `about:config` into the URL bar and scroll down to
@@ -465,6 +471,8 @@ well as the Universal Firewalls `Block when DNS is bypassed` ON.
 In Firefox `Settings -> Privacy & Security`, set `DNS over HTTPS` to
 `Default Protection`, this enables Firefox to use RethinkDNS's DNSCrypt resolver
 or whatever you chose.
+
+---
 
 **Checking for DNS Leaks**
 
@@ -610,6 +618,8 @@ privacy and freedom for all.
 
 </details>
 
+---
+
 ### [Setting up Orbot with a TCP-only Proxy](#setting-up-orbot-with-a-tcp-only-proxy)
 
 ![Orbot Logo](../images/orbot.png)
@@ -678,6 +688,8 @@ This can also be useful on public Wi-Fi or other insecure networks.
   are less creative and curious.
 - When it really matters consider using Tor Browser through Tails OS or Whonix.
 
+---
+
 ## [Setting up a SOCKS5 Proxy](#setting-up-a-socks5-proxy)
 
 If you have Orbot set up through auto mode, you'll have to disable it.
@@ -714,6 +726,8 @@ In the App dropdown choose `Orbot`.
   through multiple servers. And the SOCKS5 proxy that Orbot uses isn’t a VPN
   either, it simply directs certain app traffic through a proxy server without
   creating a full encrypted tunnel from your device like a VPN does.
+
+---
 
 ### [Logs](#logs)
 
