@@ -19,6 +19,45 @@ these settings for you.
 
 ---
 
+## Search Engines
+
+### SearXNG
+
+**SearXNG** an open-source, privacy-respecting metasearch engine that aggregates
+results from various search services, such as Google, DuckDuckGo, etc without
+tracking you or profiling your searches. You can add SearXNG to firefox by going
+to `about:preferences#search` and at the bottom click `Add`, URL will be
+`https://searx.be/search?q=%s`.
+
+> ❗️ NOTE: The above searx is the default and doesn't give many relevant
+> results. To get relevant results find a
+> [public instance](https://searx.space/) with a good rating from your area and
+> add the `search?q=%s` to the end of it. For example, I'm using
+> `https://priv.au/search?q=%s`. This gives much better results than DDG in my
+> opinion.
+
+Searx is a bit different, you can choose which search engine you want for your
+current search with `!ddg search term` to use duckduckgo for example.
+
+---
+
+**Startpage** is another metasearch engine that I've heard good things about.
+
+---
+
+#### Encrypted DNS
+
+I recommend either setting up dnscrypt-proxy:
+
+- [dnscrypt-proxy on Arch](https://mako088.github.io/arch/enc_dns.html)
+
+Or set Firefox's DNS over HTTPS to Max protection with a custom resolver:
+
+In `about:preferences#privacy` scroll down to `DNS over HTTPS`, Select
+`Max Protection` -> `Custom` -> `https://dns.quad9.net/dns-query`
+
+---
+
 #### Enhanced Tracking Protection (ETP)
 
 - [Enhanced Tracking Protection (ETP)](https://blog.mozilla.org/security/2020/01/07/firefox-72-fingerprinting/)
@@ -99,7 +138,13 @@ fingerprint.
 
 It can be disabled in `about:config` by setting `webgl.disabled` to `true`.
 
+---
+
 ## Install Firefox/LibreWolf & ArkenFox
+
+**LibreWolf** is an open-source fork of Firefox with a strong focus on privacy,
+security, and user freedom. LibreWolf enables always HTTPS, includes
+uBlockOrigin, and more providing strong defaults.
 
 <details>
 <summary> ✔️ Click to Expand Arkenfox How To </summary>
@@ -116,30 +161,31 @@ Read the [ArkenFox Wiki](https://github.com/arkenfox/user.js/wiki)
 
 ## Apply
 
-Open `about:support` and look for `Profile Folder` under `Application Basics` It
-will bring you to somewhere like `~/.librewolf/pefoo8xx.default-default/` and
-that is where you place the `user.js`.
+Open `about:support` and look for `Profile Directory` under `Application Basics`
+Select `Open Directory`, it will bring you to somewhere like
+`~/.librewolf/pefoo8xx.default-default/` and that is where you place the
+`user.js`.
 
-Place the following files in your `Profile Folder`:
+Place the following files in your `Profile Directory`:
 
-- [Arkenfox user.js](https://github.com/arkenfox/user.js/blob/master/user.js)
-  Read through the `user.js`, not all settings are applied by default such as
-  RFP Fingerprinting protection.
+1. [Arkenfox user.js](https://github.com/arkenfox/user.js/blob/master/user.js)
+   Read through the `user.js`, not all settings are applied by default such as
+   RFP Fingerprinting protection.
 
-- [updater.sh](https://github.com/arkenfox/user.js/blob/master/updater.sh)
+2. [updater.sh](https://github.com/arkenfox/user.js/blob/master/updater.sh)
 
-- [prefsCleaner.sh](https://github.com/arkenfox/user.js/blob/master/prefsCleaner.sh)
+3. [prefsCleaner.sh](https://github.com/arkenfox/user.js/blob/master/prefsCleaner.sh)
 
-- Also create your own `user-overrides.js` with any changes you want to make to
-  the default `user.js`. These changes are amended to the `user.js` and applied
-  last enabling them to override the default settings. It's best to make changes
-  here so that updating the Arkenfox `user.js` doesn't make you lose all of your
-  customizations.
+4. Also create your own `user-overrides.js` with any changes you want to make to
+   the default `user.js`. These changes are amended to the `user.js` and applied
+   last enabling them to override the default settings. It's best to make
+   changes here so that updating the Arkenfox `user.js` doesn't make you lose
+   all of your customizations.
 
 Example `user-overrides.js` spoofing the user agent:
 
 > ❗️ This is just an example, always check for common useragent strings
-> yourself.
+> yourself. Read the Arkenfox Wiki!
 
 ```js
 user_pref(
@@ -228,6 +274,10 @@ Go to `about:config` -> [x] `Show only modified preferences`. You should see
 
 ### User Agent Spoofing
 
+> ❗️ NOTE: Spoofing your useragent alone likely isn't worth the protections you
+> lose from disabling `resistFingerprinting`. `resistFingerprinting` spoofs many
+> different fingerprinting aspects.
+
 Research what the most common user agent is. You'll need to disable
 `privacy.resistFingerprinting` for this to work.
 
@@ -238,4 +288,56 @@ Place the user agent string in `general.useragent.override` something like:
 
 <https://www.useragentstring.com>
 
+---
+
+<details>
+<summary> ✔️ Click to Expand Resources </summary>
+
+- [Welcome to SearXNG](https://docs.searxng.org/)
+
+- [Firefox Hardening Guide](https://brainfucksec.github.io/firefox-hardening-guide)
+
+- [Firefox ghacks](https://www.ghacks.net/2015/08/18/a-comprehensive-list-of-firefox-privacy-and-security-settings/)
+
+- [Arkenfox](https://github.com/arkenfox/user.js)
+
+- [PrivacyTools.io](https://www.privacytools.io/private-browser)
+
+- [simeononsecurity Firefox-Privacy-Script](https://github.com/simeononsecurity/FireFox-Privacy-Script)
+
+- [brianfucksec firefox-hardening-Guide 2023](https://brainfucksec.github.io/firefox-hardening-guide)
+
+- [STIG Firefox Hardening](https://simeononsecurity.com/guides/enhance-firefox-security-configuring-guide/)
+
+> If you should trust the U.S. Governments recommendations is another story but
+> it can be good to compare and contrast with other trusted resources. You'll
+> have to think whether the CISA recommending that everyone uses Signal is solid
+> advice or guiding you towards a honeypot, I can't say for sure.
+
+- [Mozilla Firefox Security Technical Implementation Guide](https://stigviewer.com/stigs/mozilla_firefox)
+  The STIG for Mozilla Firefox (Security Technical Implementation Guide) is a
+  set of security configuration standards developed by the U.S. Department of
+  Defense. They are created by the Defense Information Systems Agency (DISA) to
+  secure and harden DoD information systems and software.
+
+- [Privacy, The New Oil (Why Privacy & Security Matter)](https://thenewoil.org/en/guides/prologue/why/)
+
+- [PrivacyGuides](https://www.privacyguides.org/en/)
+
+- [Firefox Relay](https://relay.firefox.com/accounts/profile/) can be used to
+  create email aliases that forward to your real email address. The paid plan
+  also lets you create phone number aliases that forward to your phone number.
+
+- [Zebra Crossing digital safety checklist](https://zebracrossing.narwhalacademy.org/)
+
+- [DataDetoxKit](https://datadetoxkit.org/en/privacy/essentials#step-1)
+
+- [DataDetox Degooglise](https://datadetoxkit.org/en/privacy/degooglise/)
+
+- [Tor Browser User Manual](https://tb-manual.torproject.org/)
+
+- [Tor Wiki](https://gitlab.torproject.org/tpo/team/-/wikis/home)
+
 - [BrowserCat Fingerprint Spoofing](https://www.browsercat.com/post/browser-fingerprint-spoofing-explained)
+
+</details>

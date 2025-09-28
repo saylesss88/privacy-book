@@ -1,5 +1,10 @@
 # Encrypted DNS ArchLinux with dnscrypt-proxy & dnsmasq
 
+> ❗ NOTE: There are many other ways for someone monitoring your traffic to see
+> what domain you looked up via DNS that it's effectiveness is questionable
+> without also using Tor or a VPN. Encrypted DNS will not help you hide any of
+> your browsing activity.
+
 ```bash
 sudo pacman -S dnscrypt-proxy
 ```
