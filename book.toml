@@ -6,3 +6,5 @@ title = "privacy-book"
 [preprocessor.toc]
 command = "mdbook-toc"
 renderer = ["html"]
+[output.html]
+additional-js = ["custom.js"]

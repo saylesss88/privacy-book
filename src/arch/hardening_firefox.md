@@ -1,6 +1,17 @@
 # Hardening Firefox on Arch
 
-### Fingerprinting
+<details>
+<summary> ✔️ Click to Expand Table of Contents</summary>
+
+<!-- toc -->
+
+</details>
+
+> ❗️ NOTE: Browser hardening recommendations have started to change from
+> suggesting that you install a bunch of add-ons to choosing secure defaults and
+> changing minimal settings to get the most out of it.
+
+### Fingerprinting Explained
 
 Browser fingerprinting is a tracking technique, often done by third-party
 companies that specialize in it. They provide code (usually JavaScript) that a
@@ -13,13 +24,34 @@ something like cookies that you can opt-out or delete. Browser fingerprinting is
 stateless meaning that it doesn't need to store any data on your computer. It
 can identify you while behind a VPN or in incognito mode as well.
 
-I will go over some of the settings and what they do. If you plan on using the
-Arkenfox `user.js` you can jump to that section first as it will set many of
-these settings for you.
+There are two main approaches to obfuscating your fingerprint:
+
+- Standardization: Make browsers standardized and therefore have the same
+  fingerprint to blend into a crowd. This is what Tor does.
+
+- Randomization: Randomize fingerprint metrics so it's not directly tieable to
+  you. Brave has this feature.
+
+Test your browsers fingerprint:
+
+- [CoverYourTracks](https://coveryourtracks.eff.org/)
+
+- [AmIUnique](https://amiunique.org/)
+
+Don't put too much weight into the results as people often check their
+fingerprint, change one metric and check it again over and over skewing the
+results. It is helpful for knowing what the values actually are and seeing what
+the tracking companies see.
+
+You can use something like [NoScript](https://noscript.net/) to block
+JavaScript, preventing the scripts from running that do most of the
+fingerprinting. Extensions can make you more unique but it's a give and take.
 
 ---
 
-## Search Engines
+## Metasearch Engines
+
+- [Wikipedia Metasearch engine](https://en.wikipedia.org/wiki/Metasearch_engine)
 
 ### SearXNG
 
@@ -39,13 +71,68 @@ to `about:preferences#search` and at the bottom click `Add`, URL will be
 Searx is a bit different, you can choose which search engine you want for your
 current search with `!ddg search term` to use duckduckgo for example.
 
+- [searxng repo](https://github.com/searxng/searxng?tab=readme-ov-file)
+  - [Install guide](https://docs.searxng.org/admin/installation.html)
+
+  - [Configuration guide](https://docs.searxng.org/admin/settings/index.html)
+
 ---
 
 **Startpage** is another metasearch engine that I've heard good things about.
 
+- [Startpage Privacy Please!](https://www.startpage.com/privacy-please/)
+
+- [Startpage Privacy Protection](https://www.startpage.com/privacy-please/startpage-articles/easy-privacy-control-across-the-internet-introducing-startpage-privacy-protection)
+
 ---
 
 #### Encrypted DNS
+
+DNS (Domain Name System) resolution is the process of translating a website's
+domain name into its corresponding IP address. By default, this traffic isn't
+encrypted, which means anyone on the network, from your ISP to potential
+hackers, can see the websites you're trying to visit. **Encrypted DNS** uses
+protocols to scramble this information, protecting your queries and responses
+from being intercepted and viewed by others.
+
+> ❗ NOTE: There are many other ways for someone monitoring your traffic to see
+> what domain you looked up via DNS that it's effectiveness is questionable
+> without also using Tor or a VPN. Encrypted DNS will not help you hide any of
+> your browsing activity.
+
+There are 3 main types of DNS protection:
+
+- **DNS over HTTPS (DoH)**: Uses the HTTPS protocol to encrypt data between the
+  client and the resolver.
+
+- **DNS over TLS (DoT)**: Similar to (DoH), differs in the methods used for
+  encryption and delivery using a separate port from HTTPS.
+
+- **DNSCrypt**: Uses end-to-end encryption with the added benefit of being able
+  to prevent DNS spoofing attacks.
+
+Useful resources:
+
+<details>
+<summary> ✔️ Click to Expand DNS Resources </summary>
+
+- [NixOS Wiki Encrypted DNS](https://wiki.nixos.org/wiki/Encrypted_DNS)
+
+- [Domain Name System (DNS)](https://www.cloudflare.com/learning/dns/what-is-dns/)
+
+- [Wikipedia DNS over HTTPS (DoH)](https://en.wikipedia.org/wiki/DNS_over_HTTPS)
+
+- [Wikipedia DNS over TLS (DoT)](https://en.wikipedia.org/wiki/DNS_over_TLS)
+
+- [Cloudflare Dns Encryption Explained](https://blog.cloudflare.com/dns-encryption-explained/)
+
+- [NordVPN Encrypted Dns Traffic](https://nordvpn.com/blog/encrypted-dns-traffic/)
+
+**Hot Take**:
+
+- [Encrypted DNS is ineffective without a VPN or Tor by madaidan](https://madaidans-insecurities.github.io/encrypted-dns.html)
+
+</details>
 
 I recommend either setting up dnscrypt-proxy:
 
@@ -67,8 +154,14 @@ In `about:preferences#privacy` scroll down to `DNS over HTTPS`, Select
   - In `about:preferences#privacy`, setting Enhanced Tracking Protection to
     either Strict or Custom enables FPP as well explained further down.
 
+  - When you enable ETP strict mode, Total Cookie Protection is enabled by
+    default. It confines cookies to the site where they were created, preventing
+    companies from using them to track your browsing from site to site.
+
 - [First-Party Isolation](https://wiki.mozilla.org/Security/FirstPartyIsolation)
   From the Tor Uplift Project.
+
+### Fingerprinting
 
 - [Fingerprinting](https://wiki.mozilla.org/Security/Fingerprinting)
 
@@ -126,6 +219,8 @@ are identifiable.
 When you set `privacy.resistFingerprinting` it modifies both Canvas and WebGL
 behavior to make their outputs non-unique.
 
+---
+
 ## WebGL
 
 Similar to canvas fingerprinting, this technique uses the WebGL API to render 2D
@@ -142,6 +237,15 @@ It can be disabled in `about:config` by setting `webgl.disabled` to `true`.
 
 ## Install Firefox/LibreWolf & ArkenFox
 
+Download Firefox from the
+[Mozilla FTP site](https://ftp.mozilla.org/pub/firefox/releases/) if you are
+worried about the download token, the FTP site lets you download the version you
+want without a token.
+
+For example, for the latest firefox as of 09-30-25 for the US:
+
+`https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US`
+
 **LibreWolf** is an open-source fork of Firefox with a strong focus on privacy,
 security, and user freedom. LibreWolf enables always HTTPS, includes
 uBlockOrigin, and more providing strong defaults.
@@ -154,7 +258,6 @@ strong defaults but may lag behind Firefox getting security patches.
 
 ```bash
 paru -S librewolf-bin
-sudo pacman -S firefox
 ```
 
 Read the [ArkenFox Wiki](https://github.com/arkenfox/user.js/wiki)
@@ -188,23 +291,23 @@ Example `user-overrides.js` spoofing the user agent:
 > yourself. Read the Arkenfox Wiki!
 
 ```js
-user_pref(
-  "general.useragent.override",
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-);
+<!-- user_pref( -->
+  <!-- "general.useragent.override", -->
+  <!-- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", -->
+<!-- ); -->
 // Disable Activity Stream on new windows and tab pages
 user_pref("browser.newtab.preload", false);
 // Enhanced Tracking Protection (ETP)
 user_pref("privacy.bounceTrackingProtection.mode", 1); // [FF131+] [ETP FF133+]
 user_pref("privacy.trackingprotection.enabled", true);
 // Resist Fingerprinting (RFP)
-user_pref("privacy.resistFingerprinting", false); // [FF41+]
-user_pref("privacy.resistFingerprinting.pbmode", false); // [FF114+]
+user_pref("privacy.resistFingerprinting", true); // [FF41+]
+user_pref("privacy.resistFingerprinting.pbmode", true); // [FF114+]
 // WebRTC
 user_pref("media.peerconnection.enabled", false);
 user_pref("media.peerconnection.ice.default_address_only", true);
 // WebGL
-user_pref("webgl.disabled", false);
+user_pref("webgl.disabled", true);
 // Geolocation
 user_pref("geo.enabled", false);
 user_pref("full-screen-api.enabled", false);
@@ -276,14 +379,14 @@ Go to `about:config` -> [x] `Show only modified preferences`. You should see
 
 > ❗️ NOTE: Spoofing your useragent alone likely isn't worth the protections you
 > lose from disabling `resistFingerprinting`. `resistFingerprinting` spoofs many
-> different fingerprinting aspects.
+> different fingerprinting aspects. If you don't get it right, you will get
+> captcha requests constantly.
 
 Research what the most common user agent is. You'll need to disable
 `privacy.resistFingerprinting` for this to work.
 
 Place the user agent string in `general.useragent.override` something like:
 `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36`
-
 <https://www.whatsmyuseragent.com>
 
 <https://www.useragentstring.com>
@@ -299,11 +402,19 @@ Place the user agent string in `general.useragent.override` something like:
 
 - [Firefox ghacks](https://www.ghacks.net/2015/08/18/a-comprehensive-list-of-firefox-privacy-and-security-settings/)
 
-- [Arkenfox](https://github.com/arkenfox/user.js)
+- [ArkenFox user.js](https://github.com/arkenfox/user.js) Just right IMO.
+
+- [BetterFox user.js](https://github.com/yokoffing/Betterfox) Easiest to use
+  with less breakage.
+
+- [Narsil user.js](https://codeberg.org/Narsil/user.js/src/branch/main/desktop)
+  Most hardened.
 
 - [PrivacyTools.io](https://www.privacytools.io/private-browser)
 
 - [simeononsecurity Firefox-Privacy-Script](https://github.com/simeononsecurity/FireFox-Privacy-Script)
+
+- [Browsers for Daily Using](https://anhkhoakz.neocities.org/blog/browsers-for-daily-using/#firefox-but-hardened)
 
 - [brianfucksec firefox-hardening-Guide 2023](https://brainfucksec.github.io/firefox-hardening-guide)
 
@@ -339,5 +450,7 @@ Place the user agent string in `general.useragent.override` something like:
 - [Tor Wiki](https://gitlab.torproject.org/tpo/team/-/wikis/home)
 
 - [BrowserCat Fingerprint Spoofing](https://www.browsercat.com/post/browser-fingerprint-spoofing-explained)
+
+- [cyberinsider Firefox privacy 2025](https://cyberinsider.com/firefox-privacy/)
 
 </details>

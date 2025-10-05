@@ -1,4 +1,4 @@
-# Encrypted Arch Install for UEFI Systems
+# Encrypted Arch Install for UEFI Systems with UKI and Secure Boot
 
 <details>
 <summary> ✔️ Click to Expand Table of Contents</summary>
@@ -27,7 +27,7 @@ Edited: 09-25-25 Removed encrypted swap section. Big usability downside IMO.
 > permanently in your keyring or sign it locally. This example is from the last
 > release, but the process is the same.
 
-With `sequoia`, you can get the Arch release signing key with:
+With `sequoia-sq`, you can get the Arch release signing key with:
 
 ```bash
 sq network wkd search pierre@archlinux.org --output release-key.pgp
@@ -42,7 +42,7 @@ sq cert export --keyring=release-key.pgp --cert=3E80CA1A8B89F69CBA57D98A76A5EF90
 Import into your keychain:
 
 ```bash
- gpg --import pierre-archlinux.pgp
+gpg --import pierre-archlinux.pgp
 gpg: key 0x76A5EF9054449A5C: 9 signatures not checked due to missing keys
 gpg: key 0x76A5EF9054449A5C: public key "Pierre Schmitz <pierre@archlinux.org>" imported
 gpg: Total number processed: 1
@@ -129,6 +129,8 @@ everyone.
 </details>
 </details>
 
+---
+
 1. **Connect to Wi-Fi**:
 
 ```bash
@@ -151,7 +153,7 @@ ping -c 3 archlinux.org
 2. **Update package databases and mirrorlist**:
 
 ```bash
-pacman -Sy
+pacman -Syyu
 ```
 
 Save a backup of your current mirrorlist so we can safely update it:
@@ -171,14 +173,14 @@ NOTE: This can take a bit and you can expect some failures..
 
 ---
 
-3 **Set keyboard layout, font, and system clock**:
+3. **Set keyboard layout, font, and system clock**:
 
 Default keymap is US, if you need something different:
 
 ```bash
 localectl list-keymaps
 loadkeys <chosen-map>
-# Encrease font size
+# Increase font size
 setfont ter-132b
 ```
 
@@ -255,11 +257,15 @@ Create a filesystem:
 
 ```bash
 mkfs.btrfs /dev/mapper/cryptroot
-mount /dev/mapper/cryptroot /mnt
 ```
 
-Later, we will enable compression by mounting with options like `compress=zstd`
-in `fstab`
+If you mount the filesystem with compression before running `genfstab`, it will
+automatically add the chosen compression to the `fstab`.
+
+```bash
+mount /dev/nvme0n1p1 /mnt/boot  # Mount EFI partition at /mnt/boot
+mount -o compress=zstd /dev/mapper/cryptroot /mnt
+```
 
 ---
 
@@ -268,7 +274,7 @@ in `fstab`
 If you prefer Nvim or a hardened kernel, change it here.
 
 ```bash
-pacstrap -K /mnt base linux-zen linux-zen-headers linux-firmware networkmanager helix grub lightdm lightdm-gtk-greeter btrfs-progs cryptsetup sudo base-devel efibootmgr
+pacstrap -K /mnt base linux-zen linux-zen-headers linux-firmware networkmanager helix lightdm lightdm-gtk-greeter btrfs-progs cryptsetup sudo base-devel efibootmgr systemd-ukify
 ```
 
 ---
@@ -282,32 +288,17 @@ filesystem table in the next step.
 genfstab -U /mnt >> /mnt/etc/fstab
 #
 cat /mnt/etc/fstab
-# Add compression
-vim /mnt/etc/fstab
 ```
 
 **Important**: The `fstab` should list both partitions, if it doesn't you'll
-need to regenerate your fstab again with `genfstab`.
+need to ensure both partitions are mounted and regenerate your fstab again with
+`genfstab`. Also ensure that the root partition was mounted with compression.
 
 ---
 
-8. Add compression, **Only for the Root Partition**:
-
-```bash
-# fstab
-/dev/mapper/cryptroot    /    btrfs    rw,relatime,compress=zstd,ssd, #...snip
-#...snip...
-```
-
-Remount root with compression:
-
-```bash
-mount -o remount,compress=zstd /mnt
-```
-
 ---
 
-9. **Change Root (`chroot`) into the New Installation**
+8. **Change Root (`chroot`) into the New Installation**
 
 ```bash
 arch-chroot /mnt
@@ -336,8 +327,8 @@ In `/etc/sudoers` uncomment the line:
 
 ---
 
-10. Edit `/etc/mkinitcpio.conf` in the new system to add an `encrypt` hook
-    before the `filesystems` attribute.
+9. Edit `/etc/mkinitcpio.conf` in the new system to add an `sd-encrypt` hook
+   before the `filesystems` attribute.
 
 - Locate the `HOOKS` line
 
@@ -347,11 +338,59 @@ In `/etc/sudoers` uncomment the line:
 vim /etc/mkinitcpio.conf
 ```
 
+To use `sd-encrypt`, it is necessary to replace `udev` with `systemd` and if you
+require a different keyboard layout from US `sd-vconsole` is needed.
+
 ```bash
 # mkinitcpio.conf
+# *IF* you use an nvme drive
+MODULES=(nvme)
+FILES=(/etc/crypttab.initramfs /etc/vconsole.conf)
 # ... snip ...
-HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolfont block encrypt filesystems fsck)
+HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole block sd-encrypt filesystems fsck systemd-ukify)
 # ... snip ...
+```
+
+Create `/etc/crypttab.initramfs`:
+
+```initramfs
+cryptroot UUID=your-uuid none luks,discard
+```
+
+---
+
+Create `/etc/vconsole.conf`:
+
+For example `KEYMAP=fr` is french
+
+```conf
+KEYMAP=us
+FONT=lat9w-16
+```
+
+---
+
+Edit `/etc/mkinitcpio.d/linux-zen.preset`, this enables `mkinitcpio -P` to
+generate a UKI in `/boot/EFI/Linux/`:
+
+```preset
+# mkinitcpio preset file for the 'linux-zen' package
+
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-zen"
+
+PRESETS=('default' 'fallback')
+# PRESETS=('default')
+
+# default_config="/etc/mkinitcpio.conf"
+# default_image="/boot/initramfs-linux-zen.img"
+default_uki="/boot/EFI/Linux/arch-linux-zen.efi"
+default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
+
+#fallback_config="/etc/mkinitcpio.conf"
+#fallback_image="/boot/initramfs-linux-zen-fallback.img"
+fallback_uki="/boot/EFI/Linux/arch-linux-zen-fallback.efi"
+fallback_options="-S autodetect"
 ```
 
 Generate the initial RAM Filesystem (initramfs) image.
@@ -360,52 +399,240 @@ Generate the initial RAM Filesystem (initramfs) image.
 mkinitcpio -P
 ```
 
+> ❗️ TIP: If `mkinitcpio -P` fails, exit `arch-chroot` and ensure both the boot
+> & root partitions are mounted. `arch-chroot` back into `/mnt` and try again.
+> Ensure that `/boot/EFI/Linux/arch-linux-zen.efi` and
+> `/boot/EFI/Linux/arch-linux-zen-fallback.efi` exist for your kernel of choice.
+
 ---
 
-11. **Install Grub and EFI boot manager**, (while still in chroot environment):
+10. **Install systemd-boot and setup Unified Kernel Image**, (while still in
+    chroot environment):
+
+Ensure your UEFI variables are accessible:
 
 ```bash
-# These should be installed in the chroot environment already
-pacman -Q grub efibootmgr
+efivar --list
 ```
 
-Install GRUB for UEFI Systems:
+This command won't work if both partitions aren't mounted, ensure they are both
+mounted and if it still doesn't work you can use `--esp-path=/boot` or
+`--esp-path=/mnt/boot`.
 
 ```bash
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
-# Should output
-Installation finished. No error reported.
+bootctl install
 ```
 
-Configure GRUB to unlock LUKS root partition
-
-Edit `/etc/default/grub` and modify line starting with `GRUB_CMDLINE_LINUX` to
-add:
+Edit `/etc/kernel/cmdline` and add the output of `blkid` on your root partition.
+For example:
 
 ```bash
-# ...snip...
-GRUB_CMDLINE_LINUX="cryptdevice=/dev/nvme0n1p2:cryptroot root=/dev/mapper/cryptroot"
-# ...snip...
+blkid /dev/nvme0n1p2 > /tmp/uuid.txt
 ```
 
-Generate GRUB configuration:
+When you open `/etc/kernel/cmdline` in vim or helix, run `:r /tmp/uuid.txt` to
+read the UUID of your root partition into the file. You only need the numbers
+like so:
 
-```bash
-grub-mkconfig -o /boot/grub/grub.cfg
-# Should output
-Adding boot menu entry for UEFI Firmware Settings ...
-done
+```cmdline
+rd.luks.name=7b78e942-f4f7-4dde-a015-3a816305483f=cryptroot root=/dev/mapper/cryptroot rw
 ```
 
-To be safe re-generate the `initramfs`:
+In the above example, `7b78e942-f4f7-4dde-a015-3a816305483f` is the UUID
+extracted from the `blkid` command.
+
+Create a `/boot/loader/entries/arch.conf` with the following:
+
+```conf
+title Arch Linux
+linux /vmlinuz-linux-zen
+initrd /initramfs-linux-zen.img
+options rd.luks.name=7b78e942-f4f7-4dde-a015-3a816305483f=cryptroot root=/dev/mapper/cryptroot rw quiet
+```
+
+> ❗️ NOTE: The `arch.conf` here is redundant because `systemd-boot` is
+> configured to autodetect the UKI. It doesn't hurt to add it though and can
+> prevent issues in the future. Ensure `rd.luks.name=` contains the UUID from
+> the encrypted root partition. (e.g., `blkid /dev/nvme0n1p2`).
+
+And finally, a `/boot/loader/loader.conf`:
+
+```conf
+default arch.conf
+# default @saved  # return to last choice
+timeout 4
+console-mode auto
+auto-entries 1
+```
 
 ```bash
+bootctl status
+```
+
+Set a password to protect `systemd-boot` with `systemd-boot-password`:
+
+```bash
+paru -S systemd-boot-password
+```
+
+```bash
+sudo sbpctl install /boot
+```
+
+You will now be prompted for your password before you can edit kernel
+parameters.
+
+---
+
+**systemd-ukify and the Unified Kernel Image**:
+
+We already added `systemd-ukify` in the pacstrap command, let's add a few more
+tools for this process:
+
+```bash
+sudo pacman -S sbsigntools efitools
+```
+
+Copy the existing template to `/etc/kernel/uki.conf`:
+
+```bash
+cp /usr/lib/kernel/uki.conf /etc/kernel/uki.conf
+```
+
+Edit `/etc/kernel/uki.conf`:
+
+```conf
+[UKI]
+#Initrd=
+#Microcode=
+#Splash=
+#PCRPKey=
+#PCRBanks=
+#SecureBootSigningTool=
+SecureBootPrivateKey=/etc/kernel/secure-boot-private-key.pem
+SecureBootCertificate=/etc/kernel/secure-boot-certificate.pem
+#SecureBootCertificateDir=
+#SecureBootCertificateName=
+#SecureBootCertificateValidity=
+#SigningEngine=
+SignKernel=yes
+```
+
+Generate your signing keys:
+
+```bash
+ukify genkey --config /etc/kernel/uki.conf
+```
+
+The above command creates `/etc/kernel/secure-boot-certificate.pem` and
+`/etc/kernel/secure-boot-private-key.pem`.
+
+Building the UKIs:
+
+```bash
+mkdir -p /boot/EFI/Linux
 mkinitcpio -P
+# Output
+Wrote signed /boot/EFI/Linux/arch-linux-zen.efi
+==> Unified kernel image generation successful
 ```
+
+Sign the boot loader with the new keys:
+
+```bash
+/usr/lib/systemd/systemd-sbsign sign \
+--private-key /etc/kernel/secure-boot-private-key.pem \
+--certificate /etc/kernel/secure-boot-certificate.pem \
+--output /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed \
+/usr/lib/systemd/boot/efi/systemd-bootx64.efi
+```
+
+Output:
+
+```text
+Wrote signed PE binary to /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed
+```
+
+```bash
+sudo bootctl install --secure-boot-auto-enroll yes \
+--certificate /etc/kernel/secure-boot-certificate.pem \
+--private-key /etc/kernel/secure-boot-private-key.pem
+```
+
+Output:
+
+```text
+Copied "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed" to "/boot/EFI/systemd/systemd-bootx64.efi".
+    3 Copied "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed" to "/boot/EFI/BOOT/BOOTX64.EFI".
+    4 ⚠️  Mount point '/boot' which backs the random seed file is world accessible, which is a security hole!  ⚠️
+    5 ⚠️ Random seed file '/boot/loader/random-seed' is world accessible, which is a security hole! ⚠️
+    6 Random seed file /boot/loader/random-seed successfully refreshed (32 bytes).
+    7 Secure boot auto-enrollment file /boot/loader/keys/auto/PK.auth successfully written.
+    8 Secure boot auto-enrollment file /boot/loader/keys/auto/KEK.auth successfully written.
+    9 Secure boot auto-enrollment file /boot/loader/keys/auto/db.auth successfully written.
+   10 Created EFI boot entry "Linux Boot Manager".
+```
+
+Fix the security hole:
+
+```bash
+chmod 700 /boot
+```
+
+Add the following to your `/boot/loader/loader.conf`:
+
+```conf
+secure-boot-enroll force
+```
+
+Reboot into setup-mode and it will start an automatic countdown where it enrolls
+your keys when the time runs out.
+
+After successful key enrollment, reboot into UEFI again, enable Secure Boot and
+reboot.
+
+When the desktop launches, check the output of `bootctl status` to ensure
+`Secure Boot: enabled (user)`
+
+If your system doesn't accept them, you may have to do some conversions. You can
+also add the keys manually which is what I did.
+
+<details>
+<summary> ✔️ Click to Expand conversion Examples </summary>
+
+```bash
+# Create workspace for certs and outputs
+mkdir -p ~/secureboot/output
+
+# Define certificate location
+CERT_PEM="/etc/kernel/secure-boot-certificate.pem"
+
+# Convert PEM cert to DER format for UEFI enrollment
+sudo openssl x509 -in $CERT_PEM -out ~/secureboot/output/db.cer -outform DER
+
+# Convert PEM cert to EFI Signature List
+cert-to-efi-sig-list $CERT_PEM ~/secureboot/output/db.esl
+
+# Sign the Signature List (run from wherever your private key is; do not copy it)
+sudo sign-efi-sig-list -k /etc/kernel/secure-boot-private-key.pem -c $CERT_PEM db \
+    ~/secureboot/output/db.esl ~/secureboot/output/db.auth
+```
+
+Manual Key Enrollment:
+
+- `db.cer` -> enroll in db (Trusted Signatures), Choose the desired drive, find
+  the file and add it. Save as an `Authorized Signature` instead of `Public Key`
+
+- `PK.cer` -> enroll in `Platform Key`(PK)
+
+- Keep your `secure-boot-private-key.pem` **private**, with the above commands
+  we only use it when signing, and otherwise keep it protected.
+
+</details>
 
 ---
 
-12. **Enable LightDM and NetworkManager**
+11. **Enable LightDM and NetworkManager**
 
 ```bash
 systemctl enable lightdm
@@ -440,7 +667,18 @@ cryptsetup close cryptroot
 
 ---
 
-13 **Reboot**
+12. **Reboot**
+
+```bash
+bootctl status
+System:
+      Firmware: UEFI 2.70 (American Megatrends)
+ Firmware Arch: x64
+   Secure Boot: enabled (user)
+  TPM2 Support: yes
+  Measured UKI: yes
+  Boot into FW: supported
+```
 
 ---
 
@@ -503,6 +741,121 @@ cryptsetup close cryptroot
 reboot
 ```
 
+### Creating a readonly snapshot of your root subvolume:
+
+- [Arch Wiki System Backup](https://wiki.archlinux.org/title/System_backup)
+
+1. Create readonly snapshot of root subvol:
+
+```bash
+sudo btrfs subvolume snapshot -r / /root-snapshot-$(date +%Y%m%d%H%M%S)
+```
+
+2. Mount your external backup disk:
+
+```bash
+sudo mkdir -p /mnt/backup
+sudo mount /dev/sdc1 /mnt/backup
+```
+
+3. Use rsync to copy the snapshot to the external drive:
+
+List the available snapshots and get the exact name:
+
+```bash
+sudo btrfs subvolume list /
+```
+
+```bash
+sudo rsync -aAXv --delete --progress /root-snapshot-20251002135000/ /mnt/backup/root-backup/
+```
+
+4. Unmount the external drive:
+
+```bash
+sudo umount /mnt/backup
+```
+
+5. Optionally, delete older snapshots to save space:
+
+```bash
+sudo btrfs subvolume delete /root-snapshot-OLD_TIMESTAMP
+```
+
+### Restoring from a Backup
+
+For this, you mount the partitions but don't need to `arch-chroot` in.
+
+1. Boot from a live USB
+
+2. Mount your encrypted root partition (unlock if encrypted) and the external
+   backup drive.
+
+3. Move or delete the corrupted data on the root partition.
+
+4. Use rsync to copy the backed-up snapshot from the external disk back to the
+   root partition, preserving permissions and attributes.
+
+```bash
+sudo rsync -aAXv --delete /mnt/backup/root-backup/ /
+```
+
+Or, the Wiki's suggestion, (Much more efficient, Direct backup of a running
+system without the need for btrfs snapshots):
+
+```bash
+sudo rsync -aAXHv --exclude='/dev/*' --exclude='/proc/*' --exclude='/sys/*' --exclude='/tmp/*' --exclude='/run/*' --exclude='/mnt/*' --exclude='/media/*' --exclude='/lost+found/' / /path/to/backup
+```
+
+- `/mnt/backup/root-backup/` is the path where the backup snapshot is mounted on
+  the external disk.
+
+- `/` is the root partition mount point where you want to restore the files.
+
+- The options:
+  - `-a` archive mode to preserve symbolic links, permissions, timestamps, etc.
+
+  - `-A` preserve ACLs (access control lists).
+
+  - `-X` preserve extended attributes.
+
+  - `-v` verbose output.
+
+  - `--delete` deletes files on the destination that don't exist in the source,
+    keeping an exact mirror.
+
+If you want to restore a specific snapshot directory (e.g.,
+`/root-snapshot-20251002135000`), replace the source path accordingly, like:
+
+```bash
+sudo rsync -aAXv --delete /mnt/backup/root-snapshot-20251002135000/ /
+```
+
+- [Arch Wiki rsync](https://wiki.archlinux.org/title/Rsync#As_a_backup_utility)
+
+5. Reinstall the bootloader if necessary.
+
+6. Unmount everything and reboot.
+
+### Automated backup
+
+Create `/etc/cron.daily/backup`:
+
+```backup
+#!/bin/sh
+rsync -a --delete --quiet /path/to/backup /location/of/backup
+```
+
+Change `/path/to/backup` to what needs to be backed-up such as `/home` or `/`
+
+---
+
 ### Resources
 
 - [Arch Wiki Installation Guide](https://wiki.archlinux.org/title/Installation_guide)
+
+- [Arch Wiki UKI/SecureBoot](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot)
+
+- [Wiki UKI](https://wiki.archlinux.org/title/Unified_kernel_image)
+
+- [Wiki systemd-boot](https://wiki.archlinux.org/title/Systemd-boot)

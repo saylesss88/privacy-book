@@ -1,98 +1,508 @@
 # Hardening Arch Linux
 
-This guide started with using grub, here I include a section on switching to
-systemd-boot as it's more minimal and has a smaller attack surface.
+<details>
+<summary> ✔️ Click to Expand Table of Contents</summary>
 
-## Switching to systemd-boot from GRUB
+<!-- toc -->
 
-Ensure the EFI partition is mounted at `/boot` or `/efi`:
+</details>
+
+> ⚠️ Warning: I am not a security expert. This guide presents various options
+> for hardening Arch Linux, but it is your responsibility to evaluate whether
+> each adjustment suits your specific needs and environment. Security hardening
+> and process isolation can introduce stability challenges, compatibility
+> issues, or unexpected behavior. Additionally, these protections often come
+> with performance tradeoffs. Always conduct thorough research, there are no
+> plug and play one size fits all security solutions.
+
+> Much of this guide draws inspiration or recommendations from the well-known
+> [Linux Hardening Guide](https://madaidans-insecurities.github.io/guides/linux-hardening.html)
+> by Madaidan's Insecurities and the Arch Wiki. Arch is great but when anonymity
+> truly matters, use Whonix or Tails. The Whonix Docs have a specific section or
+> Arch with KVM that is an excellent resource.
+
+- [Whonix KVM#Arch_Linux](https://www.whonix.org/wiki/KVM#Arch_Linux), if you
+  plan on using this think twice before enabling `dnscrypt-proxy` and you might
+  want to consider ufw firewall rather than the nftables I share in this guide
+  because of Port conflicts.
+
+Keep in mind that Arch’s security posture is ultimately constrained by the
+broader limitations of Linux security mechanisms, upstream tooling, and ongoing
+development priorities.
+
+I will assume that you're using a UKI with Secure Boot enabled with systemd-boot
+for this section. If you don't and want to, you can follow the
+[Guide](https://mako088.github.io/arch/enc_install.html) that I wrote or more
+obviously, the Wiki.
+
+## The Basics
+
+Check the [Arch Linux Security Tracker](https://security.archlinux.org/) for
+information about known vulnerabilities affecting Arch packages. It lists CVEs
+(Common Vulnerabilities and Exposures) affecting packages, the severity, the
+fixed versions, and advisory details.
+
+Backup your system regularly, many guides consider the data already lost if it
+isn't backed up because without a backup, any data loss event (hardware failure,
+ransomware attack, accidental deletion, natural disaster) becomes irreversible.
+Backups act as a critical safety net that enables recovery. Without them, once
+data is corrupted, deleted, or encrypted, there is no reliable way to restore
+it, effectively making it lost permanently.
+
+The 3-2-1 Backup Rule:
+
+- 3 copies of data. (Ensuring redundancy)
+
+- 2 storage types. (Reduces risk)
+
+- 1 offsite backup. (Protects against cyber threats and natural disasters)
+
+- There is a backup guide for btrfs in
+  [enc_install](https://mako088.github.io/arch/enc_install.html)
+
+Encryption is the process of using an algorithm to scramble plaintext data into
+ciphertext, making it unreadable except to a person who has the key to decrypt
+it.
+
+**Data at rest** is data in storage, such as a computer's or a servers hard
+disk.
+
+**Data at rest encryption** (typically hard disk encryption), secures the
+documents, directories, and files behind an encryption key. Encrypting your data
+at rest prevents data leakage, physical theft, unauthorized access, and more as
+long as the key management scheme isn't compromised.
+
+Enable a UEFI password or Administrator password where it requires
+authentication in order to access the UEFI/BIOS.
+
+Use a different password/passphrase for encryption and userspace.(i.e., user
+passwd)
+
+Use Secure Boot, with a Unified Kernel Image (UKI). TPM can, in some ways
+increase security; I may add a section in the future.
+
+When Secure Boot is used with a Unified Kernel Image, it provides enhanced
+protection compared to traditional boot methods because when Secure Boot
+verifies the UKI's signature, it ensures the integrity and authenticity of:
+
+- The kernel itself,
+
+- The `initramfs`,
+
+- The kernel command line parameters,
+
+- And indirectly, the bootloader that loads the UKI (since the bootloader
+  verifies the UKI signature before execution).
+
+- Secure boot doesn't protect against runtime kernel exploits.
+
+This means that any tampering with these components, such as injecting malware
+into the `initramfs`, altering boot parameters, or swapping the kernel would
+break the signature verification and prevent the system from booting.
+
+`systemd-boot` has a smaller attack surface and is often recommended over GRUB
+for hardened systems.
+
+- [Encrypted Install Guide w/ systemd-boot and UKI Secure Boot](https://mako088.github.io/arch/enc_install.html)
+
+Useful Resources:
+
+<details>
+<summary> ✔️ Click to Expand Secure Boot Resources </summary>
+
+- [The Strange State of Authenticated Boot and Encryption](https://0pointer.net/blog/authenticated-boot-and-disk-encryption-on-linux.html)
+
+- When using a UKI with Secure Boot, the initrd is authenticated because it's a
+  sealed component of the single signed image.
+
+</details>
+
+---
+
+### Best Practices and Standards
+
+It’s crucial to **document every system change** meticulously. Since Arch Linux
+typically relies on manual configuration and does not use full declarative
+version control by default, maintaining clear records, such as detailed
+changelogs, notes, or Git repositories for your config files is essential.
+
+A few options to version control some of your dotfiles:
+
+Tools like [GNU Stow](https://www.gnu.org/s/stow/manual/stow.html) and
+[chezmoi](https://chezmoi.io/install/) help bring structure and version control
+to manual configurations in Arch Linux.
+
+- GNU Stow uses a symlink farm approach to manage dotfiles and configuration
+  directories cleanly, making it easy to track and revert changes by organizing
+  files under a single version-controlled directory.
+
+- chezmoi is a powerful dotfile manager focused on reproducible, encrypted, and
+  template-driven config management. It simplifies applying changes across
+  multiple machines and maintaining a documented history of modifications.
+
+Using these tools enhances your ability to maintain clear, version-controlled
+records of system changes.
+
+By breaking changes into smaller, manageable tasks and documenting them with
+descriptive messages, you create a clear history of modifications. This makes it
+far simpler to troubleshoot issues, revert problematic changes, and maintain
+security best practices over time.
+
+**User and Permission Management**
+
+- **Implement distinct user accounts** to minimize the risk associated with
+  compromised accounts.
+
+- **Execute Specific Commands**: Always execute the specific command that
+  requires elevation, rather than using sudo to open an entire root shell:
+  - **Good**: `sudo pacman -Syu`
+
+  - **Bad**: Running `sudo su -` and then running `pacman -Syu`
+
+- Consider using a more secure or minimal form of privilege escalation like
+  `doas`, `sudo-rs`, or `run0` instead of standard `sudo`.
+
+---
+
+- Users and groups are used as a form of
+  [access control](https://en.wikipedia.org/wiki/access_control#Computer_security).
+  They control access to the system's files, directories, and peripherals. This
+  is a security feature that limits access in certain specific ways.
+  - When granting access to a resource, create a specific group and add only the
+    necessary users to it, rather than granting broad access to all root or
+    wheel users. Demonstrated in: **[Doas over sudo](#doas-over-sudo)**.
+
+- Apply the principle of least privilege by assigning users only the permissions
+  they actually need.
+
+- Avoid running services or applications as root; use dedicated service accounts
+  where possible.
+
+- Use strong passwords and a password manager. The Arch Wiki
+  [Security](https://wiki.archlinux.org/title/Security) section goes in depth
+  about this so I won't cover it here.
+
+- Regularly review group memberships and file permissions, especially on
+  sensitive system files.
+
+---
+
+**Package Management and System Minimalism**
+
+- Favor packages from the official Arch repositories managed with pacman, as
+  they are cryptographically signed and vetted by trusted Arch developers.
+
+- Use AUR packages cautiously; they lack official cryptographic signatures and
+  require manual review and vetting before installation.
+
+- Install only the software and services you truly need to reduce the attack
+  surface and minimize vulnerabilities.
+
+- Remove unused packages and disable unnecessary services to free up resources
+  and limit potential entry points.
+
+---
+
+**Network and Privacy Best Practices**
+
+On a hardened Linux system, the browser is most often the weakest link exposed
+to the internet, and so security, privacy, and anti-tracking features of
+browsers are now as important, or even more important than platform-level
+protections.
+
+- [Hardening Firefox/Librewolf Guide](https://mako088.github.io/arch/hardening_firefox.html)
+
+- Prefer software and hardware with privacy-respecting defaults and a strong
+  security posture.
+
+- Use encrypted DNS and VPNs where possible: encrypted DNS protects your
+  queries, while VPNs hide your IP address. Note that VPNs do not provide
+  anonymity on their own and fingerprinting techniques can still reveal
+  information.
+  - [dnscrypt-proxy w/ dnsmasq guide](https://mako088.github.io/arch/enc_dns.html)
+
+- Implement a firewall to control inbound and outbound network traffic based on
+  predefined security rules. Firewalls serve as a critical layer of defense to
+  reduce attack surfaces and monitor suspicious activity.
+
+- Secure SSH access by disabling root login, changing default ports, and
+  enforcing public-key authentication to prevent brute-force and unauthorized
+  access attempts.
+
+---
+
+**Cryptography and Future-Proofing**
+
+- The
+  [NSA, CISA, and NIST warn](https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/3498776/post-quantum-cryptography-cisa-nist-and-nsa-recommend-how-to-prepare-now/)
+  that nation-state actors are likely stockpiling encrypted data now, preparing
+  for a future when quantum computers could break today’s most widely used
+  encryption algorithms. Sensitive data with long-term secrecy needs is
+  especially at risk.
+
+- This is a wake-up call to use the strongest encryption available today and to
+  plan early for post-quantum security.
+
+- [NIST First 3 Post-Quantum Encryption Standards](https://www.nist.gov/news-events/news/2024/08/nist-releases-first-3-finalized-post-quantum-encryption-standards)
+  Organizations and individuals should prepare to migrate cryptographic systems
+  to these new standards as soon as practical.
+
+- They chose
+  [Four Quantum-Resistant Cryptographic Algorithms](https://www.nist.gov/news-events/news/2022/07/nist-announces-first-four-quantum-resistant-cryptographic-algorithms)
+  warning that public-key cryptography is especially vulnerable and widely used
+  to protect digital information.
+
+- Follow developments from entities like
+  [NIST’s post-quantum encryption standards](https://www.nist.gov/news-events/news/2024/08/nist-releases-first-3-finalized-post-quantum-encryption-standards)
+  and implement recommendations as soon as practical.
+
+- Stay informed of quantum-resistant algorithm updates, especially for
+  public-key cryptography, as recommended by NIST and security agencies.
+
+---
+
+## Hardening/Sandboxing systemd
+
+- [Arch Wiki systemd/sandboxing](https://wiki.archlinux.org/title/Systemd/Sandboxing)
+
+`systemd` is the core "init system" and service manager that controls how
+services, daemons, and basic system processes are started, stopped and
+supervised on modern Linux distributions, including Arch. It provides a suite of
+basic building blocks for a Linux system as well as a system and service manager
+that runs as `PID 1` and starts the rest of the system.
+
+Because it launches and supervises almost all system services, hardening systemd
+means raising the baseline security of your entire system.
 
 ```bash
-mount | grep efi
+sudo systemd-analyze security
+# ...snip
+systemd-hostnamed.service                 1.7 OK        🙂
+systemd-importd.service                   5.0 MEDIUM    😐
+systemd-journald.service                  4.9 OK        🙂
+systemd-logind.service                    2.8 OK        🙂
+systemd-machined.service                  6.2 MEDIUM    😐
+```
+
+Check a specific unit:
+
+```bash
+sudo systemd-analyze security NetworkManager
 ```
 
 ```bash
-sudo pacman -Rs grub
+sudo systemctl edit NetworkManager.service
+→ Overall exposure level for NetworkManager.service: 9.6 UNSAFE    😨
 ```
 
-Remove leftover GRUB files:
-
-```bash
-sudo rm -r /boot/EFI/grub
-```
-
-### Install systemd-boot
-
-```bash
-sudo bootctl install
-```
-
-Configure systemd-boot in `/boot/loader/loader.conf`:
+The following file will open in your $EDITOR, these settings take it from UNSAFE
+to OK:
 
 ```conf
-default arch.conf
-timeout 4
-editor no
-console-mode max
-```
+[Service]
+NoNewPrivileges = true
+ProtectHome = true
+ProtectKernelModules = true
+ProtectKernelLogs = true
+ProtectControlGroups = true
+ProtectClock = true
+ProtectHostname = true
+ProtectProc = "invisible"
+ProtectKernelTunables=yes
+PrivateTmp = true
+RestrictRealtime = true
+SystemCallFilter=~@mount ~@module ~@swap ~@obsolete ~@cpu-emulation ptrace
+CapabilityBoundingSet=~CAP_KILL ~CAP_SYS_CHROOT ~CAP_AUDIT_* ~CAP_SETUID ~CAP_SETGID ~CAP_SETPCAP ~CAP_SYS_ADMIN ~CAP_NET_BIND_SERVICE ~CAP_NET_BROADCAST ~CAP_NET_RAW ~CAP_DAC_OVERRIDE ~CAP
+_FOWNER ~CAP_IPC_OWNER
 
-Create the boot entry:
+# Allow only the essential families (AF_PACKET and exotic ones are blocked by omission)
+#RestrictAddressFamilies=AF_UNIX AF_NETLINK AF_INET AF_INET6
+RestrictNamespaces = true
+RestrictSUIDSGID = true
+MemoryDenyWriteExecute = true
+SystemCallArchitectures = "native"
+LockPersonality= true
+UMask=0077
+User=root
+PrivateDevices=yes
+
+### Edits below this comment will be discarded
+```
 
 ```bash
-sudo blkid /dev/nvme0n1p2
+sudo systemctl daemon-reload
+sudo systemctl restart NetworkManager
 ```
 
-For the following step, ensure that you use the correct `vmlinuz` and
-`initramfs` for your kernel.
-
-Take note of these names for use in `arch.conf`:
+Sometimes you may need to reboot for the changes to take effect.
 
 ```bash
-ls /boot/vmlinuz-*
-ls /boot/initramfs-*
+sudo systemd-analyze security NetworkManager
+→ Overall exposure level for NetworkManager.service: 4.5 OK 🙂
 ```
 
-If you're on an Intel machine, replace `amd-ucode` with `intel-ucode`
+> ❗️ This is just one example of the many services that you can harden if you so
+> choose.
 
-Create a `/boot/loader/entries/arch.conf` with the following:
+Further reading on systemd:
+
+<details>
+<summary> ✔️ Click to Expand Systemd Resources </summary>
+
+- [systemd.io](https://systemd.io/)
+
+- [Rethinking PID 1](https://0pointer.de/blog/projects/systemd.html)
+
+- [Biggest Myths about Systemd](https://0pointer.de/blog/projects/the-biggest-myths.html)
+
+</details>
+
+---
+
+## Lynis and other tools
+
+Lynis is a security auditing tool for systems based on UNIX like Linux, macOS,
+BSD, and others.--[lynis repo](https://github.com/CISOfy/lynis)
+
+```bash
+sudo pacman -S lynis
+```
+
+List commands:
+
+```bash
+sudo lynis show commands
+Commands:
+lynis audit
+lynis configure
+lynis generate
+lynis show
+lynis update
+lynis upload-only
+```
+
+Audit the system:
+
+```bash
+sudo lynis audit system
+ Lynis security scan details:
+
+  Hardening index : 83 [################    ]
+  Tests performed : 255
+  Plugins enabled : 0
+```
+
+- The "Lynis hardening index" is an overall impression on how well a system is
+  hardened. However, this is just an indicator on measures taken - not a
+  percentage of how safe a system might be. A score over 75 typically indicates
+  a system with more than average safety measures implemented.
+
+- Lynis will give you more recommendations for securing your system as well.
+
+---
+
+**rkhunter** (Rootkit Hunter):
+
+- [Arch Wiki RKhunter](https://wiki.archlinux.org/title/Rkhunter)
+
+```bash
+sudo pacman -S rkhunter
+```
+
+Update the file properties database:
+
+```bash
+sudo rkhunter --propupd
+```
+
+Keep rkhunters data files up-to-date with:
+
+```bash
+sudo rkhunter --update
+```
+
+Run a system check:
+
+```bash
+sudo rkhunter --check --sk
+```
+
+Validate the config files:
+
+```bash
+sudo rkhunter --config-check
+```
+
+Get rid of false positives by adding the following to `/etc/rkhunter.conf`:
 
 ```conf
-title   Arch Linux
-linux   /vmlinuz-linux-zen
-initrd  /amd-ucode.img
-initrd  /initramfs-linux-zen.img
-options cryptdevice=UUID=bdeed105-a1be-40b9-895c-5f7e9f6a19c3:cryptroot root=/dev/mapper/cryptroot rw quiet loglevel=3
+SCRIPTWHITELIST=/usr/bin/egrep
+SCRIPTWHITELIST=/usr/bin/fgrep
+SCRIPTWHITELIST=/usr/bin/ldd
+SCRIPTWHITELIST=/usr/bin/vendor_perl/GET
 ```
 
-Ensure the `/etc/mkinitcpio.conf` has `encrypt` before the `filesystems` hook:
-
-```conf
-HOOKS=(base udev autodetect microcode modconf kms keyboard keymap consolefont block encrypt filesystems fsck)
-```
-
-Regenerate initramfs:
+Run a config check:
 
 ```bash
-sudo mkinitcpio -P
+sudo rkhunter --config-check
 ```
 
-Update `systemd-boot` if needed:
+---
+
+**ClamAV**
+
+- [Arch Wiki ClamAV](https://wiki.archlinux.org/title/ClamAV)
 
 ```bash
-sudo bootctl update
+sudo pacman -S clamav
 ```
 
-Ensure your images are listed:
+Update the virus databases manually:
 
 ```bash
-sudo bootctl list
+sudo freshclam
 ```
 
-Reboot
+Scan your system:
+
+```bash
+sudo clamscan -r ~
+----------- SCAN SUMMARY -----------
+Known viruses: 8708646
+Engine version: 1.4.3
+Scanned directories: 6505
+Scanned files: 79796
+Infected files: 0
+Data scanned: 4387.29 MB
+Data read: 5191.41 MB (ratio 0.85:1)
+Time: 1748.802 sec (29 m 8 s)
+Start Date: 2025:10:03 14:32:58
+End Date:   2025:10:03 15:02:07
+```
+
+> ❗️ NOTE: This can take a while, I recommend using `caffeine-ng` or `caffeine`
+> for this to prevent your system going to sleep while the scan completes.
+
+```bash
+paru -S caffeine-ng
+```
+
+This creates a coffee cup icon in your bar config on next reboot. If you're in
+the middle of something and don't want to reboot run:
+
+```bash
+caffeine &
+```
+
+Click the icon and `Enable Caffeine` to prevent sleep.
 
 ---
 
 ## Hardening the Kernel
+
+Given the kernel's central role, it's a frequent target for malicious actors,
+making robust hardening essential.
 
 You can use the `linux-hardened` kernel to have a kernel that prioritizes
 security over anything else:
@@ -101,30 +511,57 @@ security over anything else:
 sudo pacman -S linux-hardened linux-hardened-headers
 ```
 
-Edit your `/etc/default/grub`:
-
-```bash
-GRUB_DEFAULT=saved
-GRUB_SAVEDEFAULT=true
-GRUB_DISABLE_SUBMENU=y
-```
-
-- This enables you to choose from the available kernels at boot and stays on the
-  kernel you chose last.
-
-Make grub aware of the new kernel:
-
-```bash
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-```
-
-Generate the initramfs:
+Generate the `initramfs` for the hardened kernel:
 
 ```bash
 sudo mkinitcpio -p linux-hardened
 ```
 
-Reboot and choose `linux-hardened`.
+Configure systemd-boot to boot the hardened kernel, the entries are configured
+under `/boot/loader/entries/`. Create or edit an entry file, for example
+`/boot/loader/entries/arch-linux-hardened.conf`:
+
+```text
+title   Arch Linux Hardened
+linux   /vmlinuz-linux-hardened
+initrd  /initramfs-linux-hardened.img
+options rd.luks.name=YOUR_UUID=cryptroot root=/dev/mapper/cryptroot rw quiet
+```
+
+Replace `YOUR_UUID` with the UUID of the encrypted root partition (from `blkid`)
+
+To set this as the default boot entry and enable booting the last selected
+kernel automatically, edit `/boot/loader/loader.conf`:
+
+```text
+default arch-linux-hardened.conf
+timeout 4
+console-mode auto
+```
+
+Edit `/etc/mkinitcpio.d/linux-hardened.preset`:
+
+```preset
+# mkinitcpio preset file for the 'linux-hardened' package
+
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-hardened"
+
+PRESETS=('default' 'fallback')
+
+#default_config="/etc/mkinitcpio.conf"
+# default_image="/boot/initramfs-linux-hardened.img"
+default_uki="/boot/EFI/Linux/arch-linux-hardened.efi"
+default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
+
+#fallback_config="/etc/mkinitcpio.conf"
+# fallback_image="/boot/initramfs-linux-hardened-fallback.img"
+fallback_uki="/boot/EFI/Linux/arch-linux-hardened-fallback.efi"
+fallback_options="-S autodetect"
+```
+
+Reboot and `linux-hardened` should be chosen by default. You can also choose
+additional kernels if needed.
 
 ---
 
@@ -133,6 +570,36 @@ Reboot and choose `linux-hardened`.
 Sometimes `linux-hardened` just won't work on your system without some serious
 digging. You can harden your current kernel, or even better would be to harden
 the Long-Term Support (LTS) kernel.
+
+The Linux kernel is typically released under two forms: stable and long-term
+support (LTS). Choosing either has consequences, do your research.
+[Stable vs. LTS kernels](https://madaidans-insecurities.github.io/guides/linux-hardening.html#stable-vs-lts)
+
+- [The Linux Kernel Archives Active kernel releases](https://www.kernel.org/category/releases.html)
+
+See which kernel you're currently using with:
+
+```bash
+# show the kernel release
+uname -r
+# show kernel version, hostname, and architecture
+uname -a
+```
+
+Show the configuration of your current kernel:
+
+```bash
+zcat /proc/config.gz
+```
+
+`sysctl` is a tool that allows you to view or modify kernel settings and
+enable/disable different features.
+
+Check what each setting does [sysctl-explorer](https://sysctl-explorer.net/)
+
+Refer to
+[madadaidans-insecurities#sysctl-kernel](https://madaidans-insecurities.github.io/guides/linux-hardening.html#sysctl-kernel)
+for the following settings and their explainations.
 
 Create a file `/etc/sysctl.d/99-custom.conf`, since files are read in
 lexicographical order this file will be read last, allowing it to override any
@@ -169,6 +636,23 @@ Apply the changes immediately:
 
 ```bash
 sudo sysctl --system
+```
+
+Check Active Linux Security Modules:
+
+```bash
+cat /sys/kernel/security/lsm
+# Output:
+File: /sys/kernel/security/lsm
+capability,landlock,yama,bpf,apparmor
+```
+
+Check Kernel Configuration Options:
+
+```bash
+zcat /proc/config.gz | grep CONFIG_SECURITY_SELINUX
+zcat /proc/config.gz | grep CONFIG_HARDENED_USERCOPY
+zcat /proc/config.gz | grep CONFIG_STACKPROTECTOR
 ```
 
 ```bash
@@ -335,84 +819,252 @@ net.core.default_qdisc = cake
 
 </details>
 
-## Firewall
+## Kernel and Namespace Hardening and Blacklisting
 
-Flush existing iptables Rules & Disable iptables:
+- **Protect the kernel image**:
+  - Enable Secure Boot to ensure only trusted boot components are loaded.
 
-> ⚠️ Warning: Flushing rules will remove all existing firewall configurations.
-> Ensure no critical services are running, or review existing rules with
-> `iptables -L -v -n` and `ip6tables -L -v -n` before proceeding.
+  - Enforce kernel module signature verification by adding
+    `module.sig_enforce=1` to your kernel parameters (e.g., create
+    `/etc/cmdline.d/security.conf` with this line). This restricts loading
+    unsigned kernel modules.
 
-```bash
-sudo iptables -F
-sudo iptables -X
-sudo iptables -t nat -F
-sudo iptables -t nat -X
-sudo ip6tables -F
-sudo ip6tables -X
+  - NOTE: This setting is strict and may break compatibility with some drivers
+    or modules. Thorough testing and research are recommended before enforcing
+    it.
 
-sudo systemctl disable iptables.service
-sudo systemctl disable ip6tables.service
-sudo systemctl stop iptables.service
-sudo systemctl stop ip6tables.service
+- **Protect the `/boot` partition**:
+  - The above setting is fairly strict and will break some things. Do research
+    before going so strict.
+
+  - Make `/boot` read-only if you have a high threat model. It can cause issues
+    though, setting more strict permissions helps.
+
+- Lock kernel modules (optional):
+  - Set `module.sig_enforce=1` in kernel parameters.(i.e.,
+    `/etc/cmdline.d/security.conf`)
+
+Blacklist unneeded modules in `/etc/modprobe.d/blacklist.conf`:
+
+```conf
+blacklist dccp          # Datagram Congestion Control Protocol
+blacklist sctp          # Stream Control Transmission Protocol
+blacklist rds           # Reliable Datagram Sockets
+blacklist tipc          # Transparent Inter-Process Communication
+blacklist n_hdlc        # High-level Data Link Control
+blacklist ax25          # Amateur X.25
+blacklist netrom        # NetRom
+blacklist x25           # X.25
+blacklist rose
+blacklist decnet
+blacklist econet
+blacklist af_802154     # IEE 802.15.4
+blacklist ipx           # Internetwork Packet Exchange
+blacklist appletalk
+blacklist psnap         # SubnetworkAccess Protocol
+blacklist p8023         # Novell raw IEE 802.3
+blacklist p8022         # IEE 802.3
+blacklist can           # Controller Area Network
+blacklist atm
+# Various rare filesystems
+blacklist cramfs
+blacklist freevxfs
+blacklist jffs2
+blacklist hfs
+blacklist hfsplus
+blacklist udf
+# Less rare but often recommended
+# Optionally blacklist squashfs, cifs, nfs etc. by uncommenting:
+# blacklist squashfs
+# blacklist cifs
+# blacklist nfs
+# blacklist nfsv3
+# blacklist nfsv4
+# blacklist ksmbd
+# blacklist gfs2
+# blacklist vivid
 ```
 
-**Install and enable nftables**:
+There are more suggestions in the madaidans insecurities guide.
+
+Apply the changes:
+
+```bash
+sudo mkinitcpio -P
+```
+
+Check which modules were included in the initramfs (Long Output):
+
+```bash
+mkinitcpio -v > /tmp/mk.txt
+```
+
+Then search through the file and ensure they weren't loaded.
+
+> ❗️ Note: This may break some networking and virtualization tools.
+
+- Force-enable PTI (Page Table Isolation):
+  - Add `pti=on` to the kernel command line.
+
+- User namespaces:
+  - Do **not** set `kernel.unprivileged_userns_clone=0` if desktop
+    sandboxing/containers are used.
+
+  - Set `kernel.unprivileged_userns_clone=0` in `/etc/sysctl.d/` to disable if
+    containers are not required.
+
+- SMT/Hyperthreading policy:
+  - For extra isolation, add `nosmt` to kernel parameters.
+
+  - Disabling SMT reduces performance.
+
+---
+
+## Firewall
+
+**nftables** is designed to replace **iptables** by providing a modern,
+simplified, and unified packet filtering and classification framework in the
+Linux kernel. It reuses the underlying Netfilter infrastructure but introduces a
+new kernel API and completely different user-space tool (`nft`).
+
+- [Arch Wiki nftables](https://wiki.archlinux.org/title/Nftables)
+
+**Installation**:
 
 ```bash
 sudo pacman -S nftables
-sudo systemctl enable nftables.service
-sudo systemctl start nftables.service
 ```
 
-Create nftables ruleset:
+There is an example firewall ruleset located at `/etc/nftables.conf` and more
+examples located in `/usr/share/nftables/` and
+`/usr/share/doc/nftables/examples/`
+
+Flush existing iptables Rules & Disable iptables if necessary.
+
+**Create nftables ruleset**:
 
 ```bash
-#!/usr/sbin/nft -f
-
+#-----------------------------------------------------------------------------
+# Flush existing rules: ensure a clean slate before loading new rules
+#-----------------------------------------------------------------------------
+flush ruleset
 table inet filter {
+    # -------------------------------------------------------------------------
+    # INPUT CHAIN (Incoming Traffic destined for this host)
+    # Default is to DROP all incoming traffic
+    # -------------------------------------------------------------------------
     chain input {
-        type filter hook input priority 0; policy drop;
+        type filter hook input priority filter; policy drop;
 
-        # Allow loopback
+        # Drop invalid packets (e.g., malformed or out-of-state)
+        ct state invalid drop
+
+        # Allow loopback traffic (localhost to localhost)
         iif "lo" accept
 
-        # Accept established and related connections
+        # Allow established and related connections (replies to outgoing, FTP helper)
         ct state established,related accept
 
-        ip protocol icmp accept
-        # Allow ICMPv6
-        ip6 nexthdr icmpv6 accept
+        # Allow specific ICMP types for IPv4
+        ip protocol icmp icmp type { echo-request, echo-reply, destination-unreachable, time-exceeded } accept
 
-        # Allow SSH (port 22)
-        tcp dport 22 ct state new accept
+        # Allow critical ICMPv6 types for IPv6 (essential for network function)
+        ip6 nexthdr icmpv6 icmpv6 type { echo-request, echo-reply, destination-unreachable, packet-too-big, time-exceeded, parameter-problem, nd-router-advert, nd-router-solicit, nd-neighbor-solicit, nd-neighbor-advert } accept
+
+        # Allow SSH (port 2222) with rate-limiting to prevent brute-force attacks
+        tcp dport 2222 ct state new limit rate 15/minute accept
 
         # Allow HTTP and HTTPS (ports 80 and 443)
-        tcp dport {80,443} ct state new accept
+        tcp dport { 80, 443 } ct state new accept
+
+        # Log packets that reach the end of the chain before they are dropped by the policy (optional)
+        log prefix "nft-input-drop: "
     }
 
+    # -------------------------------------------------------------------------
+    # FORWARD CHAIN (Routed Traffic passing through this host)
+    # Default is to DROP all routed traffic (host-based firewall)
+    # -------------------------------------------------------------------------
     chain forward {
-        type filter hook forward priority 0; policy drop;
+        type filter hook forward priority filter; policy drop;
+
+        # Drop invalid packets
+        ct state invalid drop
+
+        # Allow established and related connections
+        ct state established,related accept
+
+        # Add specific FORWARD rules here if the machine is acting as a router/gateway
     }
 
+    # -------------------------------------------------------------------------
+    # OUTPUT CHAIN (Outgoing Traffic originating from this host)
+    # Default is to DROP all outgoing traffic for maximum security
+    # -------------------------------------------------------------------------
     chain output {
-        type filter hook output priority 0; policy accept;
+    type filter hook output priority filter; policy drop;
 
-        # Allow DNS queries
-        udp dport 53 accept
-        tcp dport 53 accept
+    # Allow essential local communication
+    oif "lo" accept
+
+    # Allow replies for established and related connections (critical)
+    ct state established,related accept
+
+    # Allow DNS queries (UDP and TCP)
+    udp dport 53 accept
+    tcp dport 53 accept
+
+    # Allow general outbound web access (e.g., for updates, API calls)
+    tcp dport { 80, 443 } accept
+
+    # Allow Git (and general SSH client) outgoing connections
+    tcp dport 22 ct state new accept
+
+    # Allow NTP (Network Time Protocol) for time synchronization
+    udp dport 123 accept
+
+    # Use meta l4proto to correctly match MLDv2 Type 143 packets
+    meta l4proto ipv6-icmp icmpv6 type {
+        echo-request,
+        destination-unreachable,
+        time-exceeded,
+        parameter-problem,
+        nd-neighbor-solicit,
+        nd-neighbor-advert,
+        mld2-listener-report
+    } accept
+
+    # Log packets that reach the end of the chain before they are dropped by the policy (optional)
+    log prefix "nft-output-drop: "
     }
 }
 ```
 
-> ❗️ If you don't use SSH or host a web server or any service, don't allow SSH
-> and HTTP/HTTPS.
+> ❗️ Most desktop firewalls default to **allow all outgoing traffic**
+> (`policy accept` on the output chain). This is done for convenience, as it
+> prevents applications from breaking. However, for a system practicing zero
+> trust, the best practice is to enforce a **default deny**(`policy drop`) on
+> the output chain and **only explicitly allow** the services the system needs.
 
-Load and test the rules:
+```bash
+sudo systemctl enable nftables.service
+sudo systemctl start nftables.service
+```
+
+Load and test the rules if in a different location than the default:
+
+```bash
+sudo nft -f /path/to/your/nftables.conf
+```
+
+or in default location:
 
 ```bash
 sudo nft -f /etc/nftables.conf
 ```
+
+> ❗️ If you don't use SSH or host a web server or any service, don't allow SSH
+> and HTTP/HTTPS.
 
 ```bash
 sudo nft list ruleset
@@ -420,7 +1072,9 @@ sudo nft list ruleset
 
 ---
 
-## ssh-keygen
+## SSH & GPG Key Generation and Safety
+
+### ssh-keygen
 
 The `ed25519` algorithm is significantly faster and more secure when compared to
 `RSA`. You can also specify the key derivation function (KDF) rounds to
@@ -447,7 +1101,7 @@ ssh-keygen -t ed25519 -a 32 -f ~/.ssh/id_ed25519_github_$(date +%Y-%m-%d) -C "SS
 
 ---
 
-## GnuPG and gpg-agent
+### GnuPG and gpg-agent
 
 `gpg --full-generate-key` can be used to generate a basic keypair.
 
@@ -737,7 +1391,7 @@ gpg --export --armor --output my-public-keys.gpg
 
 Now if your keys ever get lost or corrupted, you can import these backups.
 
---
+---
 
 ### Remove and Store your Primary Key offline
 
@@ -864,13 +1518,18 @@ Ensure all of the permissions are correct:
 ```bash
 chmod 755 $HOME
 chmod 700 $HOME/.ssh
-chmod 600 $HOME/.ssh/authorized_keys
 ```
 
 Add the output of `ssh-add -L` to `~/.ssh/authorized_keys`
 
 ```bash
 echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGXwhVokJ6cKgodYT+0+0ZrU0sBqMPPRDPJqFxqRtM+I (none)" > ~/.ssh/authorized_keys
+```
+
+After adding the authorized_key, adjust the permission:
+
+```bash
+chmod 600 $HOME/.ssh/authorized_keys
 ```
 
 Finally, test an ssh connection:
@@ -899,30 +1558,20 @@ Port 2222
 
 Update the Firewall Rules in `/etc/nftables.conf`:
 
+Replace this line:
+
 ```conf
-# ...snip...
-table inet filter {
-    chain input {
-        type filter hook input priority 0; policy drop;
-
-        # Allow loopback
-        iif "lo" accept
-
-        # Accept established and related connections
-        ct state established,related accept
-
-        # Allow ICMPv6
-        ip protocol icmp accept
-        ip6 nexthdr icmpv6 accept
-
-        # Allow SSH (port 2222)
-        tcp dport 2222 ct state new accept
-
-        # Allow HTTP and HTTPS (ports 80 and 443)
-        tcp dport {80,443} ct state new accept
-    }
-# ...snip...
+tcp dport ssh accept comment "allow sshd"
 ```
+
+with:
+
+```conf
+tcp dport 2222 accept comment "allow sshd on port 2222"
+```
+
+This change explicitly allows new incomming TCP connections on port 2222 for
+SSH, ensuring remote access will work through the firewall.
 
 Reload the Firewall:
 
@@ -955,6 +1604,14 @@ To get a list of your connected USB devices you can use `lsusb` from the
 ```bash
 lsusb
 ```
+
+Install usbguard:
+
+```bash
+sudo pacman -S usbguard
+```
+
+> ❗️ NOTE: Most people use the daemon, this is just an example.
 
 Generate a policy based on your currently attached USB devices with:
 
@@ -1034,11 +1691,29 @@ sudo systemctl status usbguard
 
 - If you plug something new in and it doesn't work, this is why. Remember this!
 
+- [Authorizing (or not) USB devices](https://docs.kernel.org/usb/authorization.html)
+
 ---
 
 ### Firejail
 
+> ❗️ Critics such as madaidan say that Firejail worsens security by acting as a
+> privilege escalation hole. Firejail requires the executable to be setuid,
+> meaning it runs with root privileges. Experienced users are encouraged to use
+> bubblewrap for it's minimal design and specificity of its purpose.
+
+A **setuid binary** is an executable file with a special permission bit set
+called "set user ID" (setuid). When a user runs a setuid binary, the program
+executes with the permissions of the binary's owner, rather than the permissions
+of the user running it.
+
+There are mitigations for the above risks I will share further down.
+
+Another option here is [Bubblewrap](https://wiki.archlinux.org/title/Bubblewrap)
+
 - [Arch Wiki Firejail](https://wiki.archlinux.org/title/Firejail)
+
+- [Firejail weaknesses](https://madaidans-insecurities.github.io/linux.html#firejail)
 
 ```bash
 sudo pacman -S firejail
@@ -1056,10 +1731,81 @@ Using by default:
 sudo firecfg
 ```
 
+fix `.desktop` files with:
+
+```bash
+firecfg --fix
+```
+
 This creates symbolic links in `/usr/local/bin/` pointing to `/usr/bin/firejail`
 for programs for which Firejail has default or self-created profiles.
 
 You can inspect `/etc/firejail/` to see all the pre-baked profiles available.
+
+## Hardening Firejail
+
+Add the following line to `/etc/firejail/firejail.config`:
+
+```config
+force-nonewprivs yes
+```
+
+- The above setting prevents Firejail and its child processes from gaining new
+  privileges after the sandbox is started.
+  - Changing the owner and group to `root:firejail` and permissions to `4750`
+    means Firejail runs with setuid root but only allows execution by users in
+    the firejail group reducing the attack surface.
+
+> ❗️ This breaks some apps such as VirtualBox which I don't recommend and if
+> using the hardened kernel, Wireshark and Chromium-based browsers are also
+> affected.
+
+- [Why Use KVM over VirtualBox](https://www.whonix.org/wiki/KVM#Why_Use_KVM_Over_VirtualBox?)
+
+Add a pacman hook to automatically change firejail owner and mode. Create
+`/etc/pacman.d/hooks/firejail-permissions.hook` and place the following in it:
+
+```hook
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = firejail
+[Action]
+Depends = coreutils
+Depends = bash
+When = PostTransaction
+Exec = /usr/bin/sh -c "chown root:firejail /usr/bin/firejail && chmod 4750 /usr/bin/firejail"
+Description = Setting /usr/bin/firejail owner to "root:firejail" and mode "4750"
+```
+
+Create a `firejail` group:
+
+```bash
+sudo groupadd firejail
+```
+
+and add your user to it:
+
+```bash
+sudo gpasswd -a $USER firejail
+```
+
+**Verify Firejail's being used**:
+
+Launch the program that you want to ensure is running sandboxed and run:
+
+```bash
+firejail --list
+# or more comprehensive
+firejail --tree
+```
+
+**Enable AppArmor support**:
+
+```bash
+sudo apparmor_parser -r /etc/apparmor.d/firejail-default
+```
 
 With firejail running, I noticed that none of my browsers would allow me to
 download anything. A fix for this is to run:
@@ -1069,6 +1815,63 @@ sudo firejail --noprofile firefox
 ```
 
 Download your file, close firefox and run again in the firejail sandbox.
+
+> Tip from Arch Wiki `/etc/pacman.d/hooks/firejail.hook`
+>
+> For cases where you need to manually modify the `Exec=` line of the .desktop
+> file in `~/.local/share/applications` to explicitly call Firejail.
+>
+> ```hook
+>  [Trigger]
+>  Type = Path
+>  Operation = Install
+>  Operation = Upgrade
+>  Operation = Remove
+>  Target = usr/bin/*
+>  Target = usr/share/applications/*.desktop
+>
+>  [Action]
+>  Description = Configure symlinks in /usr/local/bin based on firecfg.config...
+>  When = PostTransaction
+>  Depends = firejail
+>  Exec = /bin/sh -c 'firecfg >/dev/null 2>&1'
+> ```
+
+To manually map individual applications, execute:
+
+```bash
+sudo ln -s /usr/bin/firejail /usr/local/bin/application-to-sandbox
+```
+
+### Remove Firejail symlinks
+
+```bash
+sudo firecfg --clean
+```
+
+If you would rather confine an app with AppArmor or Bubblewrap:
+
+```bash
+sudo rm /usr/local/bin/application
+```
+
+Also, comment out `application` in the `/etc/firejail/firecfg.config` to prevent
+it from being added if you run `firecfg` again.
+
+<details>
+<summary> ✔️ Click to Expand Firejail Resources </summary>
+
+- [Arch Wiki Firejail](https://wiki.archlinux.org/title/Firejail)
+
+- [Profiles not in firecfg](https://github.com/netblue30/firejail/issues/2507)
+
+- [Firejail Docs](https://firejail.wordpress.com/documentation-2/)
+
+- [Debugging Firejail](https://github.com/netblue30/firejail/wiki/Debugging-Firejail)
+
+- [How to debug a firejail sandbox](https://debugging.works/blog/debugging-firejail/)
+
+</details>
 
 ---
 
@@ -1101,17 +1904,14 @@ Install:
 sudo pacman -S apparmor
 ```
 
-Add the following to `/etc/default/grub` in `GRUB_CMDLINE_LINUX_DEFAULT`:
+Edit `/etc/cmdline.d/security.conf`:
 
-```grub
-GRUB_CMDLINE_LINUX_DEFAULT="lsm=landlock,lockdown,yama,integrity,apparmor,bpf"
+```conf
+# enable apparmor
+lsm=landlock,lockdown,yama,integrity,apparmor,bpf audit=1 audit_backlog_limit=256
 ```
 
-Rebuild grub:
-
-```bash
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-```
+Save & Reboot
 
 Start/Enable AppArmor:
 
@@ -1131,6 +1931,17 @@ cat /sys/kernel/security/lsm
 Reboot, and run `sudo aa-enabled`, and `sudo aa-status`. You should see many
 profiles in enforce mode.
 
+Check AppArmor log messages:
+
+Each time AppArmor denies applications from doing something potentially harmful
+the event is logged.
+
+```bash
+sudo journalctl -fx
+```
+
+NOTE: Your firewall can also trigger this.
+
 Further reading:
 
 - [AppArmor Quick Intro](https://apparmor.net/)
@@ -1142,8 +1953,6 @@ Further reading:
 ```bash
 paru -S bazaar
 ```
-
-speling eror
 
 ## Creating profiles that aren't pre-configured
 
@@ -1229,6 +2038,10 @@ Unmount the partitions, close cryptroot, and Reboot.
 
 ### Doas over sudo
 
+> ❗️ Removing sudo may cause compatibility issues with some scripts/tools that
+> expect it, I haven't had many issues but you should test before completely
+> removing it.
+
 For a more minimalist version of `sudo` with a smaller codebase and attack
 surface, consider `doas`:
 
@@ -1236,18 +2049,62 @@ surface, consider `doas`:
 sudo pacman -S opendoas
 ```
 
+Create a `doas` group:
+
+```bash
+sudo groupadd doas
+```
+
+Add your user to the `doas` group:
+
+```bash
+sudo usermod -aG doas $USER
+```
+
 Create `/etc/doas.conf` with the following contents:
 
 ```conf
-permit setenv {PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin} :wheel
+permit setenv {PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin} :doas
 ```
 
 You can add a line below that one like `permit nopass your-username as root:`
-Enabling your user passwordless usage, it's much less secure but an option none
-the less.
+Enabling your user passwordless usage, it's much less secure but an option.
+
+Alternatively, you can setup the doas persist feature with the following:
+
+```conf
+permit persist setenv {PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin} :doas
+```
+
+- With the above setting, after you successfully authenticate. You won't be
+  asked for your password for the next 5 minutes. It's disabled by default
+  because it can be dangerous if used in the wrong environment.
+
+- You may need to either reboot or do a soft-reset for the groups to take
+  effect.
+
+For `yay`, you can run:
 
 ```bash
-doas pacman -R sudo base-devel
+yay --sudo doas --save
+```
+
+For `paru`, edit `/etc/paru.conf`. Near bottom:
+
+```conf
+Sudo = doas
+```
+
+Edit `/etc/mkepkg.conf`:
+
+```bash
+doas hx /etc/makepkg.conf
+```
+
+At the bottom of the file uncomment `PACMAN_AUTH=()` and add `doas`:
+
+```conf
+PACMAN_AUTH=(doas)
 ```
 
 Secure the `doas.conf`:
@@ -1257,14 +2114,165 @@ doas chown -c root:root /etc/doas.conf
 doas chmod -c 0400 /etc/doas.conf
 ```
 
+```bash
+doas pacman -Syu
+```
+
+Test and ensure most commands that you use work before removing sudo so you're
+aware of potential issues. To benefit from the smaller codebase and attack
+surface, you have to remove sudo.
+
+```bash
+doas pacman -R sudo base-devel
+```
+
 Create a symlink replacing sudo with doas:
 
 ```bash
 ln -s $(which doas) /usr/bin/sudo
 ```
 
+Now, when you run `sudo`, `doas` will be executed. There are some compatibility
+issues with this method but not super common.
+
+## Intrusion Detection
+
+<details>
+<summary> ✔️ Click to Expand AIDE Example </summary>
+
+From what I've seen, this would work best if you're running a server or self
+hosting where your system will be running without you there tweaking settings
+and AIDE will alert you if anything changes in the meantime.
+
+```bash
+paru -S aide
+```
+
+- [AIDE Manual](https://aide.github.io/doc/)
+
+- [Arch Wiki AIDE](https://wiki.archlinux.org/title/AIDE)
+
+AIDE is an intrusion detection system (IDS) that will notify us whenever it
+detects that a potential intrusion has occurred. When a system is compromised,
+attackers typically will try to change file permissions and escalate to the root
+user account and start to modify system files, AIDE can detect this.
+
+To set up AIDE on your system follow these steps:
+
+1. There is a default config at `/etc/aide.conf`:
+
+2. Initialize the database:
+
+```bash
+sudo aide -i
+```
+
+You will see in the output of the above command that
+`AIDE successfully initialized database. New AIDE database written to /var/lib/aide/aide.db.new.gz`
+
+3. Move the new database and remove the `.new`:
+
+```bash
+sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+```
+
+4. Check the system against the baseline database:
+
+```bash
+sudo aide -C
+```
+
+5. Whenever you make changes to system files, or especially after running a
+   system update or installing new tools, you have to rescan all files to update
+   their checksums in the AIDE database:
+
+```bash
+sudo aide -u
+```
+
+Unfortunately, AIDE doesn't automatically replace the old database so you have
+to rename the new one again:
+
+```bash
+sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+```
+
+And finally check again:
+
+```bash
+sudo aide -C
+Start timestamp: 2025-10-02 14:57:49 -0400 (AIDE 0.19.2)
+AIDE found NO differences between database and filesystem. Looks okay!!
+```
+
+- The default settings are fairly strict, I kept getting reports of changes
+  detected because the mtime and ctime of a directory changed. It's fairly easy
+  to set ignore rules by adding a `!` in front of the path.
+
+- [aide(1) man page](https://linux.die.net/man/1/aide)
+
+Create the logfile:
+
+```bash
+sudo mkdir -p /var/log/aide
+sudo touch /var/log/aide/aide.log
+```
+
+</details>
+
 ### Resources
+
+<details>
+<summary> ✔️ Click to Expand Resources </summary>
 
 - [Arch Wiki Secure Boot](https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot)
 
+- [Arch Wiki OpenVAS](https://wiki.archlinux.org/title/OpenVAS)
+
+- [Arch Wiki AppArmor](https://wiki.archlinux.org/title/AppArmor)
+
+- [Arch Wiki SELinux](https://wiki.archlinux.org/title/SELinux)
+
+- [Arch Wiki Security](https://wiki.archlinux.org/title/Security)
+
+- [archlinuxhardened/selinux](https://github.com/archlinuxhardened/selinux)
+
+- [Gentoo Security_Handbook Concepts](https://wiki.gentoo.org/wiki/Security_Handbook/Concepts)
+
+- STIGs are configuration standards developed by the Defense Information Systems
+  Agency (DISA) to secure systems and software for the U.S. Department of
+  Defense (DoD). They are considered a highly authoritative source for system
+  hardening.There are recommendations for hardening all kinds of software in the
+  [Stig Viewer](https://stigviewer.com/stigs)
+
+- [CIS Benchmarks](https://www.cisecurity.org/cis-benchmarks)
+
+- [NSA Cybersecurity Directorate](https://github.com/nsacyber)
+
 - [rodsbooks Secure Boot](https://www.rodsbooks.com/efi-bootloaders/secureboot.html)
+
+- [TrueCrypt Guide](https://web.archive.org/web/20140422190914/https://securityinabox.org/en/truecrypt_main)
+
+- [#! Paranoid Security Guide](https://web.archive.org/web/20140220055801/http://crunchbang.org:80/forums/viewtopic.php?id=24722)
+
+- [Hardening-Linux-Servers](https://cybersecuritynews.com/hardening-linux-servers)
+
+- [linux-audit Linux Server hardening best practices](https://linux-audit.com/linux-server-hardening-most-important-steps-to-secure-systems/)
+
+- [linux-audit Linux security guide extended](https://linux-audit.com/linux-security-guide-extended-version/)
+
+- [madaidans-insecurities](https://madaidans-insecurities.github.io/linux.html)
+
+- [madaidans-insecurities Linux Hardening Guide](https://madaidans-insecurities.github.io/guides/linux-hardening.html)
+
+- [Zebra Crossing digital safety checklist](https://zebracrossing.narwhalacademy.org/)
+
+- [DataDetoxKit](https://datadetoxkit.org/en/privacy/essentials#step-1)
+
+- [DataDetox Degooglise](https://datadetoxkit.org/en/privacy/degooglise/)
+
+- [Tor Browser User Manual](https://tb-manual.torproject.org/)
+
+- [Tor Wiki](https://gitlab.torproject.org/tpo/team/-/wikis/home)
+
+</details>
