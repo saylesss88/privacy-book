@@ -287,14 +287,39 @@ filesystem table in the next step.
 ```bash
 genfstab -U /mnt >> /mnt/etc/fstab
 #
+hx /mnt/etc/fstab
 cat /mnt/etc/fstab
+```
+
+Fix security hole and harden `/boot` permissions by adding
+`fmask=0137, dmask=0027`:
+
+```bash
+hx /mnt/etc/fstab
+```
+
+Example
+
+```fstab
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/mapper/cryptroot
+UUID=6d68a2bf-34ea-4adc-86d5-cb1d56de44a4	/         	btrfs     	rw,relatime,compress=zstd:3,ssd,space_cache=v2,subvol=/	0 0
+
+# /dev/nvme0n1p1
+UUID=B88B-844F      	/boot     	vfat      	rw,relatime,fmask=0137,dmask=0027,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0 2
+```
+
+```bash
+chmod 700 /boot
+chmod 600 /boot/loader/random-seed
 ```
 
 **Important**: The `fstab` should list both partitions, if it doesn't you'll
 need to ensure both partitions are mounted and regenerate your fstab again with
 `genfstab`. Also ensure that the root partition was mounted with compression.
-
----
 
 ---
 
@@ -682,68 +707,12 @@ System:
 
 ---
 
-### arch-chroot
-
-<details>
-<summary>  ✔️ Click to Expand `arch-chroot` Example </summary>
-
-Say you forgot something, like forgetting to add a user and password. You reboot
-and go to TTY into your system and are hit with a AHHH I can't log in WTF!
-
-It's as easy as repeating some of the steps above. Reboot into the Live
-environment, remount your partitions and `arch-chroot` back in:
-
-Open the encrypted root partition:
-
-```bash
-cryptsetup open /dev/nvme0n1p2 cryptroot
-```
-
-Mount the decrypted root:
-
-```bash
-mount /dev/mapper/cryptroot /mnt
-```
-
-Mount the EFI partition:
-
-```bash
-mount /dev/nvme0n1p1 /mnt/boot
-```
-
-Chroot into your installed system:
-
-```bash
-arch-chroot /mnt
-```
-
-```bash
-useradd -m -G wheel -s /bin/bash yourusername passwd yourusername
-```
-
-- The `-s /bin/bash` sets your default shell, you can use zsh if you have it
-  installed.
-
-Uncomment the line `%wheel ALL=(ALL:All) ALL` in `/etc/sudoers`
-
-Exit chroot:
-
-```bash
-exit
-```
-
-Unmount and close LUKS:
-
-```bash
-umount /mnt/boot
-umount /mnt
-cryptsetup close cryptroot
-reboot
-```
-
 ### Creating a readonly snapshot of your root subvolume:
 
 - [Arch Wiki System Backup](https://wiki.archlinux.org/title/System_backup)
+
+<details>
+<summary> ✔️ Click to Expand snapshot & Backup Example </summary>
 
 1. Create readonly snapshot of root subvol:
 
@@ -848,7 +817,68 @@ rsync -a --delete --quiet /path/to/backup /location/of/backup
 
 Change `/path/to/backup` to what needs to be backed-up such as `/home` or `/`
 
+</details>
+
 ---
+
+### arch-chroot
+
+<details>
+<summary>  ✔️ Click to Expand `arch-chroot` Example </summary>
+
+Say you forgot something, like forgetting to add a user and password. You reboot
+and go to TTY into your system and are hit with a AHHH I can't log in WTF!
+
+It's as easy as repeating some of the steps above. Reboot into the Live
+environment, remount your partitions and `arch-chroot` back in:
+
+Open the encrypted root partition:
+
+```bash
+cryptsetup open /dev/nvme0n1p2 cryptroot
+```
+
+Mount the decrypted root:
+
+```bash
+mount /dev/mapper/cryptroot /mnt
+```
+
+Mount the EFI partition:
+
+```bash
+mount /dev/nvme0n1p1 /mnt/boot
+```
+
+Chroot into your installed system:
+
+```bash
+arch-chroot /mnt
+```
+
+```bash
+useradd -m -G wheel -s /bin/bash yourusername passwd yourusername
+```
+
+- The `-s /bin/bash` sets your default shell, you can use zsh if you have it
+  installed.
+
+Uncomment the line `%wheel ALL=(ALL:All) ALL` in `/etc/sudoers`
+
+Exit chroot:
+
+```bash
+exit
+```
+
+Unmount and close LUKS:
+
+```bash
+umount /mnt/boot
+umount /mnt
+cryptsetup close cryptroot
+reboot
+```
 
 ### Resources
 

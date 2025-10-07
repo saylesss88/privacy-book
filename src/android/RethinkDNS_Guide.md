@@ -182,18 +182,10 @@ apps, preventing them from connecting without permission.
 I will share how I use RethinkDNS, obviously feel free to make changes based on
 your threat model and needs.
 
-I use Obtainium and download my apps through GitHub URLs or Obtainium also lets
-you choose other sources such as F-Droid. This isn't required, although there
-are benefits to this such as not getting all of the shady tracking packaged into
-Google Plays Apps and more features explained further down.
+Different versions of the RethinkDNS have different features and capabilities.
+The best version in my opinion is the F-Droid version.
 
-[Obtainium#installation](https://github.com/ImranR98/Obtainium?tab=readme-ov-file#installation)
-
-You will have to allow apps from unknown sources, download the APK that your
-phone requires, and follow the instructions to install Obtainium. Once you have
-Obtainium installed, Click `Add app` and paste
-<https://github.com/celzero/rethink-app> into the `App source URL`, and click
-`Add`.
+- [F-Droid Download](https://f-droid.org/en/)
 
 ---
 
@@ -225,6 +217,7 @@ choose a VPN either, I haven't found a free VPN that I would trust...
   choose the specific resolver you want such as Quad9. You may notice that it
   says `Failed: using fallback DNS`. This is only because we haven't turned it
   on yet, we will recheck this once we turn it on.
+
 - If you want a relay in a specific country, you can click the `Relays` tab. For
   DNSCrypt you are given the choice between the Netherlands, France, Sweden, Los
   Angeles, and Singapore. You might do this if you were trying to circumvent
@@ -233,11 +226,32 @@ choose a VPN either, I haven't found a free VPN that I would trust...
 **Rules** set the following:
 
 - `Advanced DNS filtering (experimental)`: Assign unique IP per DNS request.
+
 - `Prompt on blocklist updates`: This is for if you use Rethink's custom
   blocklists.
 
+- `Prevent DNS leaks`: When enabled, Rethink captures all packets on port 53 and
+  forwards it to a user-set DNS endpoint.
+
 Leave all the `Advanced` defaults unless you plan on setting up a SOCKS5 proxy,
 in which case you will want to enable `Configure -> DNS -> Never proxy DNS`.
+
+---
+
+F-Droid Specific:
+
+- `Split DNS (experimental)`: Forward DNS queries from proxied apps to the
+  proxy's DNS servers.
+
+- `Treat DNS rules as firewall rules (experimental)`: DNS blocking will be
+  bypassed during resolution; the decision will be made at connection time.
+
+- Set `Use fallback DNS as bypass`: where it always uses your fallback DNS for
+  bypassed apps, domains and IPs.
+
+- You can also set `Use System DNS for undelgated domains` which is generally
+  safe to enable and useful if access to local network devices or custom
+  internal domains is needed.
 
 ---
 
@@ -262,6 +276,10 @@ Blocklists are available when you use Rethink's DNS.
   because they are updated regularly with new identified threats. You can also
   enable `Prompt on blocklist update`.
 
+- [hagezi which version should I use?](https://github.com/hagezi/dns-blocklists/wiki/FAQ#sources)
+
+- [oisd](https://oisd.nl/)
+
 ---
 
 **F-Droid & Github Versions**
@@ -272,39 +290,75 @@ for **any** DNS upstream.
 
 There is a known bug where it sometimes when you click `DOWNLOAD BLOCKLISTS` it
 just keeps listening and never receives anything. The GitHub `v05.5n` that I'm
-using was affected by this with the Obtainium App. I haven't solved this yet but
-have read different solutions like downgrading and upgrading within the app I'll
-report back when I have something useful.
+using was affected by this with the Obtainium App.
 
-It looks like you can use the
-[RethinkDNS Configure Blocklist Website](https://rethinkdns.com/configure)
+This **does work** on the F-Droid version.
+
+For example, if you want to use ODoH with the HAGEZI Blocklist you could:
+
+Go to `Configure -> DNS -> Other DNS`, Choose `ODoH` with `Cloudflare`. Start
+it.
+
+Now in `Configure -> DNS -> RULES`, tap `On-device blocklists`, and click the
+disabled logo, then click `DOWNLOAD BLOCKLISTS`. Once the download is complete,
+you can select `Configure` and select `ADVANCED` and search for HAGEZI, choose
+MULTI PRO++ and maybe oisd small, then press `APPLY (ON-DEVICE)`.
+
+Now any app that doesn't bypass Rethink will use your chosen blocklists, denying
+access to malicious URLs.
 
 The HAGEZI blocklists are respected for being updated frequently. There are
 different levels with MULTI PRO++ (HAGEZI) being the highest and 4 other lest
 strict levels.
 
-Choose between `DoT` and `DoH` by clicking the `DoH` button.
-
-```url
-# DoT Example w/ only HAGEZI PRO++
-1-aabaqaa.max.rethinkdns.com
-```
-
 ---
 
 ### Network
+
+Settings explained:
+
+- **Loopback proxy forwarder apps**: Enable when you want all of your devices
+  proxy-related traffic to also flow through Rethinks encrypted tunnel. It
+  ensures apps that proxy DNS/HTTP/SOCKS traffic don't leak outside the VPN.
+
+- **Do not route Private IPs**: Prevents routing traffic destined for private IP
+  address ranges (like 192.168.x.x, 10.x.x.x) through the tunnel. Instead, this
+  traffic goes directly over the local network or system default route. Most
+  useful when you want devices on your local network (NAS, printers, etc.) to be
+  reachable by apps on your phone without routing the traffic through Rethinks
+  tunnel, improving performance and reliability of local connections but
+  possibly reducing privacy.
+
+- **Loopback (experimental)**: When enabled, this routes RethinkDNS's own
+  internal traffic, such as blocklist downloads, connectivity checks, and DNS
+  queries made by the app itself, back into the encrypted tunnel through the
+  loopback device.
+
+| Setting                       | Function                                                                   | When to Use                                               |
+| ----------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------- |
+| Loopback Proxy Forwarder Apps | Route proxy-forwarder app traffic back into Rethink VPN tunnel             | When you want consistent VPN/privacy coverage for proxies |
+| Do Not Route Private IPs      | Avoid routing local network/private IP traffic through VPN (send directly) | To access local devices without VPN bottlenecks           |
+| Loopback (Experimental)       | Route Rethink’s own app traffic (updates/checks) back through VPN tunnel   | To fully protect app's own DNS/blocklist traffic          |
+
+NOTE: The above settings are disabled by default because some are experimental
+and can easily break functionality. I have found that the settings below give
+the most functionality without breakage 👇️:
 
 `Configure -> Network`:
 
 - Set `Use all available networks` to ON. This enables Wifi and mobile data to
   be used at the same time by Rethink. (Optional, may use more battery)
+
 - **Set your IP version**: The default is `IPv4`, you can choose between
   `IPv6 (experimental)` and `Auto (experimental)`.
+
 - Using the `Loopback` sounds like a good idea but it makes many of the
   resolvers fail. You may have better luck, just remember that this could be
   what's causing your connectivity issues if you're having any.
+
 - **Choose fallback DNS**: When your user-preferred DNS is not reachable,
   fallback DNS will be used. I typically choose RethinkDNS as the fallback.
+
 - You may want to experiment with shutting off `Enable network visibility`, just
   keep in mind that some apps may break. "Shutting this off prevents apps from
   accessing all available networks, stopping them from bypassing Rethinks
@@ -317,11 +371,17 @@ Choose between `DoT` and `DoH` by clicking the `DoH` button.
 `Configure -> Firewall -> Universal firewall rules` and set the following to ON:
 
 - `Block all apps when device is locked`
+
 - `Block when DNS is bypassed`
+
 - `Block port 80 (insecure HTTP) traffic`
 
 You can get more restrictive from here, but it will take some manual
 intervention to get everything working correctly.
+
+Keep your firewall rules in mind when you're setting per app settings. If the
+Universal firewall blocks all apps when the device is locked, do you want this
+app affected by this or do you want to let it Bypass the Universal firewall?
 
 ---
 
@@ -366,8 +426,9 @@ doesn't work, we can try one setting at a time until it does work and this is
 the same process for other Apps that aren't working.
 
 - First, you should check your logs and see why it's being blocked. Look at the
-  domains involved and set trust rules for said domains. If it is unclear why
-  networking still isn't working, you can:
+  domains involved and set trust rules for said domains. (start by trusting
+  reddit.com). Check the logs again, add any domains that were blocked related
+  to reddit. If it is unclear why networking still isn't working, you can:
 
 - `Bypass Universal`, this allows it to bypass any Universal Firewall rules you
   have set.
@@ -375,15 +436,15 @@ the same process for other Apps that aren't working.
 - If you're using Rethink's DNS, you can try allowing the app to
   `Bypass DNS & Firewall`. Try the app again, does it work? If not:
 
-- `Exclude` the app. This makes RethinkDNS completely unaware of the app and is
-  often what is required for Reddit. It is my understanding that after you
-  `Exclude` Reddit for example, your systems Automatic Secure DNS will pick it
-  up.
-
 - You can also `Isolate` an App, you then have to set up _trust | allow_ rules
   for domains or IPs over a period of time which can take a while. You can go to
   `Apps` and search for the app in question, click on it and at the bottom of
   the screen you'll see `IP Logs`, and `Domain Logs` to help with this.
+
+- `Exclude` the app. This makes RethinkDNS completely unaware of the app and is
+  often what is required for Reddit. It is my understanding that after you
+  `Exclude` Reddit for example, your systems Automatic Secure DNS will pick it
+  up.
 
 ---
 
@@ -497,6 +558,14 @@ OrgAbuseRef:    https://rdap.arin.net/registry/entity/ABUSE4771-ARIN
 # Copyright 1997-2025, American Registry for Internet Numbers, Ltd.
 ```
 
+> ⚠️ Use caution when setting trust rules for subnet ranges, as this grants
+> access to all services hosted within that range, potentially including
+> services unrelated to the one you intend to access. Best practice is to first
+> attempt to trust the specific domain name (e.g., reddit.com), which is
+> generally the most granular and secure method. Only consider trusting broader
+> subnet ranges (like 151.101.0.0/16) as a last resort if domain-based rules
+> fail to resolve connectivity issues for the intended service.
+
 We can see that:
 
 - The subnet range for that IP: `151.101.0.0 - 151.101.255.255` (CIDR notation:
@@ -506,8 +575,10 @@ So as a starting point to get Reddit working we could trust the following subnet
 range:
 
 - IPv4: `151.101.0.0/16`
+
 - This subnet covers the full range from `151.101.0.0` to `151.101.255.255`,
   which includes all related IPs Reddit uses via Fastly’s CDN.
+
 - The owning organization: `Fastly, Inc.` & More...
 
 </details>
@@ -624,12 +695,200 @@ it. Brave is definitely better if you must use a Chrome derivative.
 
 ### [More Fine Grained Control & Enhanced Privacy](#more-fine-grained-control--enhanced-privacy)
 
-> ❗ NOTE: If you are happy with the functionality as is it is unnecessary to
-> follow these steps. If you already only install the minimal apps needed on
-> your phone (i.e. Only install what you use) you can probably just go to
-> individual Apps and block their networking that you are worried about such as
-> Facebook and Google. Routing all of your Apps through RethinkDNS + Firewall
-> already gives you great privacy and security benefits.
+In this section we will switch from a default allow to a default deny; blocking
+network access to every app. We will then go through and only enable networking
+for the apps that we need and trust.
+
+<details>
+<summary> ✔️ Click to Expand Android Privacy Tips </summary>
+
+If you don't like the idea of someone forcing you to unlock your phone so they
+can sift through your data:
+
+- It's often recommended to **not** use biometrics as they can be forcibly be
+  taken from you while a password typically can't.
+
+- Cellibrite relies on your phone being in AFU mode which is After first unlock.
+
+**BFU**: Before First Unlock. This refers to the state right after a device
+restarts. Since you haven't entered your password yet, the system has not
+unlocked the phone's storage, so its contents remain encrypted.
+
+**AFU**: After First Unlock. In this state, the device has been unlocked at
+least once since it was powered on, even if it is currently locked. The
+encryption keys are loaded into RAM, making the device's stored data more
+accessible and increasing the potential attack surface compared to the BFU
+state.
+
+- Set the Auto optimization (Auto Restart) to the shortest amount of time
+  possible. When your phone first reboots it is in BFU mode which is Before
+  first unlock mode. Biometrics are usually disabled in this mode and the
+  encryption keys are **not** saved in RAM making the attack surface much
+  smaller.(i.e., they typically have to guess the password or brute-force it)
+  - That said, if someone gets your phone while it's in AFU mode they will only
+    have the amount of time until your next auto reboot to try to extract your
+    data.
+
+- You can also try to reduce the number of unlock attempts before the device
+  wipes. The default is typically 20 attempts, I haven't found a way to lower
+  this.
+
+- You can't really trust Airplane mode on anything but GrapheneOS. If you are
+  able to remove your battery, do that when it matters.
+
+- In your `About phone` section, name your device something that doesn't expose
+  anything useful about yourself.
+
+- Set a pin for your phones sim card to prevent sim swaps.
+
+- Consider something like mint mobile or visible, they often let you register
+  with only a spoofed email address.
+
+Bluetooth is inherently insecure and broadcasts information about your device
+constantly. Walmart and other stores have started using Bluetooth to see hot
+zones to strategically place adds on the most traveled areas.
+
+- [Bluetooth the invisible threat](https://www.edgescan.com/bluetooth-and-the-invisible-security-threat-youre-probably-not-listening-to/)
+
+- [Types of bluetooth attacks](https://www.forbes.com/sites/alexvakulov/2025/02/20/11-types-of-bluetooth-attacks-and-how-to-protect-your-devices/)
+
+**Google**
+
+In `Settings -> Google` in
+`Google services -> All services -> Privacy & security` Select `Ads` and either
+Reset advertising ID every so often, or Delete advertising ID but know the
+consequences of the latter.
+
+In the same `All services` area, click `Usage & diagnostics` to disable it.
+
+Turn off `Improve Location Accuracy`
+
+Go to your accounts `Manage your Google Account`, `Data & privacy` and disable
+all the Activity tracking (Pause it or turn it off).
+
+If you rely on Google services, in the `Data & privacy` section, it is helpful
+to run a `Privacy Checkup`.
+
+When you're done, always go to `Settings -> Accounts and backup` and remove the
+Google account.
+
+I recommended that you **remove Android System SafetyCore**.
+
+- [What is SafetyCore and why you should delete it](https://www.protectstar.com/en/blog/android-system-safetycore-hidden-installation-and-what-you-should-know)
+
+- [Google forcing Android System SafetyCore on users to scan for nudes](https://www.kaspersky.com.au/blog/what-are-android-safetycore-and-key-verifier/34736/)
+
+**F-Droid**
+
+F-Droid is a free and open-source app store for Android that only distributes
+open-source software, without ads, proprietary code, or user tracking. All apps
+are vetted for privacy and transparency, making it a strong alternative to
+Google Play.
+
+No registration or account is required, further protecting privacy.
+
+Google restricts apps that remove Google services or modify their core features
+to disable their data collection strategies. This is why you won't find many
+privacy by default browsers in Google Play. Browsers like IronFox and Cromite
+are solid options that disable telemetry and more that are available outside of
+the Play ecosystem.
+
+I personally use IronFox as my default and have been happy with it so far. It
+comes with uBlock installed by default which I recommend that you learn how to
+get the most out of. With Firefox fingerprint protection, a few about:config
+tweaks, and uBlock you can accomplish what used to take 6 extensions to do.
+
+<details>
+<summary> ✔️ Click to Expand uBlock Guide </summary>
+
+## uBlock Origin
+
+BetterFox does a great job explaining how to use uBlock with solid
+recommendations.
+
+- [BetterFox uBlock filterlists](https://github.com/yokoffing/filterlists?tab=readme-ov-file#guidelines)
+
+If you wanted to apply the
+[Privacy Essentials](https://github.com/yokoffing/filterlists/blob/main/privacy_essentials.txt)
+list you would click
+[subscribe](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/yokoffing/filterlists/main/privacy_essentials.txt&title=Privacy%20Essentials),
+which launches the uBlock asset viewer where you can see all of the domains that
+will be blocked before clicking `Subscribe` again to apply them.
+
+### Adding other lists
+
+- [Hagezi dns-blocklists](https://github.com/hagezi/dns-blocklists)
+
+- [adguard-filter-list](https://github.com/ppfeufer/adguard-filter-list)
+
+Click the uBlock logo, Settings, Filter lists, scroll to the bottom and choose
+Import..., Paste the url of your chosen list, and click Apply changes.
+
+For example, Arkenfox suggests adding the Actually Legitimate URL Shortener
+Tool. Add
+<https://raw.githubusercontent.com/DandelionSprout/adfilt/master/LegitimateURLShortener.txt>
+to the Import... section and click Apply changes. If you scroll up, you'll see
+that it was added and chosen.
+
+Setup your [Blocking mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode)
+
+Many opt for
+[medium mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-medium-mode).
+To do so you need to:
+
+**Settings pane**:
+
+- Open the dashboard, and choose I am an advanced user.
+
+**Filter lists pane**:
+
+- All of uBO's filter lists: checked
+
+- EasyList: checked
+
+- Peter Lowe's Ad server list: checked
+
+- EasyPrivacy: checked
+
+- Online Malicious URL Blocklist: checked
+
+**My rules pane (4th pane from the left)**:
+
+Underneath Temporary rules add, you literally type this in:
+
+- Add `* * 3p-script block`
+
+- Add `* * 3p-frame block`
+
+- Click `Save`
+
+- Click `<- Commit` (Not required on phone)
+
+- Setting medium mode on your phone is likely overkill because it's not super
+  quick to switch broken sites to easy mode as it is on a computer.
+
+**Fallback to
+[easy mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-easy-mode)**
+
+Click the uBlock logo while on the site you want to use easy mode on. You'll see
+the power button to the top right, the Global rules and the Local rules which
+start 3 boxes from the left. Click the box under the Local rules for 3rd-party
+scripts. The box will change colors, dark gray = NOOP (No Operation). This tells
+uBO to ignore the aggressive global block for this site, and let the normal
+filter lists handle the blocking.
+
+You can also disable JavaScript in Settings as needed replacing the need for
+NoScript.
+
+</details>
+
+- [uBlock Wiki](https://github.com/gorhill/uBlock/wiki)
+
+- [Ars Technica F-Droid & sideloading restrictions](https://arstechnica.com/gadgets/2025/09/f-droid-calls-for-regulators-to-stop-googles-crackdown-on-sideloading/)
+
+- [F-Droid and Google's Developer Registration Decree](https://f-droid.org/en/2025/09/29/google-developer-registration-decree.html)
+
+</details>
 
 If you read the following GrapheneOS discussion forum written by an RDNS dev:
 
@@ -641,23 +900,48 @@ connections to all apps by default**. This will block both Wi-Fi and mobile data
 connections to **all apps** on your device.
 
 The point here is that not every App on your device needs network access all the
-time or at all in some cases. Watch your Logs and see which apps "phone home"
-the most. Think about which Apps would leave you the most vulnerable and either
-block network access completely or block and unblock as needed based on your
-threat model.
+time or at all in some cases.
 
-I would recommend removing network access from your password manager until you
-need it or better yet use something completely offline like
-[KeePassDX](https://www.keepassdx.com/).
+Search for the apps you use/trust and:
 
-I have never used `Link to Windows` and I `Disable` & `Force Stop` it and
-`Link to Windows` is still my most blocked App of all time by Rethink...
+- start by enabling Wi-Fi 🛜 and mobile-data 📶 as well as Bypass Universal so
+  your required apps aren't blocked right when the screen shuts off or affected
+  by the firewall.
 
-If you go for the default deny, you will have to search for every app that you
-use and start by enabling networking and then following the
-`Apps that don't work` section for each app until they work as expected. If you
-really think about it, the number of apps that require constant networking
-should be limited.
+- Next, check your logs and see why it's being blocked. Look at the domains
+  involved and set trust rules for said domains. If it is unclear why networking
+  still isn't working, you can:
+
+- If you're using Rethink's DNS, you can try allowing the app to
+  `Bypass DNS & Firewall`. Try the app again, does it work? If not:
+
+- You can also `Isolate` an App, you then have to set up _trust | allow_ rules
+  for domains or IPs over a period of time which can take a while.
+
+- `Exclude` the app. This makes RethinkDNS completely unaware of the app and is
+  often what is required for Reddit. It is my understanding that after you
+  `Exclude` an App, your systems Automatic Secure DNS will pick it up.
+
+A few apps that typically need network access on Android:
+
+- Google Play services (`com.google.android.gms`): push notifications, safety
+  checks, etc.
+
+- Google Play Store (`com.android.vending`) app updates and downloads
+
+- Android System (usually UID 1000, often `android` or `system`): Core OS
+  connectivity checks, NTP time sync, and network management. Blocking can cause
+  "no internet" errors.
+
+- Android System WebView (`com.google.android.webview`): Renders web contents in
+  apps.
+
+- Download Manager (`com.android.providers.downloads`): Manages file downloads
+  from apps/browser. Without it, downloads stall.
+
+- Media Storage
+
+- Settings
 
 ---
 
@@ -815,8 +1099,8 @@ a configuration file (e.g., `.conf` file) which is a plaintext file that
 contains what is needed. You download that file and Click `IMPORT` which brings
 up your phones filesystem.
 
-There is also a `CREATE` option for advanced users who are setting up their own
-WireGuard network, typically if you host your own VPN server.
+Alternatively, the `CREATE` option for advanced users who are setting up their
+own WireGuard network, typically if you host your own VPN server.
 
 After this is setup you should always verify that your traffic is encrypted
 (hidden IP) and your DNS queries are protected (no leaks).
@@ -827,8 +1111,8 @@ You could:
    `whatismyipaddress.com` or `ipleak.net`, take note of your Public IP, ISP,
    and City/Country this is your real info that the VPN needs to hide.
 
-2. Connect to Wireguard/VPN. Choose the server location you want and go back to
-   check again.
+2. Connect to your Wireguard/VPN server. Choose the server location you want and
+   go back to check again.
 
 3. Check for leaks, go to `dnsleaktest.com` and run a Standard test. If you
    don't see your Public IP listed anywhere, you don't have a leak.

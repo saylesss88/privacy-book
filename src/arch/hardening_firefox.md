@@ -393,6 +393,81 @@ Place the user agent string in `general.useragent.override` something like:
 
 ---
 
+## uBlock Origin
+
+BetterFox does a great job explaining how to use uBlock with solid
+recommendations.
+
+- [BetterFox uBlock filterlists](https://github.com/yokoffing/filterlists?tab=readme-ov-file#guidelines)
+
+If you wanted to apply the
+[Privacy Essentials](https://github.com/yokoffing/filterlists/blob/main/privacy_essentials.txt)
+list you would click
+[subscribe](https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/yokoffing/filterlists/main/privacy_essentials.txt&title=Privacy%20Essentials),
+which launches the uBlock asset viewer where you can see all of the domains that
+will be blocked before clicking `Subscribe` again to apply them.
+
+### Adding other lists
+
+- [Hagezi dns-blocklists](https://github.com/hagezi/dns-blocklists)
+
+- [adguard-filter-list](https://github.com/ppfeufer/adguard-filter-list)
+
+Click the uBlock logo, Settings, Filter lists, scroll to the bottom and choose
+Import..., Paste the url of your chosen list, and click Apply changes.
+
+For example, Arkenfox suggests adding the Actually Legitimate URL Shortener
+Tool. Add
+<https://raw.githubusercontent.com/DandelionSprout/adfilt/master/LegitimateURLShortener.txt>
+to the Import... section and click Apply changes. If you scroll up, you'll see
+that it was added and chosen.
+
+Setup your [Blocking mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode)
+
+Many opt for
+[medium mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-medium-mode).
+To do so you need to:
+
+**Settings pane**:
+
+- Open the dashboard, and choose I am an advanced user.
+
+**Filter lists pane**:
+
+- All of uBO's filter lists: checked
+
+- EasyList: checked
+
+- Peter Lowe's Ad server list: checked
+
+- EasyPrivacy: checked
+
+- Online Malicious URL Blocklist: checked
+
+**My rules pane (4th pane from the left)**:
+
+Underneath Temporary rules add, you literally type this in:
+
+- Add `* * 3p-script block`
+
+- Add `* * 3p-frame block`
+
+- Click `Save`
+
+- Click `<- Commit` (Not required on phone)
+
+**Fallback to
+[easy mode](https://github.com/gorhill/uBlock/wiki/Blocking-mode:-easy-mode)**
+
+Click the uBlock logo while on the site you want to use easy mode on. You'll see
+the power button to the top right, the Global rules and the Local rules which
+start 3 boxes from the left. Click the box under the Local rules for 3rd-party
+scripts. The box will change colors, dark gray = NOOP (No Operation). This tells
+uBO to ignore the aggressive global block for this site, and let the normal
+filter lists handle the blocking.
+
+You can also disable JavaScript in My rules as needed.
+
 <details>
 <summary> ✔️ Click to Expand Resources </summary>
 

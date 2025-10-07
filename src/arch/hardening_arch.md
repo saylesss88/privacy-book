@@ -60,6 +60,8 @@ The 3-2-1 Backup Rule:
 - There is a backup guide for btrfs in
   [enc_install](https://mako088.github.io/arch/enc_install.html)
 
+Use Full Disk Encryption to protect your data at rest.
+
 Encryption is the process of using an algorithm to scramble plaintext data into
 ciphertext, making it unreadable except to a person who has the key to decrypt
 it.
@@ -136,12 +138,14 @@ to manual configurations in Arch Linux.
   directories cleanly, making it easy to track and revert changes by organizing
   files under a single version-controlled directory.
 
-- chezmoi is a powerful dotfile manager focused on reproducible, encrypted, and
-  template-driven config management. It simplifies applying changes across
-  multiple machines and maintaining a documented history of modifications.
+- [chezmoi](https://www.chezmoi.io/) is a powerful dotfile manager focused on
+  reproducible, encrypted, and template-driven config management. It simplifies
+  applying changes across multiple machines and maintaining a documented history
+  of modifications.
 
 Using these tools enhances your ability to maintain clear, version-controlled
-records of system changes.
+records of system changes. Consider making your dotfiles repo private if you're
+unsure what you need to protect.
 
 By breaking changes into smaller, manageable tasks and documenting them with
 descriptive messages, you create a clear history of modifications. This makes it
@@ -164,6 +168,8 @@ security best practices over time.
 
 ---
 
+### User and group management & Strong Passwords
+
 - Users and groups are used as a form of
   [access control](https://en.wikipedia.org/wiki/access_control#Computer_security).
   They control access to the system's files, directories, and peripherals. This
@@ -178,9 +184,27 @@ security best practices over time.
 - Avoid running services or applications as root; use dedicated service accounts
   where possible.
 
+**Passwords/Password Quality**
+
+```bash
+sudo pacman -S libpwquality
+```
+
+Edit `/etc/pam.d/passwd` file to read as:
+
+```passwd
+#%PAM-1.0
+password required pam_pwquality.so retry=2 minlen=10 difok=6 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1 [badwords=myservice mydomain] enforce_for_root
+password required pam_unix.so use_authtok sha512 shadow
+```
+
+- [pam_pwuality(8)](https://man.archlinux.org/man/pam_pwquality.8)
+
+- [pam_unix(8)](https://man.archlinux.org/man/pam_unix.8)
+
 - Use strong passwords and a password manager. The Arch Wiki
   [Security](https://wiki.archlinux.org/title/Security) section goes in depth
-  about this so I won't cover it here.
+  about this.
 
 - Regularly review group memberships and file permissions, especially on
   sensitive system files.
@@ -200,6 +224,9 @@ security best practices over time.
 
 - Remove unused packages and disable unnecessary services to free up resources
   and limit potential entry points.
+
+- Consider using `arch-audit` to find packages with vulnerabilities and patch
+  said vulnerabilities.
 
 ---
 
@@ -672,122 +699,111 @@ Example `99-custom.conf` with some settings to prevent breakage:
 <details>
 <summary> ✔️ Click to Expand `99-custom.conf` example </summary>
 
-> ❗️ NOTE: Always do your own research, many of these settings come from
-> recommendations from the kernel-hardening-checker as well as
-> [madaidans insecurities Linux Hardening guid](https://madaidans-insecurities.github.io/guides/linux-hardening.html).
+> ⚠️ WARNING: Always do your own research, you can find explanations to the
+> following settings in:
+> [madaidans insecurities Linux Hardening guide](https://madaidans-insecurities.github.io/guides/linux-hardening.html#sysctl-kernel).
+
+You can apply these on top of the hardened kernel as well:
 
 ```conf
-fs.suid_dumpable = 0
+# Kernel Security Hardening
+# ----------------------------------------------------------------------
+# allow set-user-ID processes to dump core
+fs.suid_dumpable = 2
 
-# Fix "FAIL: 0", recommended is 2
-net.core.bpf_jit_harden = 2
+# prevent pointer leaks
+kernel.kptr_restrict = 2
 
-# Fix "FAIL: 10000", recommended is 100
-kernel.oops_limit = 100
+# restrict kernel log to CAP_SYSLOG capability
+kernel.dmesg_restrict = 1
 
-# Fix "FAIL: 0", recommended is 100
-kernel.warn_limit = 100
+# Note: certian container runtimes or browser sandboxes might rely on the following
+# restrict eBPF to the CAP_BPF capability
+kernel.unprivileged_bpf_disabled = 1
 
+# should be enabled along with bpf above
+# net.core.bpf_jit_harden = 2
 
- # Kernel self-protection
+# restrict loading TTY line disciplines to the CAP_SYS_MODULE
+dev.tty.ldisk_autoload = 0
+
+# prevent exploit of use-after-free flaws
+vm.unprivileged_userfaultfd = 0
+
+# kexec is used to boot another kernel during runtime and can be abused
+kernel.kexec_load_disabled = 1
+
+# Kernel self-protection
 # SysRq exposes a lot of potentially dangerous debugging functionality to unprivileged users
 # 4 makes it so a user can only use the secure attention key. A value of 0 would disable completely
 kernel.sysrq = 4
 
-# Fix "FAIL: 2", recommended is 3
+# disable unprivileged user namespaces, Note: Docker and other apps may need this
+# kernel.unprivileged_userns_clone = 0 # commented out because it makes apps I need fail
+
+# restrict all usage of performance events to the CAP_PERFMON capability
 kernel.perf_event_paranoid = 3
 
-# Fix "FAIL: 1", recommended is 0
-dev.tty.ldisc_autoload = 1
+# Network Security Hardening
+# ----------------------------------------------------------------------
 
-# Fix "FAIL: 0", recommended is 2
-kernel.kptr_restrict = 2
-
-kernel.dmesg_restrict = 1
-
-# Fix "FAIL: 61175", recommended is 0
-user.max_user_namespaces = 15000
-
-# Fix "FAIL: 0", recommended is 1
-kernel.kexec_load_disabled = 1
-
-# Fix "FAIL: 2", recommended is 1
-kernel.unprivileged_bpf_disabled = 1
-
-# Fix "FAIL: 1", recommended is 0
-vm.unprivileged_userfaultfd = 0
-
-# Fix "FAIL: 0", recommended is 1
-kernel.modules_disabled = 0
-
-# Fix "FAIL: 0", recommended is 2
-# restricts access to async I/O and prevents spawning new shells
-kernel.io_uring_disabled = 0
-
-# Fix "FAIL: 16", recommended is 0
-kernel.sysrq = 0
-
-# Fix "FAIL: 1", recommended is 2
-fs.protected_fifos = 2
-
-# Fix "FAIL: 1", recommended is 2
-fs.protected_regular = 2
-
-# Fix "FAIL: 2", recommended is 0
-fs.suid_dumpable = 0
-
-# Fix "FAIL: 1", recommended is 3
-kernel.yama.ptrace_scope = 2
-
-# Fix "FAIL: 28", recommended is 32
-vm.mmap_rnd_bits = 32
-
-# Fix "FAIL: 8", recommended is 16
-vm.mmap_rnd_compat_bits = 16
-
-# Network
 # protect against SYN flood attacks (denial of service attack)
 net.ipv4.tcp_syncookies = 1
+
 # protection against TIME-WAIT assassination
 net.ipv4.tcp_rfc1337 = 1
+
 # enable source validation of packets received (prevents IP spoofing)
 net.ipv4.conf.default.rp_filter = 1
 net.ipv4.conf.all.rp_filter = 1
 
+# Disable ICMP redirects for IPv4
 net.ipv4.conf.all.accept_redirects = 0
 net.ipv4.conf.default.accept_redirects = 0
 net.ipv4.conf.all.secure_redirects = 0
 net.ipv4.conf.default.secure_redirects = 0
-# Protect against IP spoofing
+
+# Disable ICMP redirects for IPv6 (Protect against IP spoofing)
 net.ipv6.conf.all.accept_redirects = 0
 net.ipv6.conf.default.accept_redirects = 0
 net.ipv4.conf.all.send_redirects = 0
 net.ipv4.conf.default.send_redirects = 0
 
-# prevent man-in-the-middle attacks
+# prevent man-in-the-middle attacks (by ignoring ICMP echo requests)
 net.ipv4.icmp_echo_ignore_all = 1
 
-# ignore ICMP request, helps avoid Smurf attacks
+# ignore bogus ICMP errors, helps avoid Smurf attacks
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+
+# Disable IP forwarding
 net.ipv4.conf.all.forwarding = 0
+
+# Disable acceptance of source-routed packets for IPv4
 net.ipv4.conf.default.accept_source_route = 0
 net.ipv4.conf.all.accept_source_route = 0
+
+# Disable acceptance of source-routed packets for IPv6
 net.ipv6.conf.all.accept_source_route = 0
 net.ipv6.conf.default.accept_source_route = 0
-# Reverse path filtering causes the kernel to do source validation of
+
+# Disable IPv6 forwarding
 net.ipv6.conf.all.forwarding = 0
+
+# Disable Router Advertisements acceptance
 net.ipv6.conf.all.accept_ra = 0
 net.ipv6.conf.default.accept_ra = 0
 
-## TCP hardening
-# Prevent bogus ICMP errors from filling up logs.
-net.ipv4.icmp_ignore_bogus_error_responses = 1
+# TCP Hardening
+# ----------------------------------------------------------------------
 
-# Disable TCP SACK
+# Disable TCP SACK (Selective Acknowledgement)
 net.ipv4.tcp_sack = 0
 net.ipv4.tcp_dsack = 0
 net.ipv4.tcp_fack = 0
 
-# Userspace
+# Userspace/Memory Security
+# ----------------------------------------------------------------------
+
 # restrict usage of ptrace
 kernel.yama.ptrace_scope = 2
 
@@ -798,20 +814,24 @@ vm.mmap_rnd_compat_bits = 16
 # only permit symlinks to be followed when outside of a world-writable sticky directory
 fs.protected_symlinks = 1
 fs.protected_hardlinks = 1
+
 # Prevent creating files in potentially attacker-controlled environments
 fs.protected_fifos = 2
 fs.protected_regular = 2
 
 # Randomize memory
 kernel.randomize_va_space = 2
-# Exec Shield (Stack protection)
-kernel.exec-shield = 1
 
-## TCP optimization
-# TCP Fast Open is a TCP extension that reduces network latency by packing
-# data in the sender’s initial TCP SYN. Setting 3 = enable TCP Fast Open for
-# both incoming and outgoing connections:
+# Exec Shield (Stack protection)
+# NOTE: This is generally deprecated/obsolete on modern kernels that use other hardening measures
+# kernel.exec-shield = 1
+
+# TCP Optimization
+# ----------------------------------------------------------------------
+
+# TCP Fast Open: 3 = enable for both incoming and outgoing connections
 net.ipv4.tcp_fastopen = 3
+
 # Bufferbloat mitigations + slight improvement in throughput & latency
 net.ipv4.tcp_congestion_control = bbr
 net.core.default_qdisc = cake
@@ -1102,6 +1122,9 @@ ssh-keygen -t ed25519 -a 32 -f ~/.ssh/id_ed25519_github_$(date +%Y-%m-%d) -C "SS
 ---
 
 ### GnuPG and gpg-agent
+
+<details>
+<summary> ✔️ Click to Expand GnuPG section </summary>
 
 `gpg --full-generate-key` can be used to generate a basic keypair.
 
@@ -1447,9 +1470,19 @@ sec#  ed25519/0x
 The above set of commands are from the
 [RiseUp Keep your primary key offline](https://riseup.net/ru/security/message-security/openpgp/gpg-best-practices#keep-your-primary-key-entirely-offline)
 
+</details>
+
 ---
 
 ## Hardening OpenSSH
+
+OpenSSH is a tool that allows you to remotely connect to your machine with the
+SSH protocol. It encrypts all traffic to prevent eavesdropping, connection
+hijacking, and other attacks.
+
+- [Arch Wiki OpenSSH](https://wiki.archlinux.org/title/OpenSSH)
+
+- [OpenSSH](https://www.openssh.com/)
 
 Install and configure fail2ban:
 
@@ -1526,7 +1559,7 @@ Add the output of `ssh-add -L` to `~/.ssh/authorized_keys`
 echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGXwhVokJ6cKgodYT+0+0ZrU0sBqMPPRDPJqFxqRtM+I (none)" > ~/.ssh/authorized_keys
 ```
 
-After adding the authorized_key, adjust the permission:
+After adding the `authorized_key`, adjust the permission:
 
 ```bash
 chmod 600 $HOME/.ssh/authorized_keys
@@ -1595,6 +1628,8 @@ ssh -p 2222 user@hostname
 
 ## USB Port Protection
 
+- [Arch Wiki USBGuard](https://wiki.archlinux.org/title/USBGuard)
+
 It's important to protect your USB ports to prevent BadUSB attacks, data
 exfiltration, unauthorized device access, malware injection, etc.
 
@@ -1609,14 +1644,23 @@ Install usbguard:
 
 ```bash
 sudo pacman -S usbguard
+# Optionally; paru -S usbguard-notifier fails with bad keys
+# paru -S usbguard-notifier-git
 ```
 
-> ❗️ NOTE: Most people use the daemon, this is just an example.
+Create a `usbguard` group and add your user to it:
+
+```bash
+sudo groupadd usbguard
+sudo usermod -aG usbguard username
+```
 
 Generate a policy based on your currently attached USB devices with:
 
 ```bash
 sudo usbguard generate-policy | sudo tee /etc/usbguard/rules.conf
+# Or if everything else fails
+# sudo bash -c "usbguard generate-policy > /etc/usbguard/rules.conf"
 ```
 
 ```bash
@@ -1625,17 +1669,25 @@ sudo chmod 600 /etc/usbguard/rules.d/99-policy.conf
 
 ### USBGuard Daemon
 
+> ❗️ If practicing zero-trust, you would want to change your default policy to
+> `apply-policy`. This way any device that isn't explicitly allowed will be
+> blocked. It's easy to lock yourself out if done incorrectly.
+
 Edit `/etc/usbguard/usbguard-daemon.conf` to set the policy to allow devices
-that are already connected for root and your user:
+that are already connected for members of the `usbguard` group:
 
 ```conf
+# ...snip...
+RuleFile=/etc/usbguard/rules.conf
+
 # Default policy for devices that were already connected when the daemon started.
 # Supported values: apply-policy, allow, block, reject, keep.
 PresentDevicePolicy=allow
 
 # A list of users and groups that are allowed to interact with the daemon
 # via the IPC interface.
-IPCAllowedUsers=root your-user
+#IPCAllowedUsers=root your-user
+IPCAllowedUsers=usbguard
 ```
 
 From the above file we can see that it expects its configuration file to be
@@ -1683,10 +1735,18 @@ sudo systemctl enable usbguard
 sudo systemctl start usbguard --now
 ```
 
+- Sometimes a reboot is required. If your keyboard doesn't work, after entering
+  your encryption passphrase, enter the TTY with `Alt+Ctrl+F2` and ensure the
+  `usbguard` group exists and your user is a member.
+
 Check status:
 
 ```bash
 sudo systemctl status usbguard
+```
+
+```bash
+sudo usbguard list-devices
 ```
 
 - If you plug something new in and it doesn't work, this is why. Remember this!
@@ -1950,18 +2010,43 @@ Further reading:
 
 - [Arch Wiki AppArmor](https://wiki.archlinux.org/title/AppArmor)
 
-```bash
-paru -S bazaar
-```
-
 ## Creating profiles that aren't pre-configured
 
 ### Auditd
+
+Linux audit makes your system more secure by providing you the means to analyze
+what's going on in your system in great detail. It does not provide any security
+itself, but instead is useful for tracking these issues and helps you take
+additional security measures to prevent them.
 
 Install with:
 
 ```bash
 sudo pacman -S audit
+```
+
+- Enable audit at boot-time by setting `audit=1` as a kernel parameter,
+  typically either in `/etc/kernel/cmdline` or `/etc/cmdline.d/security.conf`
+  for UKIs.
+
+For example, this is my `/etc/cmdline.d/security.conf`:
+
+```conf
+# enable apparmor                               # enable audit
+lsm=landlock,lockdown,yama,integrity,apparmor,bpf audit=1 audit_backlog_limit=256
+```
+
+Create a group to follow principle of least privilege:
+
+```bash
+sudo groupadd audit-view
+sudo usermod -a -G audit-view $USER
+```
+
+In `/etc/audit/auditd.conf`, change `log_group = root` to:
+
+```conf
+log_group = audit-view
 ```
 
 Enable:
@@ -1975,6 +2060,8 @@ To create new profiles, `auditd` should be running. AppArmor can use kernel
 audit logs from the userspace auditd daemon, allowing you to build new profiles.
 
 - [Audit Framework](https://wiki.archlinux.org/title/Audit_framework)
+
+- [Arch manpage auditd](https://man.archlinux.org/man/auditd.8.en)
 
 A basic set of rules could be to create a `/etc/audit/rules.d/audit.rules` with
 the following contents:
@@ -1994,6 +2081,9 @@ the following contents:
 
 # Enable auditing
 -e 1
+
+# Make rules immutable
+-e 2
 ```
 
 Validate and load the rules, this will populate `/etc/audit/audit.rules` with
@@ -2014,7 +2104,20 @@ logs:
 
 ```bash
 sudo pacman -Syu
+```
+
+View the logs:
+
+```bash
 sudo ausearch -k sudo_usage
+```
+
+View the Summary Report:
+
+```bash
+sudo aureport
+sudo aureport --auth
+man aureport
 ```
 
 Verify the rules are loaded:

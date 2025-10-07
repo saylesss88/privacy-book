@@ -235,3 +235,218 @@ listed in Germany. If not, something is wrong and you have a DNS leak.
 
 I have noticed dnsleaktest having issues lately, `https://ipleak.net` works for
 this as well.
+
+## Enable MAC Randomization
+
+```bash
+sudo mkdir -p /etc/NetworkManager/conf.d
+sudo hx /etc/NetworkManager/conf.d/20-mac-randomization.conf
+```
+
+Add the following for randomization (use `stable` for consistent per-network
+MACs; change to `random` if preferred)
+
+```conf
+[device]
+wifi.scan-rand-mac-address=yes
+
+[connection]
+wifi.cloned-mac-address=random
+ethernet.cloned-mac-address=random
+```
+
+- `wifi.scan-rand-mac-address=yes`: Enables randomization during Wi-Fi scans
+  (default, but explicit for clarity).
+
+- `wifi.cloned-mac-address=stable` / `ethernet.cloned-mac-address=stable`:
+  Applies to Wi-Fi and Ethernet connections.
+
+**Verify MAC Randomization**
+
+Check your interface (e.g., `wlan3` for Wi-Fi, find with `ip link`)
+
+```bash
+ip link show wlp3s0 | grep link/ether
+```
+
+```bash
+nmcli connection down "YourSSID"
+nmcli connection up "YourSSID"
+```
+
+Check MAC again:
+
+```bash
+cat /sys/class/net/wlp3s0/address
+```
+
+```bash
+sudo systemctl status dnscrypt-proxy dnsmasq
+```
+
+```bash
+nslookup example.com
+```
+
+---
+
+**Enable dnsmasq caching**
+
+`/etc/NetworkManager/dnsmasq.d/cache.conf`:
+
+```conf
+cache-size=1000
+```
+
+---
+
+This may help with IPv6 connectivity, add the following to
+`/etc/NetworkManager/dnsmasq.d/ipv6-listen.conf`:
+
+```bash
+listen-address=::1
+```
+
+---
+
+**Enable DNSSEC validation**:
+
+`/etc/NetworkManager/dnsmasq.d/dnssec.conf`:
+
+```conf
+conf-file=/usr/share/dnsmasq/trust-anchors.conf
+dnssec
+```
+
+## Add Blocklists
+
+- [dnscrypt-proxy Filters](https://github.com/DNSCrypt/dnscrypt-proxy/wiki/Filters)
+
+Configure filter list sources in
+`/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/domains-blocklist.conf`:
+
+```conf
+# NextDNS CNAME cloaking list
+https://raw.githubusercontent.com/nextdns/cname-cloaking-blocklist/master/domains
+
+# AdGuard Simplified Domain Names filter
+https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
+
+# OISD Big list
+https://big.oisd.nl/domainswild
+
+# HaGeZi Multi PRO
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt
+
+# HaGeZi Threat Intelligence Feeds
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif-onlydomains.txt
+```
+
+```bash
+sudo mkdir -p /etc/dnscrypt-proxy-blocklist
+sudo cp -r /usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/* /etc/dnscrypt-proxy-blocklist/
+```
+
+Test and generate a blocklist manually, the `generate-domains-blocklist.py` can
+be found
+[Here](https://raw.githubusercontent.com/DNSCrypt/dnscrypt-proxy/master/utils/generate-domains-blocklist/generate-domains-blocklist.py).
+Save this file to `/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist`
+
+```bash
+cd /etc/dnscrypt-proxy-blocklist
+sudo python3 generate-domains-blocklist.py -o blocklist.txt
+```
+
+Create a service to download & combine filter lists:
+`/etc/systemd/system/dnscrypt-filterlist-update.service`:
+
+```.service
+[Unit]
+Description=DNSCrypt Filterlist Update
+
+[Service]
+Type=oneshot
+ExecStart=/etc/dnscrypt-proxy-blocklist/generate-domains-blocklist -a /etc/dnscrypt-proxy-blocklist/domains-allowlist.txt -o /etc/dnscrypt-proxy-blocklist/blocklist.txt
+ExecStartPost=/usr/bin/sleep 2
+ExecStartPost=/usr/bin/systemctl restart dnscrypt-proxy.service
+```
+
+Create a timer to run at boot & every 5 hours.
+`/etc/systemd/system/dnscrypt-filterlist-update.timer`:
+
+```.timer
+[Unit]
+Description=Run filterlist update 15min after boot and every 5h
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=5h
+
+[Install]
+WantedBy=timers.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable dnscrypt-filterlist-update.timer
+```
+
+Configure dnscrypt-proxy to use the blocklist:
+
+`/etc/dnscrypt-proxy/dnscrypt-proxy.toml`:
+
+```toml
+blocked_names_file = "/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/blocklist.txt"
+log_file = '/var/log/dnscrypt-proxy/blocked-names.log'
+```
+
+Restart the service:
+
+```bash
+sudo systemctl restart dnscrypt-proxy
+```
+
+Reboot.
+
+Verify blocklist works against an address listed in `blocklist.txt`:
+
+```bash
+dig dm.csl.academy @127.0.0.1 -p 53
+```
+
+Output:
+
+```bash
+;; ANSWER SECTION:
+dm.csl.academy.         10      IN      HINFO   "This query has been locally blocked" "by dnscrypt-proxy"
+```
+
+They should resolve to NXDOMAIN or fail according to our config
+
+## Enable Privacy Extensions
+
+Add this to `/etc/sysctl.d/40-ipv6.conf`:
+
+```conf
+# Enable IPv6 Privacy Extensions
+net.ipv6.conf.all.use_tempaddr = 2
+net.ipv6.conf.default.use_tempaddr = 2
+net.ipv6.conf.nic.use_tempaddr = 2
+```
+
+```bash
+# find nic
+ip link
+net.ipv6.conf.wlp3s0.use_tempaddr = 2
+```
+
+```bash
+sudo sysctl --system
+```
+
+`/etc/NetworkManager/conf.d/ip6-privacy.conf`:
+
+```conf
+[connection]
+ipv6.ip6-privacy=2
+```
