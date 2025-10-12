@@ -16,6 +16,9 @@
 sudo pacman -S dnscrypt-proxy
 ```
 
+> NOTE: udp is required for dnscrypt protocol, keep this in mind when
+> configuring your servers if your output chain is a default drop.
+
 - [Arch Wiki dnscrypt-proxy](https://wiki.archlinux.org/title/Dnscrypt-proxy)
 
 - [dnscrypt-proxy Wiki](https://github.com/DNSCrypt/dnscrypt-proxy/wiki/Configuration)
@@ -24,7 +27,7 @@ sudo pacman -S dnscrypt-proxy
 
 Edit `/etc/dnscrypt-proxy/dnscrypt-proxy.toml` to add your chosen resolvers etc.
 
-For example, to use Quad9's resolvers with oDoH:
+For example, to setup ODoH you could do the following:
 
 <details>
 <summary>
@@ -34,8 +37,13 @@ the local resolver.
 
 </summary>
 
+> ❗️ This isn't the whole file, only the parts that were changed.
+
 ```toml
-server_names = ['quad9-dnscrypt-ip6-filter-pri', 'quad9-dnscrypt-ip4-filter-pri', 'mullvad-adblock-doh' ]
+# DNSCRYPT servers to be forwarded to anon-relays
+# server_names = ['quad9-dnscrypt-ip6-nofilter-pri', 'quad9-dnscrypt-ip4-nofilter-pri', 'quad9-dnscrypt-ip6-nofilter-ecs-pri' ]
+# ODoH servers to be forwarded to odoh-relays
+server_names = [ 'odoh-cloudflare', 'odoh-snowstorm' ]
 
 listen_addresses = ['127.0.0.1:53', '[::1]:53']
 
@@ -65,7 +73,7 @@ require_dnssec = true
 require_nolog = true
 
 # Server must not enforce its own blocklist (for parental control, ads blocking...)
-require_nofilter = false
+require_nofilter = true
 
 bootstrap_resolvers = ['9.9.9.11:53', '1.1.1.1:53']
 
@@ -77,6 +85,8 @@ ignore_system_dns = true
 [sources]
 
 ### An example of a remote source from https://github.com/DNSCrypt/dnscrypt-resolvers
+
+# These are just lists of resolvers to choose from
 
 [sources.public-resolvers]
 urls = [
@@ -125,19 +135,54 @@ prefix = ''
 
 [anonymized_dns]
 
+# ODoH Server/ODoH Relay settings
 routes = [
-  { server_name='quad9-dnscrypt-ip6-filter-pri', via=['anon-cs-berlin', 'anon-cs-dus6'] },
-  { server_name='quad9-dnscrypt-ip4-filter-pri', via=['sdns://gREzNy4xMjAuMjE3Ljc1OjQ0Mw'] },
-  { server_name='mullvad-adblock-doh', via=['anon-cs-de', 'anon-cs-norway6'] }
+    { server_name='odoh-snowstorm', via=['odohrelay-crypto-sx'] },
+    { server_name='odoh-cloudflare', via=['odohrelay-crypto-sx'] }
 ]
+
+# DNSCRYPT Server/Anon-Relay Settings
+# routes = [
+#   { server_name='quad9-dnscrypt-ip6-nofilter-pri', via=['anon-cs-berlin', 'anon-cs-dus6'] },
+#   { server_name='quad9-dnscrypt-ip4-nofilter-pri', via=['sdns://gREzNy4xMjAuMjE3Ljc1OjQ0Mw'] },
+#   { server_name='quad9-dnscrypt-ip6-nofilter-ecs-pri', via=['anon-cs-de', 'anon-cs-norway6'] }
+# ]
+
 
 ## Skip resolvers incompatible with anonymization instead of using them directly
 skip_incompatible = true
 ```
 
-Check the
+The only
+[ODoH relay](https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/odoh-relays.md)
+listed is `odohrelay-crypto-sx` so both ODoH servers are routed through the same
+relay.
+
+The commented out `server_names` and `routes` are for Anonymous relays, which
+are different from oblivious relays and servers. Check the
 [relays.md](https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/relays.md)
 for different anon relays.
+
+Resources:
+
+<details>
+<summary> ✔️ Click to Expand Resources </summary>
+
+- [public-resolvers v3](https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md)
+
+- [dnscrypt public-servers](https://dnscrypt.info/public-servers/)
+
+- [Oblivious DoH](https://github.com/DNSCrypt/dnscrypt-proxy/wiki/Oblivious-DoH)
+
+- [List of public ODoH servers](https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/odoh-servers.md)
+
+- [List of public ODoH relays](https://github.com/DNSCrypt/dnscrypt-resolvers/blob/master/v3/odoh-relays.md)
+
+- [List of quad9-resolvers](https://raw.githubusercontent.com/Quad9DNS/dnscrypt-settings/main/dnscrypt/quad9-resolvers.md)
+
+- [dnscry.pt](https://www.dnscry.pt/)
+
+</details>
 
 </details>
 
@@ -223,6 +268,119 @@ request to dnsmasq first.
 4. Finally, dnsmasq receives the IP address from dnscrypt-proxy and sends it
    back to the program that made the original request (e.g., the browser).
 
+## Add Blocklists
+
+- [dnscrypt-proxy Filters](https://github.com/DNSCrypt/dnscrypt-proxy/wiki/Filters)
+
+Configure filter list sources in
+`/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/domains-blocklist.conf`:
+
+> ❗️ NOTE: Do a bit of research, all of these aren't required and will slow down
+> your queries. You can also setup an allowlist for exceptions.
+
+```conf
+# NextDNS CNAME cloaking list
+https://raw.githubusercontent.com/nextdns/cname-cloaking-blocklist/master/domains
+
+# AdGuard Simplified Domain Names filter
+https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
+
+# OISD Big list
+https://big.oisd.nl/domainswild
+
+# HaGeZi Multi PRO
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt
+
+# HaGeZi Threat Intelligence Feeds
+https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif-onlydomains.txt
+```
+
+```bash
+sudo mkdir -p /etc/dnscrypt-proxy-blocklist
+sudo cp -r /usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/* /etc/dnscrypt-proxy-blocklist/
+```
+
+Save
+[generate-domains-blocklist.py](https://raw.githubusercontent.com/DNSCrypt/dnscrypt-proxy/master/utils/generate-domains-blocklist/generate-domains-blocklist.py)
+to `/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist`
+
+```bash
+cd /etc/dnscrypt-proxy-blocklist
+sudo python3 generate-domains-blocklist.py -o blocklist.txt
+```
+
+Create a service to download & combine filter lists:
+`/etc/systemd/system/dnscrypt-filterlist-update.service`:
+
+```.service
+[Unit]
+Description=DNSCrypt Filterlist Update
+
+[Service]
+Type=oneshot
+ExecStart=/etc/dnscrypt-proxy-blocklist/generate-domains-blocklist -a /etc/dnscrypt-proxy-blocklist/domains-allowlist.txt -o /etc/dnscrypt-proxy-blocklist/blocklist.txt
+ExecStartPost=/usr/bin/sleep 2
+ExecStartPost=/usr/bin/systemctl restart dnscrypt-proxy.service
+```
+
+Create a timer to run at boot & every 5 hours.
+`/etc/systemd/system/dnscrypt-filterlist-update.timer`:
+
+```.timer
+[Unit]
+Description=Run filterlist update 15min after boot and every 5h
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=5h
+
+[Install]
+WantedBy=timers.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable dnscrypt-filterlist-update.timer
+```
+
+Configure dnscrypt-proxy to use the blocklist:
+
+`/etc/dnscrypt-proxy/dnscrypt-proxy.toml`:
+
+```toml
+blocked_names_file = "/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/blocklist.txt"
+log_file = '/var/log/dnscrypt-proxy/blocked-names.log'
+```
+
+For an allow list, you create a list of names you want to allow to bypass your
+blocklist:
+
+```toml
+allowed_names_file = "/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/allowed-names.txt"
+log_file = "/var/log/dnscrypt-proxy/allowed-names.log"
+```
+
+Restart the service:
+
+```bash
+sudo systemctl restart dnscrypt-proxy
+```
+
+Reboot.
+
+Verify blocklist works against an address listed in `blocklist.txt`:
+
+```bash
+dig dm.csl.academy @127.0.0.1 -p 53
+```
+
+Output:
+
+```bash
+;; ANSWER SECTION:
+dm.csl.academy.         10      IN      HINFO   "This query has been locally blocked" "by dnscrypt-proxy"
+```
+
 ## Testing
 
 I tested in Firefox by ensuring that in `Settings -> Privacy & Security` the DNS
@@ -263,7 +421,7 @@ ethernet.cloned-mac-address=random
 
 **Verify MAC Randomization**
 
-Check your interface (e.g., `wlan3` for Wi-Fi, find with `ip link`)
+Check your interface (e.g., `wlp3s0` for Wi-Fi, find with `ip link`)
 
 ```bash
 ip link show wlp3s0 | grep link/ether
@@ -317,111 +475,6 @@ listen-address=::1
 conf-file=/usr/share/dnsmasq/trust-anchors.conf
 dnssec
 ```
-
-## Add Blocklists
-
-- [dnscrypt-proxy Filters](https://github.com/DNSCrypt/dnscrypt-proxy/wiki/Filters)
-
-Configure filter list sources in
-`/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/domains-blocklist.conf`:
-
-```conf
-# NextDNS CNAME cloaking list
-https://raw.githubusercontent.com/nextdns/cname-cloaking-blocklist/master/domains
-
-# AdGuard Simplified Domain Names filter
-https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
-
-# OISD Big list
-https://big.oisd.nl/domainswild
-
-# HaGeZi Multi PRO
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/pro-onlydomains.txt
-
-# HaGeZi Threat Intelligence Feeds
-https://raw.githubusercontent.com/hagezi/dns-blocklists/main/wildcard/tif-onlydomains.txt
-```
-
-```bash
-sudo mkdir -p /etc/dnscrypt-proxy-blocklist
-sudo cp -r /usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/* /etc/dnscrypt-proxy-blocklist/
-```
-
-Test and generate a blocklist manually, the `generate-domains-blocklist.py` can
-be found
-[Here](https://raw.githubusercontent.com/DNSCrypt/dnscrypt-proxy/master/utils/generate-domains-blocklist/generate-domains-blocklist.py).
-Save this file to `/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist`
-
-```bash
-cd /etc/dnscrypt-proxy-blocklist
-sudo python3 generate-domains-blocklist.py -o blocklist.txt
-```
-
-Create a service to download & combine filter lists:
-`/etc/systemd/system/dnscrypt-filterlist-update.service`:
-
-```.service
-[Unit]
-Description=DNSCrypt Filterlist Update
-
-[Service]
-Type=oneshot
-ExecStart=/etc/dnscrypt-proxy-blocklist/generate-domains-blocklist -a /etc/dnscrypt-proxy-blocklist/domains-allowlist.txt -o /etc/dnscrypt-proxy-blocklist/blocklist.txt
-ExecStartPost=/usr/bin/sleep 2
-ExecStartPost=/usr/bin/systemctl restart dnscrypt-proxy.service
-```
-
-Create a timer to run at boot & every 5 hours.
-`/etc/systemd/system/dnscrypt-filterlist-update.timer`:
-
-```.timer
-[Unit]
-Description=Run filterlist update 15min after boot and every 5h
-
-[Timer]
-OnBootSec=15min
-OnUnitActiveSec=5h
-
-[Install]
-WantedBy=timers.target
-```
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable dnscrypt-filterlist-update.timer
-```
-
-Configure dnscrypt-proxy to use the blocklist:
-
-`/etc/dnscrypt-proxy/dnscrypt-proxy.toml`:
-
-```toml
-blocked_names_file = "/usr/share/dnscrypt-proxy/utils/generate-domains-blocklist/blocklist.txt"
-log_file = '/var/log/dnscrypt-proxy/blocked-names.log'
-```
-
-Restart the service:
-
-```bash
-sudo systemctl restart dnscrypt-proxy
-```
-
-Reboot.
-
-Verify blocklist works against an address listed in `blocklist.txt`:
-
-```bash
-dig dm.csl.academy @127.0.0.1 -p 53
-```
-
-Output:
-
-```bash
-;; ANSWER SECTION:
-dm.csl.academy.         10      IN      HINFO   "This query has been locally blocked" "by dnscrypt-proxy"
-```
-
-They should resolve to NXDOMAIN or fail according to our config
 
 ## Enable Privacy Extensions
 

@@ -7,30 +7,81 @@
 
 </details>
 
-> ❗️ NOTE: Browser hardening recommendations have started to change from
-> suggesting that you install a bunch of add-ons to choosing secure defaults and
-> changing minimal settings to get the most out of it.
+## 🔑 Key Terms
+
+- **Browser hardening** focuses on reducing attack surface and blocking tracking
+  by disabling or restricting features like JavaScript, cookies, telemetry, and
+  third-party scripts.
+
+- **Fingerprint protection**, on the other hand, aims to make your browser
+  indistinguishable from others. Instead of just blocking data collection, it
+  ensures that your browser’s configuration; screen size, fonts, user agent,
+  etc. matches a large group of users, so you blend in.
+
+- **Browser compartmentalization** is a technique where different browsers are
+  dedicated to distinct online activities to isolate cookies, trackers, and
+  browsing data. For example, Mullvad Browser can be used solely for activities
+  where fingerprinting resistance is critical, such as anonymous browsing or
+  visiting privacy-sensitive sites. Meanwhile, a hardened LibreWolf or Firefox
+  can be used for general browsing, email, or banking where you want solid
+  security and feature flexibility but aren't as concerned about fingerprint
+  uniqueness.
+
+- **Web APIs**: are sets of rules and protocols that allow browsers or servers
+  to communicate and share data or functions over the internet. It lets
+  developers access features or data of a web service or application without
+  exposing the underlying system details, enabling different software to
+  interact smoothly and securely.
+
+- **Anonymity**: Maximizing anonymity often means restricting or masking
+  features (setting a generic fingerprint, disabling browser APIs, blocking
+  trackers) so the browser blends in with many others. This reduces uniqueness
+  but can break website functionality, cause CAPTCHAs, and limit usability.
+
+- **Usability**: Keeping your browser features enabled improves compatibility
+  and user experience but increase uniqueness and thus make you easier to track.
+
+- [Entropy](<https://en.wikipedia.org/wiki/Entropy_(computing)>): in this
+  context, is a measure of how much unique information a specific browser
+  feature contributes to your fingerprint. It's often quantified in **bits of
+  entropy**, where higher bits mean more uniqueness (i.e., easier to identify
+  you).
+  - A "bit" is a basic unit of information for computers. Entropy measuring
+    sites results are measured in "bits of identifying information".
+
+> Tor Browser is **not** the most secure browser, anonymity, and security can
+> often be at odds with each other. Having the exact same browser as many other
+> people isn't the best security practice, but it is great for anonymity. Tor is
+> also based on Firefox Esr, which only receives patches for vulnerabilities
+> considered Critical or High which can be taken advantage of.
 
 ### Fingerprinting Explained
+
+Modern Web APIs enable highly customized user experiences but also expose
+detailed device information that attackers can exploit to create browser
+fingerprints, unique identifiers used for covert tracking, even when cookies are
+blocked.
+
+**Entropy**, a measure of randomness or uniqueness in data, is a critical metric
+for assessing the risk of browser fingerprinting.
 
 Browser fingerprinting is a tracking technique, often done by third-party
 companies that specialize in it. They provide code (usually JavaScript) that a
 website owner can embed on their site. When you visit the site, the script runs
 in the background, silently collecting data about your device and browser.
 
-The most concerning aspect of browser fingerprinting is that it operates
-silently and without user consent. It's not something you can easily see or
-something like cookies that you can opt-out or delete. Browser fingerprinting is
-stateless meaning that it doesn't need to store any data on your computer. It
-can identify you while behind a VPN or in incognito mode as well.
-
 There are two main approaches to obfuscating your fingerprint:
 
-- Standardization: Make browsers standardized and therefore have the same
-  fingerprint to blend into a crowd. This is what Tor does.
+- **Standardization**: Make browsers standardized and therefore have the same
+  fingerprint to blend into a crowd. This is what Tor and Mullvad Browser do.
+  Best for anonymity; increases the crowd you blend into, but may decrease
+  usability (site breakage, CAPTCHAs); adversaries may still find subtle
+  differences.
 
-- Randomization: Randomize fingerprint metrics so it's not directly tieable to
-  you. Brave has this feature.
+- **Randomization**: Randomize fingerprint metrics so it's not directly linkable
+  to you. Brave has this feature, if you run coveryourtracks with Brave you will
+  get a result of "your browser has a randomized fingerprint". This is good for
+  privacy but may be detectable by advanced scripts.
 
 Test your browsers fingerprint:
 
@@ -38,14 +89,26 @@ Test your browsers fingerprint:
 
 - [AmIUnique](https://amiunique.org/)
 
+Test the sites you visit for trackers:
+
+- [Blacklight](https://themarkup.org/ask-the-markup/2020/09/22/i-scanned-the-websites-i-visit-with-blacklight-and-its-horrifying-now-what)
+
 Don't put too much weight into the results as people often check their
 fingerprint, change one metric and check it again over and over skewing the
-results. It is helpful for knowing what the values actually are and seeing what
-the tracking companies see.
+results. It is helpful for knowing the fingerprint values that trackers track.
+
+- [Browser Fingerprinting Tor Forum](https://forum.torproject.org/t/browser-fingerprinting/1228/25)
+
+- [Madaidans Hot Take on Browser Tracking](https://madaidans-insecurities.github.io/browser-tracking.html)
 
 You can use something like [NoScript](https://noscript.net/) to block
 JavaScript, preventing the scripts from running that do most of the
 fingerprinting. Extensions can make you more unique but it's a give and take.
+
+The following website lists the tracking protection mechanisms implemented by
+the major browsers and browser engines:
+
+- [Cookie Status](https://www.cookiestatus.com/)
 
 ---
 
@@ -68,7 +131,7 @@ to `about:preferences#search` and at the bottom click `Add`, URL will be
 > `https://priv.au/search?q=%s`. This gives much better results than DDG in my
 > opinion.
 
-Searx is a bit different, you can choose which search engine you want for your
+SearXNG is a bit different, you can choose which search engine you want for your
 current search with `!ddg search term` to use duckduckgo for example.
 
 - [searxng repo](https://github.com/searxng/searxng?tab=readme-ov-file)
@@ -85,6 +148,8 @@ current search with `!ddg search term` to use duckduckgo for example.
 - [Startpage Privacy Protection](https://www.startpage.com/privacy-please/startpage-articles/easy-privacy-control-across-the-internet-introducing-startpage-privacy-protection)
 
 ---
+
+## Defenses
 
 #### Encrypted DNS
 
@@ -116,8 +181,6 @@ Useful resources:
 <details>
 <summary> ✔️ Click to Expand DNS Resources </summary>
 
-- [NixOS Wiki Encrypted DNS](https://wiki.nixos.org/wiki/Encrypted_DNS)
-
 - [Domain Name System (DNS)](https://www.cloudflare.com/learning/dns/what-is-dns/)
 
 - [Wikipedia DNS over HTTPS (DoH)](https://en.wikipedia.org/wiki/DNS_over_HTTPS)
@@ -147,21 +210,30 @@ In `about:preferences#privacy` scroll down to `DNS over HTTPS`, Select
 
 #### Enhanced Tracking Protection (ETP)
 
-- [Enhanced Tracking Protection (ETP)](https://blog.mozilla.org/security/2020/01/07/firefox-72-fingerprinting/)
+Browsers that have a form of tracking protection typically use lists of known
+trackers and match each outgoing request against these lists.
+
+Enhanced Tracking Protection is how you deal with cookies and more on Firefox.
+
+- [Enhanced Tracking Protection (ETP)](https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop)
   blocks known "third-party requests" to companies that participate in
   fingerprinting, according to the
   [Disconnect List](https://disconnect.me/trackerprotection)
   - In `about:preferences#privacy`, setting Enhanced Tracking Protection to
-    either Strict or Custom enables FPP as well explained further down.
+    either Strict or Custom enables FPP as well, explained further down.
 
-  - When you enable ETP strict mode, Total Cookie Protection is enabled by
-    default. It confines cookies to the site where they were created, preventing
-    companies from using them to track your browsing from site to site.
+  - [Total Cookie Protection](https://blog.mozilla.org/mozilla/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/)
+    is enabled by default in Standard mode.
+
+  - When you set ETP to Strict, it includes
+    [Enhanced Cookie Clearing](https://blog.mozilla.org/security/2021/08/10/firefox-91-introduces-enhanced-cookie-clearing/),
+    which improves on the removal of third-party cookies, as well as Bounce
+    Tracking Protection that prevents redirect trackers.
 
 - [First-Party Isolation](https://wiki.mozilla.org/Security/FirstPartyIsolation)
   From the Tor Uplift Project.
 
-### Fingerprinting
+### Resist Fingerprinting
 
 - [Fingerprinting](https://wiki.mozilla.org/Security/Fingerprinting)
 
@@ -189,11 +261,29 @@ In `about:preferences#privacy` scroll down to `DNS over HTTPS`, Select
 
 ---
 
-## WebRTC
+## Disable JavaScript
+
+Most trackers run on JavaScript, thus blocking JavaScript prevents them from
+gathering much of the info needed to form a browser fingerprint.
+
+- [NoScript](https://noscript.net/) lets you selectively block scripts on
+  websites. Its core function is to block all scripts by default on websites,
+  allowing you to manually enable scripts on trusted sites.
+
+  [NoScript PrivacyGuides](https://blog.jeaye.com/2017/11/30/noscript/) should
+
+- [uBlock Origin](https://ublockorigin.com/) also lets you block JavaScript,
+  just be aware that many sites may break so you'll have to whitelist
+  selectively.
+
+## Disable WebRTC
 
 The main reason people disable WebRTC is to prevent an IP address leak. WebRTC
 is designed for real-time communication like video calls and file sharing. If
 you don't use those features, it makes sense to disable it.
+
+Disabling WebRTC eliminates specific data points that trackers use, reducing
+entropy & the uniqueness of your fingerprint.
 
 In `about:preferences#privacy` -> `Privacy & Security` -> `Permissions`. Click
 `Settings`.
@@ -207,21 +297,40 @@ In `about:preferences#privacy` -> `Privacy & Security` -> `Permissions`. Click
 You can also use the master switch by going to `about:config` and setting
 `media.peerconnection.enabled` to `false`
 
+`user.js` settings related to WebRTC:
+
+```js
+/* 2002: force WebRTC inside the proxy [FF70+] ***/
+user_pref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
+ * When using a system-wide proxy, it uses the proxy interface
+ * [1] https://developer.mozilla.org/docs/Web/API/RTCIceCandidate
+ * [2] https://wiki.mozilla.org/Media/WebRTC/Privacy ***/
+user_pref("media.peerconnection.ice.default_address_only", true);
+user_pref("media.peerconnection.enabled", false);
+user_pref("media.peerconnection.ice.obfuscate_host_address", true);
+/* 2004: force exclusion of private IPs from ICE candidates [FF51+]
+ * [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you
+ * grant device access, but often results in breakage on video-conferencing platforms ***/
+user_pref("media.peerconnection.ice.no_host", true);
+```
+
 ---
 
-## Canvas Fingerprinting
+## Disable Canvas Fingerprinting
 
 Canvas Fingerprinting uses the HTML5 `<canvas>` element to generate a
 fingerprint. It gets your device to render an image or text on a canvas and then
 reads the pixel data. Since devices render things differently, those differences
 are identifiable.
 
-When you set `privacy.resistFingerprinting` it modifies both Canvas and WebGL
-behavior to make their outputs non-unique.
+When the pref `privacy.resistFingerprinting` is set to `true`, restricts APIs
+commonly used for fingerprinting, including the HTML5 Canvas API. When enabled,
+it returns a randomized or generic canvas output to prevent unique
+identification.
 
 ---
 
-## WebGL
+## Disable WebGL
 
 Similar to canvas fingerprinting, this technique uses the WebGL API to render 2D
 and 3D graphics. The way your system renders these graphics provides information
@@ -236,6 +345,12 @@ It can be disabled in `about:config` by setting `webgl.disabled` to `true`.
 ---
 
 ## Install Firefox/LibreWolf & ArkenFox
+
+> ⚠️ Firefox offers excellent privacy and customization but falls behind
+> Chromium-based browsers in isolation and patch timing. Compartmentalization
+> can help balance strong privacy with optimal security by using Brave or
+> Chromium for high-risk browsing alongside Firefox for general and
+> privacy-focused tasks.
 
 Download Firefox from the
 [Mozilla FTP site](https://ftp.mozilla.org/pub/firefox/releases/) if you are
@@ -468,6 +583,161 @@ filter lists handle the blocking.
 
 You can also disable JavaScript in My rules as needed.
 
+---
+
+## Set up a SOCKS5 Proxy with Arti
+
+> ❗️ NOTE: This is one example of using a SOCKS5 proxy to circumvent censorship
+> or add additional privacy without the Tor Browser. You can also route other
+> apps through the proxy, such as email clients, messaging apps, torrent
+> clients, and more.
+
+1. Clone the arti repo:
+
+```bash
+# clone the repo
+git clone https://gitlab.torproject.org/tpo/core/arti.git
+
+# navigate to the directory
+cd arti
+```
+
+---
+
+2. To build the Arti binary, compile the code and generate the executable run:
+
+These are the safer build options so you can leave the arti repo in your home
+directory without it leaking your username:
+
+```bash
+RUSTFLAGS="--remap-path-prefix $HOME/.cargo=.cargo --remap-path-prefix $(pwd)=." \
+   cargo build --release -p arti
+```
+
+---
+
+3. To allow Arti SOCKS proxy traffic you need to add a rule permitting incoming
+   connections to port 9150.
+
+For nftables, you would open `/etc/nftables.conf` and add:
+
+```conf
+chain input {
+  # ...snip...
+
+  # Allow Arti SOCKS proxy (port 9150)
+    tcp dport 9150 ct state new accept
+
+  # ...snip...
+}
+```
+
+Enable it with `sudo nft -f /etc/nftables.conf`
+
+---
+
+4. To run Arti as a SOCKS proxy on port `9150`, execute:
+
+```bash
+./target/release/arti proxy
+```
+
+---
+
+5. Configure LibreWolf/Firefox to use the Arti proxy:
+
+Open LibreWolf or Firefox
+
+Go to the menu and open `Preferences/Settings`.
+
+Scroll to the bottom `Network Settings` section.
+
+Click on "`Settings...`" under Network Settings.
+
+In the connection settings dialog:
+
+Select "`Manual proxy configuration`".
+
+For "SOCKS Host", enter `127.0.0.1`.
+
+For the port next to SOCKS Host, enter `9150`.
+
+Select the SOCKS version 5 option (`SOCKS v5`).
+
+Optionally check the box "`Proxy DNS when using SOCKS v5`" to route DNS queries
+through the proxy for enhanced privacy.
+
+Click "`OK`" to apply the settings.
+
+---
+
+6. Verify Your Proxy Setup Open a new tab and visit `https://dnsleaktest.com`
+   and run an `Extended Test`.
+
+Your IP address should now appear as a Tor exit node IP, indicating your traffic
+is routed through the Arti proxy.
+
+- Make sure Arti is running in its terminal or background before you start
+  browsing.
+
+- If you close the terminal or stop Arti, your browser will lose the proxy
+  connection.
+
+This setup only proxies the configured browser traffic; other apps are not
+affected unless configured similarly.
+
+This setup turns LibreWolf or Firefox into a Tor-enabled browser without
+installing the Tor Browser Bundle, using the Arti SOCKS proxy instead. It can be
+useful if you want to use a more customizable or alternative browser while still
+accessing the Tor network securely.
+
+> ⚠️ While using LibreWolf with the Arti SOCKS5 proxy provides network-level
+> anonymity by routing traffic through the Tor network, it does not include the
+> extensive browser-level privacy and security enhancements found in the
+> official Tor Browser. For casual or moderate privacy needs the SOCKS proxy can
+> be useful but for stronger anonymity guarantees and protection, the Tor
+> Browser is recommended.
+
+## Setup an Arti service to run in the background
+
+> Be careful here, its not as easy to tell if Arti failed for some reason.
+
+Create a service file at `/etc/systemd/system/arti.service`:
+
+Replace `your-username` with your username
+
+```.service
+[Unit]
+Description=Arti Tor Proxy Service
+After=network.target
+
+[Service]
+ExecStart=/home/your-username/arti/target/release/arti proxy
+Restart=on-failure
+User=jr
+Group=jr
+WorkingDirectory=/home/your-username/arti
+Environment=RUSTFLAGS="--remap-path-prefix $HOME/.cargo=.cargo --remap-path-prefix $(pwd)=."
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Enable & Start the service:
+
+```bash
+sudo systemctl enable arti
+sudo systemctl start arti --now
+```
+
+Ensure its running:
+
+```bash
+sudo systemctl status arti
+```
+
+---
+
 <details>
 <summary> ✔️ Click to Expand Resources </summary>
 
@@ -524,8 +794,26 @@ You can also disable JavaScript in My rules as needed.
 
 - [Tor Wiki](https://gitlab.torproject.org/tpo/team/-/wikis/home)
 
+- [Tor Blog](https://blog.torproject.org/)
+
+- [Arti why-rewrite-tor-in-rust](https://gitlab.torproject.org/tpo/core/arti/#why-rewrite-tor-in-rust)
+
+- [The Tor Uplift Project](https://wiki.mozilla.org/Security/Tor_Uplift/Tracking)
+
 - [BrowserCat Fingerprint Spoofing](https://www.browsercat.com/post/browser-fingerprint-spoofing-explained)
 
 - [cyberinsider Firefox privacy 2025](https://cyberinsider.com/firefox-privacy/)
+
+- [cyberinsider Browser Fingerprinting](https://cyberinsider.com/browser-fingerprinting/)
+
+- [Mozilla Web Docs Privacy on the web](https://developer.mozilla.org/en-US/docs/Web/Privacy)
+
+- [Adguard Blog Browser Extensions and Firewalls explained](https://adguard-dns.io/en/blog/techtok-9-browser-extensions-and-firewall.html)
+
+- [searchfox RFPTargetsDefault](https://searchfox.org/firefox-main/source/toolkit/components/resistfingerprinting/RFPTargetsDefault.inc)
+
+- [Wikipedia Entropy (computing)](<https://en.wikipedia.org/wiki/Entropy_(computing)>)
+
+- [Brave Blog](https://brave.com/blog/)
 
 </details>

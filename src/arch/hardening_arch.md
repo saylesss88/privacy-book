@@ -1976,8 +1976,8 @@ Save & Reboot
 Start/Enable AppArmor:
 
 ```bash
-sudo systemctl start apparmor
 sudo systemctl enable apparmor
+sudo systemctl start apparmor
 ```
 
 Ensure the LSM is loaded with:
@@ -1991,6 +1991,10 @@ cat /sys/kernel/security/lsm
 Reboot, and run `sudo aa-enabled`, and `sudo aa-status`. You should see many
 profiles in enforce mode.
 
+### Switching an app from unconfined mode to enforce
+
+- First, ensure a profile exists
+
 Check AppArmor log messages:
 
 Each time AppArmor denies applications from doing something potentially harmful
@@ -2002,6 +2006,14 @@ sudo journalctl -fx
 
 NOTE: Your firewall can also trigger this.
 
+### Disabling AppArmor
+
+Disable AppArmor by unloading all profiles for the current session:
+
+```bash
+sudo aa-teardown
+```
+
 Further reading:
 
 - [AppArmor Quick Intro](https://apparmor.net/)
@@ -2010,7 +2022,106 @@ Further reading:
 
 - [Arch Wiki AppArmor](https://wiki.archlinux.org/title/AppArmor)
 
-## Creating profiles that aren't pre-configured
+## Creating or adding profiles that aren't pre-configured
+
+For example, thunderbird came with a profile that just allowed everything.
+Rather than creating my own profile I cloned the `apparmor-profiles` repo and
+got it from there.
+
+```bash
+mkdir aa && cd aa
+git clone git://git.launchpad.net/apparmor-profiles
+```
+
+```bash
+sudo cp ~/aa/apparmor-profiles/thunderbird /etc/apparmor.d/usr.bin.thunderbird
+```
+
+Create a local override file, this is where you will make your personal changes
+to existing profiles:
+
+```bash
+sudo mkdir -p /etc/apparmor.d/local
+sudo touch /etc/apparmor.d/local/usr.bin.thunderbird
+```
+
+Set the new profile to enforce mode:
+
+```bash
+sudo aa-enforce /etc/apparmor.d/usr.bin.thunderbird
+```
+
+---
+
+**Creating a new profile**
+
+- [Profiling_with_tools](https://gitlab.com/apparmor/apparmor/-/wikis/Profiling_with_tools)
+
+1. Temporarily disable kernel rate limiting on logs:
+
+```bash
+sudo sysctl -w kernel.printk_ratelimit=0
+```
+
+2. Start `aa-genprof`:
+
+```bash
+sudo aa-genprof <path-to-executable>
+# Example
+sudo aa-genprof /usr/bin/brave
+```
+
+3. Execute a test plan, open and close brave, download a file through brave,
+   adjust settings, do anything you can think of with brave.
+
+- Press S to Scan system log for AppArmor events
+
+- Press F to Finish
+
+This simple example created this profile in `/etc/apparmor.d/usr.bin.brave`:
+
+```text
+# Last Modified: Wed Oct  8 09:29:51 2025
+abi <abi/4.0>,
+
+include <tunables/global>
+
+/usr/bin/brave flags=(complain) {
+  include <abstractions/base>
+
+  /usr/bin/brave r,
+  /usr/bin/env ix,
+
+}
+```
+
+### Profiling by Hand
+
+Disable kernel rate limiting:
+
+```bash
+sysctl -w kernel.printk_ratelimit=0
+```
+
+Lets pick up from our /usr/bin/brave example:
+
+Create a preliminary profile
+
+```text
+# Last Modified: Wed Oct  8 09:29:51 2025
+abi <abi/4.0>,
+
+include <tunables/global>
+
+/usr/bin/brave flags=(complain) {
+  include <abstractions/base>
+
+  /usr/bin/brave r,
+  /usr/bin/env ix,
+
+}
+
+```
 
 ### Auditd
 

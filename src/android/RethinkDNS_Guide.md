@@ -91,6 +91,17 @@
 - **DNS Resolver**: is a server or software component that translates domain
   names into IP addresses that devices use to communicate.
 
+- **Unicast DNS**: The traditional DNS setup where each DNS server is assigned a
+  unique, single IP address. DNS queries from clients are directed to this
+  specific server regardless of the clients location.
+
+- **Anycast DNS**: Anycast allows a single IP address to be used by multiple
+  servers. In Anycast DNS, a DNS query can be answered by any one of several DNS
+  servers, usually the one closest to the user by geographic or network
+  proximity. This setup reduces latency, increases the availability of DNS
+  resolution services, and offers protection against DNS flood DDoS attacks by
+  distributing traffic across multiple servers.
+
 - **Recursive resolver** (DNS recursor): is typically the first stop in the
   series of the above servers.
 
@@ -192,6 +203,47 @@ The best version in my opinion is the F-Droid version.
 ## Getting Started
 
 ### DNS
+
+Recommended Resolvers:
+
+<details>
+<summary> ✔️ Click to Expand recommended resolvers </summary>
+
+These are just the providers I've researched personally and not in a specific
+order. It's recommended to regularly test and switch between DNS providers as
+location and network conditions play a factor. There are DNS benchmarking tools
+available to either download or use in-browser.
+
+A few examples:
+
+- <https://dnsspeedtest.online/>
+
+- <https://www.grc.com/dns/benchmark.htm>
+
+---
+
+- **Quad9** is known to enforce strong standards in cryptography and was the
+  first to use DNSSEC cryptographic validation.
+  - [Quad9 privacy policy](https://quad9.net/privacy/policy/)
+
+- Mullvad DNS
+  - [Mullvad privacy policy](https://mullvad.net/en/help/privacy-policy)
+
+- NextDNS
+  - [NextDNS privacy policy](https://nextdns.io/privacy)
+
+- Cloudflare publishes regular transparency reports and undergoes independent
+  audits and have a great blog explaining the technology which is a major plus.
+  - [Cloudflare Privacy Policy](https://www.cloudflare.com/privacypolicy/)
+
+- RethinkDNS: Their DNS code is open source so anyone can audit it themselves.
+  They do not collect PII nor seek to profile its users, transparency is great.
+  - [DNS Privacy Policy for stub resolvers](https://rethinkdns.com/privacy)
+  - [Fly.io privacy policy for the recursive resolver](https://fly.io/legal/privacy-policy/)
+
+- [PrivacyGuides DNS Recommendations](https://www.privacyguides.org/en/dns/)
+
+</details>
 
 Throughout this article, I'll be discussing the **RethinkDNS Android App**.
 We'll later reference the **DNS Blocklist configuring website**, which is
@@ -379,9 +431,10 @@ the most functionality without breakage 👇️:
 You can get more restrictive from here, but it will take some manual
 intervention to get everything working correctly.
 
-Keep your firewall rules in mind when you're setting per app settings. If the
-Universal firewall blocks all apps when the device is locked, do you want this
-app affected by this or do you want to let it Bypass the Universal firewall?
+Keep your firewall rules in mind when you're configuring per app settings. If
+the Universal firewall blocks all apps when the device is locked, do you want
+this app affected by this or do you want to let it Bypass the Universal
+firewall?
 
 ---
 
@@ -700,7 +753,7 @@ network access to every app. We will then go through and only enable networking
 for the apps that we need and trust.
 
 <details>
-<summary> ✔️ Click to Expand Android Privacy Tips </summary>
+<summary> ✔️ Click to Expand Android Privacy Tips for the paranoid </summary>
 
 If you don't like the idea of someone forcing you to unlock your phone so they
 can sift through your data:
@@ -708,7 +761,8 @@ can sift through your data:
 - It's often recommended to **not** use biometrics as they can be forcibly be
   taken from you while a password typically can't.
 
-- Cellibrite relies on your phone being in AFU mode which is After first unlock.
+- [Cellebrite](https://en.wikipedia.org/wiki/Cellebrite) relies on your phone
+  being in AFU mode which is After first unlock.
 
 **BFU**: Before First Unlock. This refers to the state right after a device
 restarts. Since you haven't entered your password yet, the system has not
@@ -752,6 +806,19 @@ zones to strategically place adds on the most traveled areas.
 
 - [Types of bluetooth attacks](https://www.forbes.com/sites/alexvakulov/2025/02/20/11-types-of-bluetooth-attacks-and-how-to-protect-your-devices/)
 
+- Turn off Wi-Fi, Bluetooth, Location, Nearby device scanning, etc. when not in
+  use or needed. Your weather app doesn't need your location 24/7, find one that
+  lets you manually enter your location and time zone.
+
+- Use a password manager rather than using the one built into the browser, I
+  like BitWarden for sync and KeepassDX for self storage. Since you don't have
+  to remember the passwords, have it generate long complex unique passwords for
+  each app.
+  - You can use KeepassDX to store a complex password for Bitwarden that is kept
+    100% offline so your synced passwords are better protected.
+
+---
+
 **Google**
 
 In `Settings -> Google` in
@@ -778,6 +845,8 @@ I recommended that you **remove Android System SafetyCore**.
 
 - [Google forcing Android System SafetyCore on users to scan for nudes](https://www.kaspersky.com.au/blog/what-are-android-safetycore-and-key-verifier/34736/)
 
+---
+
 **F-Droid**
 
 F-Droid is a free and open-source app store for Android that only distributes
@@ -796,15 +865,121 @@ the Play ecosystem.
 I personally use IronFox as my default and have been happy with it so far. It
 comes with uBlock installed by default which I recommend that you learn how to
 get the most out of. With Firefox fingerprint protection, a few about:config
-tweaks, and uBlock you can accomplish what used to take 6 extensions to do.
+tweaks, and uBlock you can accomplish what used to take 6 extensions to do. See:
+[uBlock Origin](#ublock-origin)
+
+For more compartmentalization, Brave Browser now has an F-Droid repository that
+can be added.
+
+Open F-Droid, in Settings click Repositories, click +, and for the Brave
+official repository add the following:
+
+> NOTE: If you don't want to add a repo, you can use the FFUpdater app to
+> install privacy friendly browsers including brave.
+
+```text
+https://brave-browser-apk-release.s3.brave.com/fdroid/repo
+```
+
+Or you can visit
+<https://brave-browser-apk-release.s3.brave.com/fdroid/repo/index.html> and scan
+the QR code.
+
+Another app that I recently discovered on F-Droid is the
+[FFUpdater](https://f-droid.org/en/packages/de.marmaro.krt.ffupdater/) app. It
+enables you to install and update different privacy friendly browsers as well as
+updating FairEmail, K-9 Mail/Thunderbird, and Orbot in a privacy respecting way.
+
+- FairEmail is great, it has many privacy features including support for
+  encryption,reformatting messages to prevent phishing, and more.
+
+- To install apps through FFUpdater tap the phone logo with the down arrow on
+  the top right of the screen.
+
+Aurora Store is an open-source client for Google Play that respects user privacy
+and lets you download and update proprietary apps with an anonymous account. You
+can use F-Droid for open-source apps and Aurora for proprietary apps.
+
+I would recommend against Obtainium, the dev is a piece of shit and you can do
+anything it can do easily without it.
+
+Another option I came across that I haven't tried yet is
+[Zapstore](https://zapstore.dev/) It's a decentralized, permissionless app store
+that lets you support devs without PII.
+
+- [EFF stop-tracking-my-emails](https://www.eff.org/deeplinks/2019/01/stop-tracking-my-emails)
+
+---
+
+**SearXNG**
+
+While we're on the topic of browsers, it's worth considering a privacy-focused
+metasearch engine like SearXNG. SearXNG anonymizes your search queries and
+removes any identifying data before passing them along to Google or other search
+engines. This way, you can receive top-quality search results while keeping your
+privacy intact
+
+To get started find a few [local instances](https://searx.space/) and
+[others](https://searx.neocities.org/nojs.html) and either bookmark them for
+quick access or do what I do and add them to use as your default search engine.
+
+In Firefox go to `about:preferences#search`, scroll to the bottom and click
+`Add`. Name it whatever you want and for the URL add one of the local instances
+followed by `search?q=%s` for example, for an instance in the US with A+
+ratings:
+
+```text
+https://searx.ankha.ac/search?q=%s
+```
+
+Then click `Add Engine`, and back near the top of the page you can set one
+instance as your default search engine and another for private windows. I have
+had a good experience so far using SearXNG with the occasional problem that is
+solved by using a different instance.
+
+> ❗️ Note: When using a public SearXNG instance from someone you don’t know, you
+> are trusting the operator since they can see the IP address making the
+> searches and might keep logs. The site https://searx.space/ provides helpful
+> details to choose instances based on trust and location. If you want the
+> highest level of privacy and full control, running your own instance is the
+> best option—though it requires more setup. Using public instances is a great
+> way to get started and improve privacy compared to regular search engines.
+
+**Browser compartmentalization** is a technique where you use multiple browsers
+to separate different types of online activities. Instead of doing all browsing
+in a single browser, you dedicate specific browsers to distinct tasks, for
+example, one browser for email and banking, another for social media, and a
+third for casual web surfing. This separation makes it difficult for websites
+and trackers to link your activities across different contexts because cookies,
+trackers, and browsing data are isolated within each browser.
+
+- AI and social media Apps often require extensive permissions and deep access
+  to your device data and can run background processes that you can't easily
+  monitor. If you avoid the apps and only access AI and social media in your
+  browser you get the benefits of browser sandboxing, tracking prevention,
+  cookie controls and more. You gain more benefits by using the
+  compartmentalization technique explained above, possibly one for AI and one
+  for social media.
+
+---
+
+The following website lists the tracking protection mechanisms implemented by
+the major browsers and browser engines:
+
+- [Cookie Status](https://www.cookiestatus.com/)
+
+---
 
 <details>
 <summary> ✔️ Click to Expand uBlock Guide </summary>
 
 ## uBlock Origin
 
-BetterFox does a great job explaining how to use uBlock with solid
-recommendations.
+Arkenfox and Betterfox are JavaScript configuration files used to harden/control
+Firefox settings on a computer.
+
+[BetterFox](https://github.com/yokoffing/BetterFox?tab=readme-ov-file) does a
+great job explaining how to use uBlock with solid recommendations.
 
 - [BetterFox uBlock filterlists](https://github.com/yokoffing/filterlists?tab=readme-ov-file#guidelines)
 
@@ -824,8 +999,8 @@ will be blocked before clicking `Subscribe` again to apply them.
 Click the uBlock logo, Settings, Filter lists, scroll to the bottom and choose
 Import..., Paste the url of your chosen list, and click Apply changes.
 
-For example, Arkenfox suggests adding the Actually Legitimate URL Shortener
-Tool. Add
+For example, [Arkenfox](https://github.com/arkenfox/user.js/) suggests adding
+the Actually Legitimate URL Shortener Tool. Add
 <https://raw.githubusercontent.com/DandelionSprout/adfilt/master/LegitimateURLShortener.txt>
 to the Import... section and click Apply changes. If you scroll up, you'll see
 that it was added and chosen.
@@ -877,6 +1052,8 @@ scripts. The box will change colors, dark gray = NOOP (No Operation). This tells
 uBO to ignore the aggressive global block for this site, and let the normal
 filter lists handle the blocking.
 
+Click the padlock to make the rules NOOP rules permanent.
+
 You can also disable JavaScript in Settings as needed replacing the need for
 NoScript.
 
@@ -889,6 +1066,10 @@ NoScript.
 - [F-Droid and Google's Developer Registration Decree](https://f-droid.org/en/2025/09/29/google-developer-registration-decree.html)
 
 </details>
+
+---
+
+## Default Deny
 
 If you read the following GrapheneOS discussion forum written by an RDNS dev:
 
@@ -947,6 +1128,16 @@ A few apps that typically need network access on Android:
 
 ### [Tor](#tor)
 
+Tor itself is a network and software that anonymizes traffic by encrypting it
+and bouncing it though a series of volunteer-operated relays around the world
+before reaching the destination. Orbot uses this Tor network to encrypt and
+anonymize internet traffic for Android apps.
+
+Orbot routes app traffic through Tor but doesn't provide the same kind of
+traffic isolation and sandboxing that Tor browser offers on desktop. Be aware of
+the limitations and use Tor Browser on a hardened system or specialized software
+such as Tails or Whonix when anonymity truly matters.
+
 If you want to learn how Tor works, I suggest reading the following in this
 order:
 
@@ -965,6 +1156,21 @@ technologies.--[How to Support Tor](https://www.privacyguides.org/articles/2025/
 <summary>
 ✔️ Click to Expand Tor Section
 </summary>
+
+> ❗️ WARNING: Tor gets much of its funding from the US government and is not
+> immune to vulnerabilities or misconfigurations.Tor Browser is **not** the most
+> secure browser, anonymity and security can often be at odds with each other.
+> Having the exact same browser as many other people isn't the best security
+> practice, but it is great for anonymity. Tor is also based on Firefox Esr,
+> which only receives patches for vulnerabilities considered Critical or High
+> which can be taken advantage of.
+
+Tor Project has also done some sketchy/questionable things lately such as
+removing user agent spoofing which made every user appear as if they were using
+the same version of Windows. This decision reduces anonymity and is questionable
+at best, seems to me there ought to be a very good reason for doing this which I
+can't find. Tor is still one of the best anonymity solutions, just stay informed
+and cautious.
 
 The following is a summary of some of the Tor Overview, all credit goes to them.
 It is important to spread the word when you can!
@@ -992,6 +1198,8 @@ privacy and freedom for all.
 ### [Setting up Orbot with a TCP-only Proxy](#setting-up-orbot-with-a-tcp-only-proxy)
 
 ![Orbot Logo](../images/orbot.png)
+
+- Helpful guide, [What is Orbot?](https://thecyberexpress.com/what-is-orbot/)
 
 TCP-Only Proxies forward all TCP-level connections from selected apps to Orbot.
 
@@ -1033,7 +1241,7 @@ https://ipcheck.net
 > properly anonymized through Tor and Quad9. As long as you don't see your
 > actual ISP's servers in the results, your setup is working as intended.
 
-Now you can add more apps that would benefit from anonymity such as FairMail,
+Now you can add more apps that would benefit from anonymity such as FairEmail,
 RSS feeds, and crypto wallets. I believe for Signal, it requires that you to set
 up the SOCKS5 proxy to work correctly which is pretty straightforward.
 
@@ -1117,6 +1325,19 @@ You could:
 3. Check for leaks, go to `dnsleaktest.com` and run a Standard test. If you
    don't see your Public IP listed anywhere, you don't have a leak.
 
+**Fixing DNS Leaks**:
+
+- Use WireGuard in Simple mode.
+
+- Or, use `Configure -> DNS -> Split DNS` with WireGuard in
+  `Advanved + Lockdown` mode (if running on Android 12+)
+
+To ensure your DNS requests go through your VPN, check
+`Configure -> Logs -> DNS`. Tap on the entries that appear there, which should
+bring up a bottomsheet with more info about the request and how it was handled.
+Requests handled by WireGuard are shown with sub-text "resolved x min ago by
+wg..." --celzero
+
 ---
 
 ### [Logs](#logs)
@@ -1154,9 +1375,60 @@ rule to `Block` or `Trust`.
 ✔️ Click to Expand Resources
 </summary>
 
+**RSS** (Really Simple Syndication) is a technology that delivers automatic
+updates from your favorite websites, blogs, or podcasts in a standardized
+format. It saves you time by eliminating the need to manually check for new
+content. Best of all, your feed includes only what you choose—no algorithms
+deciding what you see.
+
+I personally use [Feeder](https://feeder.co/) as my RSS reader, it's open-source
+and has been great IMO.
+
+- [PrivacyTools privacy-rss-feed-readers](https://www.privacytools.io/privacy-rss-feed-readers)
+
+**RSS Feeds**:
+
+With Feeder, you click the 3 dots in the top right and click + Add feed, you can
+then type the regular address of a site & if it has RSS feeds, Feeder will list
+them. Most sites that have an RSS feed will have an orange RSS button that you
+can click on to get the address.
+
+- PrivacyTools: <https://www.privacytools.io/guides/rss.xml>
+
+- Darknet Diaries: <https://podcast.darknetdiaries.com/>
+
+- Hacker News: <https://news.ycombinator.com/rss>
+
+- PrivacyGuides: <https://privacyguides.org/rss/>
+
+- Tor Project blog: <https://blog.torproject.org/feed.xml>
+
+- Mozilla Security Blog: <https://blog.mozilla.org/security/feed/>
+
+- Electronic Frontier Foundation Deeplinks Blog:
+  <https://www.eff.org/rss/updates.xml>
+
+- KrebsonSecurity: <https://krebsonsecurity.com/feed/>
+
+- Arkenfox recent commits:
+  <https://github.com/arkenfox/user.js/commits/master.atom>
+
+- Arkenfox release notes: <https://github.com/arkenfox/user.js/releases.atom>
+
+- Brave Blog: <https://brave.com/blog/index.xml>
+
+- Ars Technica: <https://feeds.arstechnica.com/arstechnica/index/>
+
+- PrivacySavvy: <https://privacysavvy.com/feed/>
+  - PrivacySavvy Security Archive: <https://privacysavvy.com/security/feed/>
+
+---
+
 - [Oblivious DNS over HTTPS](https://research.cloudflare.com/projects/network-privacy/odns/)
 
 - [DNSCrypt Protocol](https://www.ietf.org/archive/id/draft-denis-dprive-dnscrypt-06.html)
+
+- [PrivacyTools.io](https://www.privacytools.io/)
 
 - [PrivacyGuides In Praise of Tor](https://www.privacyguides.org/articles/2025/04/30/in-praise-of-tor/)
 
@@ -1186,6 +1458,10 @@ rule to `Block` or `Trust`.
 - [PrivacyGuides DNS Recommendations](https://www.privacyguides.org/en/dns/)
 
 - [What is a DNS Server?](https://www.cloudflare.com/learning/dns/what-is-a-dns-server/)
+
+- [What is Anycast](https://www.cloudflare.com/learning/dns/what-is-anycast-dns/)
+
+- [anycast-dns-vs-unicast-dns](https://dn.org/anycast-dns-vs-unicast-dns-a-comparative-guide/)
 
 - [What is UDP?](https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/)
 
