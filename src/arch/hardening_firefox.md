@@ -49,6 +49,25 @@
   - A "bit" is a basic unit of information for computers. Entropy measuring
     sites results are measured in "bits of identifying information".
 
+- [Origin](https://developer.mozilla.org/en-US/docs/Glossary/Origin): Web
+  content's _origin_ is defined by the _scheme_ (protocol), _hostname_ (domain),
+  and port of the URL used to access it. Two objects have the same origin only
+  when the scheme, hostname, and port all match.
+
+- [Same-origin policy](https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy):
+  is a critical security mechanism that restricts how a document or script
+  loaded by one origin can interact with a resource from another origin. It
+  helps isolate potentially malicious documents, reducing possible attack
+  vectors.
+
+- [Firefox Site-Isolation](https://blog.mozilla.org/security/2021/05/18/introducing-site-isolation-in-firefox/).
+  Firefox does provide site-isolation as well.
+
+- [Protection from side-channel attacks](https://www.mozilla.org/en-US/security/advisories/mfsa2018-01/)
+
+- [MDN Insecure passwords](https://developer.mozilla.org/en-US/docs/Web/Security/Insecure_passwords)
+  - [Risks of reused passwords](https://blog.mozilla.org/tanvi/2016/01/28/no-more-passwords-over-http-please/)
+
 > Tor Browser is **not** the most secure browser, anonymity, and security can
 > often be at odds with each other. Having the exact same browser as many other
 > people isn't the best security practice, but it is great for anonymity. Tor is
@@ -88,6 +107,10 @@ Test your browsers fingerprint:
 - [CoverYourTracks](https://coveryourtracks.eff.org/)
 
 - [AmIUnique](https://amiunique.org/)
+
+Test how well your browser implements security standards and features:
+
+- [BrowserAudit](https://browseraudit.com)
 
 Test the sites you visit for trackers:
 
@@ -757,6 +780,8 @@ sudo systemctl status arti
 
 - [PrivacyTools.io](https://www.privacytools.io/private-browser)
 
+- [PrivacyTests.org](https://privacytests.org/)
+
 - [simeononsecurity Firefox-Privacy-Script](https://github.com/simeononsecurity/FireFox-Privacy-Script)
 
 - [Browsers for Daily Using](https://anhkhoakz.neocities.org/blog/browsers-for-daily-using/#firefox-but-hardened)
@@ -815,5 +840,17 @@ sudo systemctl status arti
 - [Wikipedia Entropy (computing)](<https://en.wikipedia.org/wiki/Entropy_(computing)>)
 
 - [Brave Blog](https://brave.com/blog/)
+
+**Cheatsheets**
+
+- [HTTP Security Response Headers Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html)
+
+- [Zero Trust Architecture Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Zero_Trust_Architecture_Cheat_Sheet.html)
+
+- [riseup entropy](https://we.riseup.net/riseup+tech/entropy)
+
+- [kicksecure entropy](https://www.kicksecure.com/wiki/Dev/Entropy)
+
+- [riseup Digital Security](https://riseup.net/en/security)
 
 </details>

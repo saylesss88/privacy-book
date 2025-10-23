@@ -22,6 +22,17 @@
   browsers and servers to transfer web pages and related resources over the
   internet.
 
+- **HTTPS**: HTTP encrypted using TLS is often referred to as HTTPS.
+  TLS-encrypted web traffic is by convention exchanged on port 443 by default,
+  while unencrypted HTTP uses port 80 by default.
+
+- **TLS** (Transport Layer Security) is an encryption protocol and is the
+  standard for enabling two networked applications or devices to exchange
+  information privately and robustly.
+
+- **Mixed content**: is when an otherwise secure website uses resources fetched
+  via HTTP or other insecure protocols.
+
 - **IP** (Internet Protocol): The address system of the internet that routes
   data packets from source to destination devices. IP operates at the network
   layer and does not guarantee delivery order or error checking, which is
@@ -259,7 +270,7 @@ available at [rethinkdns.com/configure](https://rethinkdns.com/configure).
 That said, it's quite common for ISPs to engage in practices that compromise
 user privacy. Do some research, whats their business model, privacy policy, etc.
 Unfortunately, with a VPN you are also just shifting the trust. Don't blindly
-choose a VPN either, I haven't found a free VPN that I would trust...
+choose a VPN either.
 
 - [ISP data-collection](https://cyberinsider.com/internet-service-providers-isp-privacy-data-collection/)
 
@@ -341,8 +352,8 @@ blocklists from `Configure -> DNS -> On-device blocklists`, and have them setup
 for **any** DNS upstream.
 
 There is a known bug where it sometimes when you click `DOWNLOAD BLOCKLISTS` it
-just keeps listening and never receives anything. The GitHub `v05.5n` that I'm
-using was affected by this with the Obtainium App.
+just keeps listening and never receives anything. The GitHub `v05.5n` was
+affected by this.
 
 This **does work** on the F-Droid version.
 
@@ -404,17 +415,18 @@ the most functionality without breakage 👇️:
 - **Set your IP version**: The default is `IPv4`, you can choose between
   `IPv6 (experimental)` and `Auto (experimental)`.
 
-- Using the `Loopback` sounds like a good idea but it makes many of the
-  resolvers fail. You may have better luck, just remember that this could be
-  what's causing your connectivity issues if you're having any.
-
 - **Choose fallback DNS**: When your user-preferred DNS is not reachable,
-  fallback DNS will be used. I typically choose RethinkDNS as the fallback.
+  fallback DNS will used.
+  - With the F-Droid version in `Configure -> DNS -> ADVANCED`. You can enable
+    `Use fallback DNS as bypass`, which always uses fallback DNS for bypassed
+    apps, domains, and IPs.
 
-- You may want to experiment with shutting off `Enable network visibility`, just
-  keep in mind that some apps may break. "Shutting this off prevents apps from
-  accessing all available networks, stopping them from bypassing Rethinks
-  tunnel". This caused issues with the browser when turned off.
+- I personally disable `Enable network visibility`, just keep in mind that some
+  apps may break.
+  - "Shutting this off prevents apps from accessing all available networks,
+    stopping them from bypassing Rethinks tunnel". This caused issues with the
+    browser when turned off.(Some audio/video conference apps like Zoom and Meet
+    require this)
 
 ---
 
@@ -718,6 +730,9 @@ visit the site that wouldn't work while watching the logs. You should see
 `Firefox` pop up, click it, in the top right of the pop up should be the reason
 it was blocked.
 
+- [PrivacyTests.org](https://privacytests.org/), tests different browsers in
+  different privacy categories.
+
 ---
 
 ### [DuckDuckGo](#duckduckgo)
@@ -732,17 +747,13 @@ servers.
 
 #### [Chromium Based Browsers (Brave)](#chromium-based-browsers-brave)
 
-Brave would not work when routed through Rethink and Chrome completely ignored
-it. Brave is definitely better if you must use a Chrome derivative.
+For Brave, if you want your DNS routed through Rethink you have to turn
+`Use secure DNS` off.
 
-- I tried disabling the Brave Shield `Use Secure DNS` to see if that helped, it
-  didn't. There may be more you could do here to get it working...
+I also had to set Brave to _Bypass Universal_
 
-- I do have Chrome and google apps disabled on my main device and only active in
-  the Secure Folder which is like a sandboxed environment. This could very well
-  be the reason it ignored Rethink, I don't care to test further...
-
-- [EU Hits Google with 3.5 Billion Antitrust](https://techstory.in/eu-hits-google-with-3-5-billion-antitrust-fine-over-adtech-practices/)
+> NOTE: Brave has been known to have some spyware in the past, though most of it
+> can be opted out of.
 
 ---
 
@@ -901,13 +912,25 @@ and lets you download and update proprietary apps with an anonymous account. You
 can use F-Droid for open-source apps and Aurora for proprietary apps.
 
 I would recommend against Obtainium, the dev is a piece of shit and you can do
-anything it can do easily without it.
+anything it can do easily without it. Discoverium is a fork run by someone else,
+might be an option.
 
 Another option I came across that I haven't tried yet is
 [Zapstore](https://zapstore.dev/) It's a decentralized, permissionless app store
 that lets you support devs without PII.
 
 - [EFF stop-tracking-my-emails](https://www.eff.org/deeplinks/2019/01/stop-tracking-my-emails)
+
+---
+
+**Share Files and more anonymously**:
+
+- [OnionShare](https://onionshare.org/)
+
+**Sharing Images**:
+
+- Clean metadata before sharing pics, I personally use
+  [Metadata Remover](https://github.com/Crazy-Marvin/MetadataRemover)
 
 ---
 
@@ -1300,6 +1323,12 @@ In the App dropdown choose `Orbot`.
 
 ## WireGuard/VPN
 
+![WireGuard Logo](../images/wireguard.png)
+
+Keep your goals in mind before paying for a VPN, some allow you to pay with cash
+anonymously such as Mullvad VPN and a few others. Remember that you are
+transferring trust, from your ISP to the VPN provider.
+
 `Configure -> Proxy -> Setup WireGuard -> +`:
 
 With the WireGuard protocol, the provider usually gives you either a QR Code, or
@@ -1340,6 +1369,109 @@ wg..." --celzero
 
 ---
 
+**Proton VPN**
+
+This works for ProtonVPN Free as well.
+
+Written by celzero
+[Here](https://www.reddit.com/r/rethinkdns/comments/163e83l/proton_vpn/)
+
+1. On your Android, visit https://account.protonvpn.com/downloads
+
+2. Scroll to WireGuard
+
+- Give it a name
+
+- Select Android
+
+- Enable VPN options as needed.
+
+- Press Create or tap on Download.
+
+3. Open Rethink, goto Configure -> Proxy -> Setup WireGuard
+
+- Tap on the "+" button
+
+- Choose Import
+
+- Select the downloaded configuration file
+
+4. If the import is successful, you should see a new profile prefixed wg added
+   to the list.
+
+5. Tap on that `wg` entry.
+
+- In the new screen that opens up, tap on Add / Remove applications.
+
+- Select apps that should be part of this particular WireGuard profile.
+
+- Go back.
+
+6. Enable / disable that wg profile as desirable.
+
+- On my phone, when I saved the VPN profile, it automatically added `.txt` to
+  the end of the file causing the import to fail. I was able to open my phones
+  documents and long hold the file to rename it, afterwards I was able import
+  it.
+
+---
+
+**SIMPLE**
+
+When you enable: `Configure -> Proxy -> Setup WireGuard - SIMPLE`
+
+All connections from all apps, including DNS, will be routed to a single, active
+WireGuard VPN. Other active WireGuard VPNs, if any, will be stopped.
+
+If you tap SIMPLE, you can see the name of your VPN, check your Logs, and see
+your Peer connection.(your device that participates in the VPN network)
+
+---
+
+**ADVANCED**
+
+Same as above but tap `ADVANCED` before enabling the toggle. This lets you
+choose which apps will be routed through the VPN while the rest are routed as
+usual.
+
+This Mode also lets you enable:
+
+- **Lockdown**: Selected apps will only be routed through this WireGuard VPN,
+  regardless of whether the VPN is active or disabled.
+
+- **Always-on**: All connections and apps not routed by other WireGuard VPNs
+  will be routed by this one.
+
+- **Mobile only**: Use this WireGuard exclusively over mobile data.
+
+After you configure your Advanced settings as needed, enable the toggle.
+
+Always make sure to watch your Logs as well as test with something like
+<dnsleaktest.com>, you shouldn't see your actual Public IP anywhere. It's
+advisable to check for WebRTC Leaks as well if you have that enabled.
+
+**Troubleshooting VPN issues**
+
+There are a few Proxy settings in `Configure -> Network -> PROXY`, where you
+can:
+
+- Enable `Do not randomize WireGuard listen port`: Keep WireGuard listen ports
+  fixed (no randomization) in Advanced mode.
+
+- Enable `Endpoint-Independent mapping`: When enabled, UDP sockets maintain a
+  fixed address and port for all destinations.
+
+**Check your Logs**
+
+In `Configure -> Proxy -> Setup WireGuard`, click on your VPN which will give
+you access to the `LOGS`.
+
+Click the top entry, it will bring up the IP address and domain and show your
+rules the app. You can click the dropdown menu's to set new Universal Firewall
+rules, as well as block/trust rules for IPs and domains.
+
+---
+
 ### [Logs](#logs)
 
 On-device logging is on by default. You can find it in `Configure -> Settings`.
@@ -1375,6 +1507,10 @@ rule to `Block` or `Trust`.
 ✔️ Click to Expand Resources
 </summary>
 
+Things change frequently in the privacy/security relm, many sites provide an RSS
+feed that automatically updates when they post new content. I've listed a few
+feeds that are good to follow IMO.
+
 **RSS** (Really Simple Syndication) is a technology that delivers automatic
 updates from your favorite websites, blogs, or podcasts in a standardized
 format. It saves you time by eliminating the need to manually check for new
@@ -1404,6 +1540,14 @@ can click on to get the address.
 - Tor Project blog: <https://blog.torproject.org/feed.xml>
 
 - Mozilla Security Blog: <https://blog.mozilla.org/security/feed/>
+
+- MDN Blog: <https://developer.mozilla.org/en-US/blog/rss.xml>
+
+- F-Droid Forum - Latest posts: <https://forum.f-droid.org/posts.rss>
+
+- Opensource.com: <https://opensource.com/feed>
+
+- DuckDuckGo Blog: <https://spreadprivacy.com/rss/>
 
 - Electronic Frontier Foundation Deeplinks Blog:
   <https://www.eff.org/rss/updates.xml>
@@ -1465,6 +1609,10 @@ can click on to get the address.
 
 - [What is UDP?](https://www.cloudflare.com/learning/ddos/glossary/user-datagram-protocol-udp/)
 
+- [MDN TLS](https://developer.mozilla.org/en-US/docs/Web/Security/Transport_Layer_Security)
+
+- [What is TLS](https://www.cloudflare.com/learning/ssl/transport-layer-security-tls/)
+
 - [Networking-Guides TCP/IP Basics](https://network-guides.com/tcp-ip-basics/)
 
 - [Cloudflare What is recursive DNS?](https://www.cloudflare.com/learning/dns/what-is-recursive-dns/)
@@ -1472,5 +1620,7 @@ can click on to get the address.
 - [OpenSnitch](https://github.com/evilsocket/opensnitch)
 
 - [pi-hole](https://github.com/pi-hole/pi-hole)
+
+- [Sypware Watchdog](https://spyware.neocities.org/)
 
 </details>

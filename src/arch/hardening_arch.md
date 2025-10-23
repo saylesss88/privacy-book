@@ -198,6 +198,10 @@ password required pam_pwquality.so retry=2 minlen=10 difok=6 dcredit=-1 ucredit=
 password required pam_unix.so use_authtok sha512 shadow
 ```
 
+The `/etc/pam.d/passwd` file with `pam_pwquality.so` specifies the enforcement
+directives and some immediate password rules, which apply dynamically during
+password changes.
+
 - [pam_pwuality(8)](https://man.archlinux.org/man/pam_pwquality.8)
 
 - [pam_unix(8)](https://man.archlinux.org/man/pam_unix.8)
@@ -208,6 +212,41 @@ password required pam_unix.so use_authtok sha512 shadow
 
 - Regularly review group memberships and file permissions, especially on
   sensitive system files.
+
+Edit `/etc/security/pwquality.conf` to read as:
+
+```pwquality.conf
+minlen = 15
+# digit
+dcredit = -1
+# uppercase
+ucredit = -1
+# lowercase
+lcredit = -1
+# Special character
+ocredit = -1
+# dictionary checks
+dictcheck = 1
+# username checks
+usercheck = 1
+usersubstr = 5
+enforcing = 1
+# check roots pwquality
+enforce_for_root
+```
+
+The `/etc/security/pwquality.conf` file holds system-wide default parameters
+that cannot all be easy expressed on the PAM line. This is a bit more
+comprehensive than `/etc/pam.d/passwd`.
+
+Setting `enforcing = 0` disables enforcement.
+
+- Using negative values like `dcredit = -1`, `ucredit = -1`, `lcredit = -1`, and
+  `ocredit = -1` requires at least one digit, uppercase, lowercase, and other
+  (special) character respectively.
+
+- `dictcheck = 1` and `usercheck = 1` enable dictionary checks and user name
+  checks to prevent weak or related passwords.
 
 ---
 
@@ -478,6 +517,10 @@ sudo rkhunter --config-check
 ---
 
 **ClamAV**
+
+- Malware stands for malicious software. A computer virus is an undesirable
+  program running on the user's computer often without their consent or even
+  without their knowledge.
 
 - [Arch Wiki ClamAV](https://wiki.archlinux.org/title/ClamAV)
 
@@ -835,6 +878,46 @@ net.ipv4.tcp_fastopen = 3
 # Bufferbloat mitigations + slight improvement in throughput & latency
 net.ipv4.tcp_congestion_control = bbr
 net.core.default_qdisc = cake
+```
+
+## Disable Core Dumps
+
+A core dump consists of the recorded state of the working memory of a computer
+program at a specific time, generally when a program crashes or terminates
+abnormally. They can be useful for debugging but can also contain sensitive
+information, to disable core dumps:
+
+Create `/etc/sysctl.d/50-coredump.conf`:
+
+```conf
+# disable coredumps
+kernel.core_pattern = |/bin/false
+# disable core dumps from setuid binaries
+fs.suid_dumpable = 0
+```
+
+Apply with:
+
+```bash
+sudo sysctl --system
+# or
+sudo sysctl -p /etc/sysctl.d/50-coredump.conf
+```
+
+Arch uses `systemd-coredump` by default, which still intercepts dumps. To fully
+disable that component, create `/etc/systemd/coredump.conf/custom.conf`:
+
+```conf
+[Coredump]
+Storage=none
+ProcessSizeMax=0
+```
+
+Then reload systemd:
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl mask systemd-coredump.socket
 ```
 
 </details>
@@ -2488,5 +2571,7 @@ sudo touch /var/log/aide/aide.log
 - [Tor Browser User Manual](https://tb-manual.torproject.org/)
 
 - [Tor Wiki](https://gitlab.torproject.org/tpo/team/-/wikis/home)
+
+- [VeraCrypt Beginners Tutorial](https://onionshare.org/)
 
 </details>

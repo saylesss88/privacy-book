@@ -169,6 +169,9 @@ reflector --list-countries
 reflector -c US --protocol https --age 6 --fastest 5 --sort rate --save /etc/pacman.d/mirrorlist
 ```
 
+This actually improves security by only providing `HTTPS` mirrors, by default
+both HTTP and HTTPS are used.
+
 NOTE: This can take a bit and you can expect some failures..
 
 ---
@@ -182,6 +185,69 @@ localectl list-keymaps
 loadkeys <chosen-map>
 # Increase font size
 setfont ter-132b
+```
+
+```bash
+sudo pacman -S chrony
+```
+
+`/etc/chrony.conf`:
+
+```conf
+# Copyright © 2014-2025 GrapheneOS
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+server time.cloudflare.com iburst nts
+server ntppool1.time.nl iburst nts
+server nts.netnod.se iburst nts
+server ptbtime1.ptb.de iburst nts
+server time.dfm.dk iburst nts
+server time.cifelli.xyz iburst nts
+
+minsources 3
+authselectmode require
+
+# EF
+dscp 46
+
+driftfile /var/lib/chrony/drift
+dumpdir /var/lib/chrony
+ntsdumpdir /var/lib/chrony
+
+leapseclist /usr/share/zoneinfo/leap-seconds.list
+makestep 1.0 3
+
+rtconutc
+rtcsync
+
+cmdport 0
+
+noclientlog
+```
+
+The above setup uses Network Time Security (NTS) and is a more modern safer way
+to synchronize time using chrony.
+
+```bash
+sudo systemctl disable --now systemd-timesyncd
+sudo systemctl enable --now chronyd
 ```
 
 ```bash
