@@ -215,6 +215,21 @@ The best version in my opinion is the F-Droid version.
 
 ### DNS
 
+I was surprised to see that GrapheneOS recommends that people use their own
+"network provided DNS servers for general purpose usage" (i.e., Your ISPs DNS).
+They say that "using the network-provided DNS servers is the best way to blend
+in with other users". Network and web sites can fingerprint and track users
+based on non-default DNS configurations.
+--[grapheneos default-dns](https://grapheneos.org/faq#default-dns)
+
+Given that it is a fact that many ISPs are known to share this data and do other
+privacy disrespecting things, I would personally rather make it harder for them.
+I included this because they are the experts and the choice is yours, I use a
+custom DNS myself. I guess since so many people virtue-signal saying that they
+"have nothing to hide"(a reckless, privileged notion) that not many people truly
+care about privacy and are likely using the default. The more people that we can
+convince to use privacy respecting tools, the better it is for everybody.
+
 Recommended Resolvers:
 
 <details>
@@ -245,6 +260,8 @@ A few examples:
 
 - Cloudflare publishes regular transparency reports and undergoes independent
   audits and have a great blog explaining the technology which is a major plus.
+  GrapheneOS sets Cloudflare as the fallback due to their good privacy policy,
+  and widespread usage.
   - [Cloudflare Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
 - RethinkDNS: Their DNS code is open source so anyone can audit it themselves.
@@ -679,10 +696,16 @@ well as the Universal Firewalls `Block when DNS is bypassed` ON.
 **Firefox Settings**
 
 > In Firefox, plug `about:config` into the URL bar and scroll down to
-> `network.ttr.mode` and change its value to `3` to prevent leaking DNS queries
+> `network.trr.mode` and change its value to `3` to prevent leaking DNS queries
 > to the System resolver. Also in `about:config` scroll down to
 > `media.peerconnection.enabled`, double-click to set it to false to prevent
 > WebRTC leaks.
+
+IronFox no longer lets you adjust the `network.trr.mode` in `about:config`, you
+adjust the `trr.mode` through the DNS over HTTPS settings. Set it to
+`Default Protection` or `OFF` and check for dns leaks. Fennec also has issues
+with setting `network.trr.mode 3` and falls back to insecure methods. I would
+suggest using the built in DNS over HTTPS for Fennec on max protection.
 
 - The trade-off is that disabling WebRTC also disables any websites or apps
   using WebRTC for real-time communication (like video calls or chat functions)
@@ -690,8 +713,8 @@ well as the Universal Firewalls `Block when DNS is bypassed` ON.
   [Wikipedia WebRTC](https://en.wikipedia.org/wiki/WebRTC)
 
 In Firefox `Settings -> Privacy & Security`, set `DNS over HTTPS` to
-`Default Protection`, this enables Firefox to use RethinkDNS's DNSCrypt resolver
-or whatever you chose.
+`Default Protection` or `OFF`, this enables Firefox to use RethinkDNS's DNSCrypt
+resolver or whatever you chose.
 
 ---
 
@@ -1322,8 +1345,6 @@ In the App dropdown choose `Orbot`.
 ---
 
 ## WireGuard/VPN
-
-![WireGuard Logo](../images/wireguard.png)
 
 Keep your goals in mind before paying for a VPN, some allow you to pay with cash
 anonymously such as Mullvad VPN and a few others. Remember that you are
