@@ -14,6 +14,6 @@ command = "mdbook-toc"
 renderers = ["html"]
 
 [output.html]
-# site-url = "https://mako088.github.io/"
+site-url = "https://mako088.github.io/"
 additional-css = ["theme/header-buttons.css"]
 additional-js = ["theme/header-buttons.js"]
