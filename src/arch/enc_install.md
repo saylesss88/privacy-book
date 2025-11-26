@@ -92,8 +92,6 @@ Linux key and has not been tampered with.
 
 The following is only if you currently already have keys on your gpg keyring.
 
-</details>
-
 <details>
 
 <summary> ☑️ Click to expand Key Signing and Publishing Example </summary>
@@ -129,6 +127,7 @@ better for the web of trust that gpg uses making the network more secure for
 everyone.
 
 </details>
+
 </details>
 
 ---
@@ -948,7 +947,12 @@ cryptsetup close cryptroot
 reboot
 ```
 
+</details>
+
 ### Resources
+
+<details>
+<summary> ✔️ Click to Expand Resources </summary>
 
 - [Arch Wiki Installation Guide](https://wiki.archlinux.org/title/Installation_guide)
 
@@ -957,3 +961,5 @@ reboot
 - [Wiki UKI](https://wiki.archlinux.org/title/Unified_kernel_image)
 
 - [Wiki systemd-boot](https://wiki.archlinux.org/title/Systemd-boot)
+
+</details>

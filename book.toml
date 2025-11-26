@@ -1,3 +1,19 @@
 [book]
 authors = ["saylesss88"]
 language = "en"
+src = "src"
+
+[preprocessor.rss-feed]
+renderers = ["html"]
+
+[preprocessor.frontmatter-strip]
+renderers = ["html"]
+
+[preprocessor.toc]
+command = "mdbook-toc"
+renderers = ["html"]
+
+[output.html]
+# site-url = "https://mako088.github.io/"
+additional-css = ["theme/header-buttons.css"]
+additional-js = ["theme/header-buttons.js"]
