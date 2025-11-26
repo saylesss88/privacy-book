@@ -92,6 +92,8 @@ Linux key and has not been tampered with.
 
 The following is only if you currently already have keys on your gpg keyring.
 
+</details>
+
 <details>
 
 <summary> ☑️ Click to expand Key Signing and Publishing Example </summary>

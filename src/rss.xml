@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel><title>privacy-book</title><link>https://example.com/</link><description>An mdBook-generated site</description><generator>mdbook-rss-feed 0.1.0</generator><item><title>RethinkDNS_Guide</title><link>https://example.com/android/RethinkDNS_Guide.html</link><description><![CDATA[<p>I was surprised to see that GrapheneOS recommends that people use their own
+“network provided DNS servers for general purpose usage” (i.e., Your ISPs DNS).
+They say that “using the network-provided DNS servers is the best way to blend
+in with other users”. Network and web sites can fingerprint and track users
+based on non-default DNS configurations.
+–<a href="https://grapheneos.org/faq#default-dns">grapheneos default-dns</a></p><p>Given that it is a fact that many ISPs are known to share this data and do other
+privacy disrespecting things, I would personally rather make it harder for them.
+I included this because they are the experts and the choice is yours, I use a
+custom DNS myself. I guess since so many people virtue-signal saying that they
+“have nothing to hide”(a reckless, privileg]]></description><guid>https://example.com/android/RethinkDNS_Guide.html</guid><pubDate>Sun, 2 Nov 2025 22:32:38 +0000</pubDate></item><item><title>android_privacy</title><link>https://example.com/android/android_privacy.html</link><description><![CDATA[]]></description><guid>https://example.com/android/android_privacy.html</guid><pubDate>Sun, 2 Nov 2025 12:33:05 +0000</pubDate></item><item><title>chapter_1</title><link>https://example.com/chapter_1.html</link><description><![CDATA[]]></description><guid>https://example.com/chapter_1.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item><item><title>fingerprinting</title><link>https://example.com/browsers/fingerprinting.html</link><description><![CDATA[]]></description><guid>https://example.com/browsers/fingerprinting.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item><item><title>hardening_networking</title><link>https://example.com/arch/hardening_networking.html</link><description><![CDATA[]]></description><guid>https://example.com/arch/hardening_networking.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item><item><title>hardening_firefox</title><link>https://example.com/arch/hardening_firefox.html</link><description><![CDATA[<p><strong>Startpage</strong> is another metasearch engine that I’ve heard good things about.</p><p><a href="https://www.startpage.com/privacy-please/">Startpage Privacy Please!</a></p>]]></description><guid>https://example.com/arch/hardening_firefox.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item><item><title>hardening_arch</title><link>https://example.com/arch/hardening_arch.html</link><description><![CDATA[<p>Users and groups are used as a form of
+<a href="https://en.wikipedia.org/wiki/access_control#Computer_security">access control</a>.
+They control access to the system’s files, directories, and peripherals. This
+is a security feature that limits access in certain specific ways.</p><p>Apply the principle of least privilege by assigning users only the permissions
+they actually need.</p>]]></description><guid>https://example.com/arch/hardening_arch.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item><item><title>enc_install</title><link>https://example.com/arch/enc_install.html</link><description><![CDATA[<pre><code class="language-bash">pacman -Syyu
+</code></pre>
+<p>Save a backup of your current mirrorlist so we can safely update it:</p><pre><code class="language-bash">cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+</code></pre>
+<pre><code class="language-bash">pacman -S reflector
+reflector --list-countries
+# Example if you live in the US
+reflector -c US --protocol https --age 6 --fastest 5 --sort rate --save /etc/pacman.d/mirrorlist
+</code></pre>
+<p>This actually improves security by only providing <code>HTTPS</code> mirrors, by default
+both HTTP and HTTPS are used.</p>]]></description><guid>https://example.com/arch/enc_install.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item><item><title>enc_dns</title><link>https://example.com/arch/enc_dns.html</link><description><![CDATA[<p><strong>Enable dnsmasq caching</strong></p><p><code>/etc/NetworkManager/dnsmasq.d/cache.conf</code>:</p>]]></description><guid>https://example.com/arch/enc_dns.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item><item><title>README</title><link>https://example.com/README.html</link><description><![CDATA[]]></description><guid>https://example.com/README.html</guid><pubDate>Mon, 27 Oct 2025 11:33:55 +0000</pubDate></item></channel></rss>
