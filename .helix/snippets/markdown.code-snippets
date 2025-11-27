@@ -1,0 +1,32 @@
+{
+  "mdbookChapter": {
+    "prefix": "chapter",
+    "body": [
+      "# ${1:Chapter Title}",
+      "",
+      "${0:Your content here...}"
+    ],
+    "description": "New mdBook chapter header"
+  },
+
+  "mdbookAdmonishNote": {
+    "prefix": "adnote",
+    "body": [
+      "```
+      "${0:content}",
+      "```"
+    ],
+    "description": "mdBook admonish note block"
+  },
+
+  "mdbookRustCode": {
+    "prefix": "rs",
+    "body": [
+      "```
+      "${0:// code}",
+      "```"
+    ],
+    "description": "mdBook Rust code block"
+  }
+}
+
