@@ -16,7 +16,7 @@ draft: false
 
 </details>
 
-![RethinkDNS Logo](../images/rethinkdns.cleaned.png)
+![RethinkDNS Logo](images/rethinkdns.cleaned.png)
 
 > I'm not affiliated with RethinkDNS in any way, I'm just a technologist and
 > privacy advocate.
