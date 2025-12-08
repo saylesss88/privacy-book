@@ -1,3 +1,12 @@
+---
+title: Hardening Arch
+date: 2025-11-28
+author: saylesss88
+collection: "blog"
+tags: ["arch", "security"]
+draft: false
+---
+
 # Hardening Arch Linux
 
 <details>

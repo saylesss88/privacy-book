@@ -1,3 +1,12 @@
+---
+title: Encrypted Arch Install
+date: 2025-11-28
+author: saylesss88
+collection: "blog"
+tags: ["arch", "security"]
+draft: false
+---
+
 # Encrypted Arch Install for UEFI Systems with UKI and Secure Boot
 
 <details>

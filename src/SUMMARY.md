@@ -1,6 +1,5 @@
-[Introduction](README.md)
+[Introduction](index.md)
 
-- [Android Privacy & Security](android/android_privacy.md)
 - [RethinkDNS](android/RethinkDNS_Guide.md)
 - [Encrypted Arch Install](arch/enc_install.md)
 - [Encrypted DNS ArchLinux](arch/enc_dns.md)

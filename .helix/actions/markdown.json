@@ -1,0 +1,14 @@
+{
+	"bold": {
+		"title": "bold",
+		"filter": "",
+		"shell": ["echo -n **${TM_SELECTED_TEXT}**"],
+		"description": "bold"
+	},
+	"italic": {
+		"title": "italic",
+		"filter": "",
+		"shell": ["echo -n _${TM_SELECTED_TEXT}_"],
+		"description": "italic"
+	}
+}

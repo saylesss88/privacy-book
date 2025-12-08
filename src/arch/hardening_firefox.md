@@ -1,3 +1,12 @@
+---
+title: Hardening Firefox
+date: 2025-11-28
+author: saylesss88
+collection: "blog"
+tags: ["browsers", "security"]
+draft: false
+---
+
 # Hardening Firefox on Arch
 
 <details>

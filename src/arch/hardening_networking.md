@@ -1,3 +1,14 @@
+---
+title: Hardening Networking
+date: 2025-11-28
+author: saylesss88
+collection: "blog"
+tags:
+  - security
+  - networking
+draft: false
+---
+
 # Hardening Networking
 
 NetworkManagers global config is `/etc/NetworkManager/NetworkManager.conf`.

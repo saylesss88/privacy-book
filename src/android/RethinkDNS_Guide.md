@@ -1,3 +1,12 @@
+---
+title: RethinkDNS
+date: 2025-12-07
+author: saylesss88
+collection: "blog"
+tags: ["android", "privacy"]
+draft: false
+---
+
 # RethinkDNS
 
 <details>

@@ -1,3 +1,12 @@
+---
+title: Encrypted DNS on Arch
+date: 2025-12-05
+author: saylesss88
+collection: "blog"
+tags: ["arch", "security"]
+draft: false
+---
+
 # Encrypted DNS ArchLinux with dnscrypt-proxy & dnsmasq
 
 <details>
