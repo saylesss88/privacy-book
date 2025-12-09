@@ -4,6 +4,9 @@ authors = ["saylesss88"]
 language = "en"
 src = "src"
 
+[build]
+build-dir = "book"
+
 [preprocessor.rss-feed]
 renderers = ["html"]
 full-preview = true
