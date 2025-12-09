@@ -1,0 +1,1 @@
+[![pages-build-deployment](https://github.com/saylesss88/privacy-book/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/saylesss88/privacy-book/actions/workflows/pages/pages-build-deployment)
