@@ -24,36 +24,37 @@ renderers = ["html"]
 [preprocessor.content-collections]
 renderers = ["html"]
 
-# [preprocessor.content-loader]
-# command = "mdbook-content-loader"
-# after = ["content-collections"]
+[preprocessor.content-loader]
+command = "mdbook-content-loader"
+after = ["content-collections"]
+# inject_all = true
 
 
 # Output
 [output.html]
 default-theme = "navy"
 preferred-dark-theme = "navy"
-site-url = "https://mako088.github.io/"
+site-url = "https://saylesss88.github.io/privacy-book/"
 additional-css = ["theme/header-buttons.css"]
 additional-js = ["theme/header-buttons.js"]
 git-repository-url = "https://github.com/saylesss88/privacy-book.git"
 git-repository-icon = "fab-github"
 
-# [preprocessor.kanagawa-theme]
-# renderers = ["html"]
-# before = ["content-loader", "content-collections"]
-# # Landing page text
-# landing_title = "privacy-book"
-# landing_subtitle = "Notes, posts, and more"
+[preprocessor.kanagawa-theme]
+renderers = ["html"]
+before = ["content-loader", "content-collections"]
+# Landing page text
+landing_title = "privacy-book"
+landing_subtitle = "Notes, posts, and more"
 
-# # Column headers
-# header_latest = "Latest posts"
-# header_notes = "Recent notes"
-# header_tags = "Popular tags"
+# Column headers
+header_latest = "Latest posts"
+header_notes = "Recent notes"
+header_tags = "Popular tags"
 
-# # Optional: have the generated theme/kanagawa.css import another palette
-# # This path is relative to the compiled book root, same as additional-css.
-# css_import = "theme/dracula.css"
+# Optional: have the generated theme/kanagawa.css import another palette
+# This path is relative to the compiled book root, same as additional-css.
+css_import = "theme/catppuccin-mocha.css"
 
-# # Optional: if true, the preprocessor will NOT write theme/kanagawa.css
-# disable_builtin_css = false
+# Optional: if true, the preprocessor will NOT write theme/kanagawa.css
+disable_builtin_css = false

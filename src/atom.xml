@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>privacy-book</title><id>https://mako088.github.io/atom.xml</id><updated>1970-01-01T00:00:00+00:00</updated><link href="https://mako088.github.io/atom.xml" rel="self"/><subtitle>An mdBook-generated site</subtitle><entry><title>RethinkDNS</title><id>https://mako088.github.io/android/RethinkDNS_Guide.html</id><updated>2025-12-07T00:00:00+00:00</updated><link href="https://mako088.github.io/android/RethinkDNS_Guide.html" rel="alternate"/><content type="html">&lt;h1&gt;RethinkDNS&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>privacy-book</title><id>https://saylesss88.github.io/privacy-book/atom.xml</id><updated>1970-01-01T00:00:00+00:00</updated><link href="https://saylesss88.github.io/privacy-book/atom.xml" rel="self"/><subtitle>An mdBook-generated site</subtitle><entry><title>RethinkDNS</title><id>https://saylesss88.github.io/privacy-book/android/RethinkDNS_Guide.html</id><updated>2025-12-07T00:00:00+00:00</updated><link href="https://saylesss88.github.io/privacy-book/android/RethinkDNS_Guide.html" rel="alternate"/><content type="html">&lt;h1&gt;RethinkDNS&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
 &lt;/details&gt;
-&lt;p&gt;&lt;img src=&quot;../images/rethinkdns.cleaned.png&quot; alt=&quot;RethinkDNS Logo&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;images/rethinkdns.cleaned.png&quot; alt=&quot;RethinkDNS Logo&quot; /&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;I’m not affiliated with RethinkDNS in any way, I’m just a technologist and
 privacy advocate.&lt;/p&gt;
@@ -1707,7 +1707,7 @@ state-of-the-art cryptography. –&lt;a href=&quot;https://www.wireguard.com/&qu
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
-</content></entry><entry><title>Encrypted DNS on Arch</title><id>https://mako088.github.io/arch/enc_dns.html</id><updated>2025-12-05T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/enc_dns.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted DNS ArchLinux with dnscrypt-proxy &amp;amp; dnsmasq&lt;/h1&gt;
+</content></entry><entry><title>Encrypted DNS on Arch</title><id>https://saylesss88.github.io/privacy-book/arch/enc_dns.html</id><updated>2025-12-05T00:00:00+00:00</updated><link href="https://saylesss88.github.io/privacy-book/arch/enc_dns.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted DNS ArchLinux with dnscrypt-proxy &amp;amp; dnsmasq&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
@@ -2112,7 +2112,7 @@ net.ipv6.conf.wlp3s0.use_tempaddr = 2
 &lt;pre&gt;&lt;code class=&quot;language-conf&quot;&gt;[connection]
 ipv6.ip6-privacy=2
 &lt;/code&gt;&lt;/pre&gt;
-</content></entry><entry><title>index</title><id>https://mako088.github.io/index.html</id><updated>2025-12-03T00:05:27+00:00</updated><link href="https://mako088.github.io/index.html" rel="alternate"/><content type="html"></content></entry><entry><title>Hardening Networking</title><id>https://mako088.github.io/arch/hardening_networking.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/hardening_networking.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Networking&lt;/h1&gt;
+</content></entry><entry><title>index</title><id>https://saylesss88.github.io/privacy-book/index.html</id><updated>2025-12-03T00:05:27+00:00</updated><link href="https://saylesss88.github.io/privacy-book/index.html" rel="alternate"/><content type="html"></content></entry><entry><title>Hardening Networking</title><id>https://saylesss88.github.io/privacy-book/arch/hardening_networking.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://saylesss88.github.io/privacy-book/arch/hardening_networking.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Networking&lt;/h1&gt;
 &lt;p&gt;NetworkManagers global config is &lt;code&gt;/etc/NetworkManager/NetworkManager.conf&lt;/code&gt;.
 Additional config files can be placed in &lt;code&gt;/etc/NetworkManager/conf.d&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;After editing a config file, apply the changes with:&lt;/p&gt;
@@ -2239,7 +2239,7 @@ recommended.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/NetworkManager&quot;&gt;Arch Wiki NetworkManager&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-</content></entry><entry><title>Encrypted Arch Install</title><id>https://mako088.github.io/arch/enc_install.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/enc_install.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted Arch Install for UEFI Systems with UKI and Secure Boot&lt;/h1&gt;
+</content></entry><entry><title>Encrypted Arch Install</title><id>https://saylesss88.github.io/privacy-book/arch/enc_install.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://saylesss88.github.io/privacy-book/arch/enc_install.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted Arch Install for UEFI Systems with UKI and Secure Boot&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
@@ -2998,7 +2998,7 @@ reboot
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
-</content></entry><entry><title>Hardening Firefox</title><id>https://mako088.github.io/arch/hardening_firefox.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/hardening_firefox.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Firefox on Arch&lt;/h1&gt;
+</content></entry><entry><title>Hardening Firefox</title><id>https://saylesss88.github.io/privacy-book/arch/hardening_firefox.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://saylesss88.github.io/privacy-book/arch/hardening_firefox.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Firefox on Arch&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
@@ -3887,7 +3887,7 @@ also lets you create phone number aliases that forward to your phone number.&lt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
-</content></entry><entry><title>Hardening Arch</title><id>https://mako088.github.io/arch/hardening_arch.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/hardening_arch.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Arch Linux&lt;/h1&gt;
+</content></entry><entry><title>Hardening Arch</title><id>https://saylesss88.github.io/privacy-book/arch/hardening_arch.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://saylesss88.github.io/privacy-book/arch/hardening_arch.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Arch Linux&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;

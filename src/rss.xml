@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel><title>privacy-book</title><link>https://mako088.github.io/</link><description>An mdBook-generated site</description><generator>mdbook-rss-feed 1.0.0</generator><item><title>RethinkDNS</title><link>https://mako088.github.io/android/RethinkDNS_Guide.html</link><description><![CDATA[<h1>RethinkDNS</h1>
+<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel><title>privacy-book</title><link>https://saylesss88.github.io/privacy-book/</link><description>An mdBook-generated site</description><generator>mdbook-rss-feed 1.0.0</generator><item><title>RethinkDNS</title><link>https://saylesss88.github.io/privacy-book/android/RethinkDNS_Guide.html</link><description><![CDATA[<h1>RethinkDNS</h1>
 <details>
 <summary> ✔️ Click to Expand Table of Contents</summary>
 <!-- toc -->
 </details>
-<p><img src="../images/rethinkdns.cleaned.png" alt="RethinkDNS Logo" /></p>
+<p><img src="images/rethinkdns.cleaned.png" alt="RethinkDNS Logo" /></p>
 <blockquote>
 <p>I’m not affiliated with RethinkDNS in any way, I’m just a technologist and
 privacy advocate.</p>
@@ -1706,7 +1706,7 @@ state-of-the-art cryptography. –<a href="https://www.wireguard.com/">Wireguard
 </li>
 </ul>
 </details>
-]]></description><author>saylesss88</author><guid>https://mako088.github.io/android/RethinkDNS_Guide.html</guid><pubDate>Sun, 7 Dec 2025 00:00:00 +0000</pubDate></item><item><title>Encrypted DNS on Arch</title><link>https://mako088.github.io/arch/enc_dns.html</link><description><![CDATA[<h1>Encrypted DNS ArchLinux with dnscrypt-proxy &amp; dnsmasq</h1>
+]]></description><author>saylesss88</author><guid>https://saylesss88.github.io/privacy-book/android/RethinkDNS_Guide.html</guid><pubDate>Sun, 7 Dec 2025 00:00:00 +0000</pubDate></item><item><title>Encrypted DNS on Arch</title><link>https://saylesss88.github.io/privacy-book/arch/enc_dns.html</link><description><![CDATA[<h1>Encrypted DNS ArchLinux with dnscrypt-proxy &amp; dnsmasq</h1>
 <details>
 <summary> ✔️ Click to Expand Table of Contents</summary>
 <!-- toc -->
@@ -2111,7 +2111,7 @@ net.ipv6.conf.wlp3s0.use_tempaddr = 2
 <pre><code class="language-conf">[connection]
 ipv6.ip6-privacy=2
 </code></pre>
-]]></description><author>saylesss88</author><guid>https://mako088.github.io/arch/enc_dns.html</guid><pubDate>Fri, 5 Dec 2025 00:00:00 +0000</pubDate></item><item><title>index</title><link>https://mako088.github.io/index.html</link><description><![CDATA[]]></description><guid>https://mako088.github.io/index.html</guid><pubDate>Wed, 3 Dec 2025 00:05:27 +0000</pubDate></item><item><title>Hardening Networking</title><link>https://mako088.github.io/arch/hardening_networking.html</link><description><![CDATA[<h1>Hardening Networking</h1>
+]]></description><author>saylesss88</author><guid>https://saylesss88.github.io/privacy-book/arch/enc_dns.html</guid><pubDate>Fri, 5 Dec 2025 00:00:00 +0000</pubDate></item><item><title>index</title><link>https://saylesss88.github.io/privacy-book/index.html</link><description><![CDATA[]]></description><guid>https://saylesss88.github.io/privacy-book/index.html</guid><pubDate>Wed, 3 Dec 2025 00:05:27 +0000</pubDate></item><item><title>Hardening Networking</title><link>https://saylesss88.github.io/privacy-book/arch/hardening_networking.html</link><description><![CDATA[<h1>Hardening Networking</h1>
 <p>NetworkManagers global config is <code>/etc/NetworkManager/NetworkManager.conf</code>.
 Additional config files can be placed in <code>/etc/NetworkManager/conf.d</code>.</p>
 <p>After editing a config file, apply the changes with:</p>
@@ -2238,7 +2238,7 @@ recommended.</p>
 <p><a href="https://wiki.archlinux.org/title/NetworkManager">Arch Wiki NetworkManager</a></p>
 </li>
 </ul>
-]]></description><author>saylesss88</author><guid>https://mako088.github.io/arch/hardening_networking.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item><item><title>Encrypted Arch Install</title><link>https://mako088.github.io/arch/enc_install.html</link><description><![CDATA[<h1>Encrypted Arch Install for UEFI Systems with UKI and Secure Boot</h1>
+]]></description><author>saylesss88</author><guid>https://saylesss88.github.io/privacy-book/arch/hardening_networking.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item><item><title>Encrypted Arch Install</title><link>https://saylesss88.github.io/privacy-book/arch/enc_install.html</link><description><![CDATA[<h1>Encrypted Arch Install for UEFI Systems with UKI and Secure Boot</h1>
 <details>
 <summary> ✔️ Click to Expand Table of Contents</summary>
 <!-- toc -->
@@ -2997,7 +2997,7 @@ reboot
 </li>
 </ul>
 </details>
-]]></description><author>saylesss88</author><guid>https://mako088.github.io/arch/enc_install.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item><item><title>Hardening Firefox</title><link>https://mako088.github.io/arch/hardening_firefox.html</link><description><![CDATA[<h1>Hardening Firefox on Arch</h1>
+]]></description><author>saylesss88</author><guid>https://saylesss88.github.io/privacy-book/arch/enc_install.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item><item><title>Hardening Firefox</title><link>https://saylesss88.github.io/privacy-book/arch/hardening_firefox.html</link><description><![CDATA[<h1>Hardening Firefox on Arch</h1>
 <details>
 <summary> ✔️ Click to Expand Table of Contents</summary>
 <!-- toc -->
@@ -3886,7 +3886,7 @@ also lets you create phone number aliases that forward to your phone number.</p>
 </li>
 </ul>
 </details>
-]]></description><author>saylesss88</author><guid>https://mako088.github.io/arch/hardening_firefox.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item><item><title>Hardening Arch</title><link>https://mako088.github.io/arch/hardening_arch.html</link><description><![CDATA[<h1>Hardening Arch Linux</h1>
+]]></description><author>saylesss88</author><guid>https://saylesss88.github.io/privacy-book/arch/hardening_firefox.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item><item><title>Hardening Arch</title><link>https://saylesss88.github.io/privacy-book/arch/hardening_arch.html</link><description><![CDATA[<h1>Hardening Arch Linux</h1>
 <details>
 <summary> ✔️ Click to Expand Table of Contents</summary>
 <!-- toc -->
@@ -6073,4 +6073,4 @@ hardening.There are recommendations for hardening all kinds of software in the
 </li>
 </ul>
 </details>
-]]></description><author>saylesss88</author><guid>https://mako088.github.io/arch/hardening_arch.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item></channel></rss>
+]]></description><author>saylesss88</author><guid>https://saylesss88.github.io/privacy-book/arch/hardening_arch.html</guid><pubDate>Fri, 28 Nov 2025 00:00:00 +0000</pubDate></item></channel></rss>
