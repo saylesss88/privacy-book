@@ -21,7 +21,21 @@ document.addEventListener("DOMContentLoaded", () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ code }),
         });
-        const data = await res.json();
+
+        console.log("nix-repl response status", res.status);
+        const raw = await res.text();
+        console.log("nix-repl raw response", raw);
+
+        let data;
+        try {
+          data = JSON.parse(raw);
+        } catch (e) {
+          block.classList.add("error");
+          out.textContent = "Non-JSON response: " + raw;
+          status.textContent = "Error";
+          return;
+        }
+
         if (data.error) {
           block.classList.add("error");
           out.textContent = data.error;
