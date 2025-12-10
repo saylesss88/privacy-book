@@ -1,0 +1,53 @@
+
+pre code.hljs,
+code.hljs {
+  background: var(--bg-alt);
+  color: var(--fg);
+}
+
+/* Keywords, control flow */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal {
+  color: #E46876; /* waveRed */
+}
+
+/* Strings, attributes */
+.hljs-string,
+.hljs-attr,
+.hljs-template-tag {
+  color: #98BB6C; /* springGreen */
+}
+
+/* Numbers, builtins, types */
+.hljs-number,
+.hljs-built_in,
+.hljs-type {
+  color: #7E9CD8; /* crystalBlue */
+}
+
+/* Comments */
+.hljs-comment {
+  color: #727169;
+  font-style: italic;
+}
+
+/* Function names */
+.hljs-title,
+.hljs-title.function_ {
+  color: #7FB4CA; /* springBlue */
+}
+
+/* Constants, variables */
+.hljs-variable,
+.hljs-constant,
+.hljs-symbol {
+  color: #FFA066; /* surimiOrange */
+}
+
+/* Punctuation / operators */
+.hljs-operator,
+.hljs-punctuation {
+  color: var(--fg);
+}
+
