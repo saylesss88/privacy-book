@@ -40,7 +40,7 @@ preferred-dark-theme = "navy"
 site-url = "https://saylesss88.github.io/privacy-book/"
 additional-css = [
 	"theme/header-buttons.css",
-	"theme/css/kanagawa-code.css",
+	# "theme/css/kanagawa-code.css",
 	"theme/css/catppuccin-mocha-code.css",
 ]
 additional-js = ["theme/header-buttons.js"]
