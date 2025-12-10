@@ -1654,3 +1654,7 @@ can click on to get the address.
 - [Sypware Watchdog](https://spyware.neocities.org/)
 
 </details>
+
+```nix repl
+1 + 1
+```

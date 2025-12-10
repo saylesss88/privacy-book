@@ -9,6 +9,10 @@ tags:
 draft: false
 ---
 
+```nix repl
+2 + 2
+```
+
 # Hardening Networking
 
 NetworkManagers global config is `/etc/NetworkManager/NetworkManager.conf`.

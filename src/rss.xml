@@ -1706,6 +1706,8 @@ state-of-the-art cryptography. –<a href="https://www.wireguard.com/">Wireguard
 </li>
 </ul>
 </details>
+<pre><code class="language-nix">1 + 1
+</code></pre>
 ]]></description><author>saylesss88</author><guid>https://saylesss88.github.io/privacy-book/android/RethinkDNS_Guide.html</guid><pubDate>Sun, 7 Dec 2025 00:00:00 +0000</pubDate></item><item><title>Encrypted DNS on Arch</title><link>https://saylesss88.github.io/privacy-book/arch/enc_dns.html</link><description><![CDATA[<h1>Encrypted DNS ArchLinux with dnscrypt-proxy &amp; dnsmasq</h1>
 <details>
 <summary> ✔️ Click to Expand Table of Contents</summary>
