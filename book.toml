@@ -7,30 +7,30 @@ src = "src"
 [build]
 build-dir = "book"
 
-# [preprocessor.rss-feed]
-# renderers = ["html"]
-# full-preview = true
-# # New pagination options
-# paginated = false # enable pagination
-# max-items = 0     # max items per page (0 = unlimited / single feed)
-# atom = true
-# json-feed = true
+[preprocessor.rss-feed]
+renderers = ["html"]
+full-preview = true
+# New pagination options
+paginated = false # enable pagination
+max-items = 0     # max items per page (0 = unlimited / single feed)
+atom = true
+json-feed = true
 
 # Preprocessors
-# [preprocessor.frontmatter-strip]
-# renderers = ["html"]
+[preprocessor.frontmatter-strip]
+renderers = ["html"]
 
-# [preprocessor.toc]
-# command = "mdbook-toc"
-# renderers = ["html"]
+[preprocessor.toc]
+command = "mdbook-toc"
+renderers = ["html"]
 
-# [preprocessor.content-collections]
-# renderers = ["html"]
+[preprocessor.content-collections]
+renderers = ["html"]
 
-# [preprocessor.content-loader]
-# command = "mdbook-content-loader"
-# after = ["content-collections"]
-# inject_all = true
+[preprocessor.content-loader]
+command = "mdbook-content-loader"
+after = ["content-collections"]
+inject_all = true
 
 
 # Output
@@ -40,33 +40,33 @@ preferred-dark-theme = "navy"
 site-url = "https://saylesss88.github.io/privacy-book/"
 additional-css = [
 	"theme/header-buttons.css",
-	# "theme/css/kanagawa-code.css",
+	"theme/css/kanagawa-code.css",
 	"theme/css/catppuccin-mocha-code.css",
 ]
 additional-js = ["theme/header-buttons.js", "theme/nix_http.js"]
 git-repository-url = "https://github.com/saylesss88/privacy-book.git"
 git-repository-icon = "fab-github"
 
-# [preprocessor.kanagawa-theme]
-# renderers = ["html"]
-# before = ["content-loader", "content-collections"]
-# # Landing page text
-# landing_title = "privacy-book"
-# landing_subtitle = "Notes, posts, and more"
+[preprocessor.kanagawa-theme]
+renderers = ["html"]
+before = ["content-loader", "content-collections"]
+# Landing page text
+landing_title = "privacy-book"
+landing_subtitle = "Notes, posts, and more"
 
-# # Column headers
-# header_latest = "Latest posts"
-# header_notes = "Recent notes"
-# header_tags = "Popular tags"
+# Column headers
+header_latest = "Latest posts"
+header_notes = "Recent notes"
+header_tags = "Popular tags"
 
-# # Optional: have the generated theme/kanagawa.css import another palette
-# # This path is relative to the compiled book root, same as additional-css.
-# css_import = "/assets/catppuccin-mocha.css"
+# Optional: have the generated theme/kanagawa.css import another palette
+# This path is relative to the compiled book root, same as additional-css.
+css_import = "/assets/catppuccin-mocha.css"
 
-# card_layout = "wide"
+card_layout = "wide"
 
-# # Optional: if true, the preprocessor will NOT write theme/kanagawa.css
-# disable_builtin_css = false
+# Optional: if true, the preprocessor will NOT write theme/kanagawa.css
+disable_builtin_css = false
 
 [preprocessor.nix-repl]
 command = "mdbook-nix-repl"

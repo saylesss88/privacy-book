@@ -1656,5 +1656,5 @@ can click on to get the address.
 </details>
 
 ```nix repl
-1 + 1
+"goodbye ${ { d = "world";}.d}"
 ```

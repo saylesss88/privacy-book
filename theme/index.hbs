@@ -361,11 +361,14 @@
             });
         </script>
         {{/if}}
-        <script>
-      window.NIX_REPL_ENDPOINT = "http://127.0.0.1:8080/";
-    </script>
-    <script src="{{ path_to_root }}book.js"></script>
 
     </div>
-    </body>
+    
+<!-- mdbook-nix-repl config -->
+<script>
+  window.NIX_REPL_ENDPOINT = "http://127.0.0.1:8080/";
+  window.NIX_REPL_TOKEN = "188176066b360710";
+</script>
+
+</body>
 </html>
