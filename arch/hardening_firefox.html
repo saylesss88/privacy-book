@@ -1,0 +1,1170 @@
+<!DOCTYPE HTML>
+<html lang="en" class="coal sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Hardening Firefox on Arch - privacy-book</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-e4858e4b.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/header-buttons-af1bc2f9.css">
+        <link rel="stylesheet" href="../theme/css/kanagawa-code-0be3dd7a.css">
+        <link rel="stylesheet" href="../theme/css/tokyo-night-code-6a5e27e7.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "coal";
+            const default_dark_theme = "coal";
+            window.path_to_searchindex_js = "../searchindex-4f448ce9.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-0d0d0292.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('coal')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">privacy-book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/saylesss88/privacy-book.git" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <script>window.CONTENT_COLLECTIONS = {"collections":{"blog":[{"author":"saylesss88","collection":"blog","date":"2025-12-07T00:00:00+00:00","description":null,"draft":false,"path":"android/RethinkDNS_Guide.md","preview_html":"<p><img src=\"../images/rethinkdns.cleaned.png\" alt=\"RethinkDNS Logo\" /></p><p>I’m not affiliated with RethinkDNS in any way, I’m just a technologist and\nprivacy advocate.</p><p><strong>HTTP</strong> (HyperText Transfer Protocol): The standard protocol used by web\nbrowsers and servers to transfer web pages and related resources over the\ninternet.</p>","tags":["android","privacy"],"title":"RethinkDNS"},{"author":"saylesss88","collection":"blog","date":"2025-12-05T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_dns.md","preview_html":"<p>❗ NOTE: There are many other ways for someone monitoring your traffic to see\nwhat domain you looked up via DNS that it’s effectiveness is questionable\nwithout also using Tor or a VPN. Encrypted DNS will not help you hide any of\nyour browsing activity.</p><pre><code class=\"language-bash\">sudo pacman -S dnscrypt-proxy\n</code></pre>\n<blockquote>\n<p>NOTE: udp is required for dnscrypt protocol, keep this in mind when\nconfiguring your servers if your output chain is a default drop.</p><p><a href=\"https://wiki.archlinux.org/title/Dnscrypt-proxy\">Arch Wiki dnscrypt-proxy</a></p>","tags":["arch","security"],"title":"Encrypted DNS on Arch"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_networking.md","preview_html":"<p>NetworkManagers global config is <code>/etc/NetworkManager/NetworkManager.conf</code>.\nAdditional config files can be placed in <code>/etc/NetworkManager/conf.d</code>.</p><p>After editing a config file, apply the changes with:</p><pre><code class=\"language-bash\">sudo nmcli general reload\n</code></pre>\n<pre><code class=\"language-bash\">sudo usermod -aG network $USER\n</code></pre>\n<h2>Investigate sockets</h2>\n<p>Display all TCP Sockets with service names:</p>","tags":["security","networking"],"title":"Hardening Networking"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_install.md","preview_html":"<p>The ultimate installation resource is always goint to be the:</p><p><a href=\"https://wiki.archlinux.org/title/Installation_guide\">Arch Wiki Installation Guide</a></p><p><a href=\"https://archlinux.org/download/#checksums\">Verify PGP Signatures</a>, the ISO\ndirectory is just the same directory where your Arch Linux ISO file is stored.</p>","tags":["arch","security"],"title":"Encrypted Arch Install"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_firefox.md","preview_html":"<p><strong>Browser hardening</strong> focuses on reducing attack surface and blocking tracking\nby disabling or restricting features like JavaScript, cookies, telemetry, and\nthird-party scripts.</p><p><strong>Fingerprint protection</strong>, on the other hand, aims to make your browser\nindistinguishable from others. Instead of just blocking data collection, it\nensures that your browser’s configuration; screen size, fonts, user agent,\netc. matches a large group of users, so you blend in.</p><p><strong>Browser compartmentalization</strong> is a technique where different browsers are\ndedicated to distinct online activities to isolate cookies, trackers, and\nbrowsing data. For example, Mullvad Browser can be used solely for activities\nwhere fingerprinting resistance is critical, such as anonymou","tags":["browsers","security"],"title":"Hardening Firefox"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_arch.md","preview_html":"<p>⚠️ Warning: I am not a security expert. This guide presents various options\nfor hardening Arch Linux, but it is your responsibility to evaluate whether\neach adjustment suits your specific needs and environment. Security hardening\nand process isolation can introduce stability challenges, compatibility\nissues, or unexpected behavior. Additionally, these protections often come\nwith performance tradeoffs. Always conduct thorough research, there are no\nplug and play one size fits all security solutions.</p><p>Much of this guide draws inspiration or recommendations from the well-known\n<a href=\"https://madaidans-insecurities.github.io/guides/linux-hardening.html\">Linux Hardening Guide</a>\nby Madaidan’s Insecurities and the Arch Wiki. Arch is great but when anonymity\ntruly matters, use Whonix o","tags":["arch","security"],"title":"Hardening Arch"}],"posts":[{"author":null,"collection":null,"date":"2026-01-03T19:48:28.349243924+00:00","description":"\n","draft":false,"path":"index.md","preview_html":"","tags":[],"title":"index"}]},"entries":[{"author":null,"collection":null,"date":"2026-01-03T19:48:28.349243924+00:00","description":"\n","draft":false,"path":"index.md","preview_html":"","tags":[],"title":"index"},{"author":"saylesss88","collection":"blog","date":"2025-12-07T00:00:00+00:00","description":null,"draft":false,"path":"android/RethinkDNS_Guide.md","preview_html":"<p><img src=\"../images/rethinkdns.cleaned.png\" alt=\"RethinkDNS Logo\" /></p><p>I’m not affiliated with RethinkDNS in any way, I’m just a technologist and\nprivacy advocate.</p><p><strong>HTTP</strong> (HyperText Transfer Protocol): The standard protocol used by web\nbrowsers and servers to transfer web pages and related resources over the\ninternet.</p>","tags":["android","privacy"],"title":"RethinkDNS"},{"author":"saylesss88","collection":"blog","date":"2025-12-05T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_dns.md","preview_html":"<p>❗ NOTE: There are many other ways for someone monitoring your traffic to see\nwhat domain you looked up via DNS that it’s effectiveness is questionable\nwithout also using Tor or a VPN. Encrypted DNS will not help you hide any of\nyour browsing activity.</p><pre><code class=\"language-bash\">sudo pacman -S dnscrypt-proxy\n</code></pre>\n<blockquote>\n<p>NOTE: udp is required for dnscrypt protocol, keep this in mind when\nconfiguring your servers if your output chain is a default drop.</p><p><a href=\"https://wiki.archlinux.org/title/Dnscrypt-proxy\">Arch Wiki dnscrypt-proxy</a></p>","tags":["arch","security"],"title":"Encrypted DNS on Arch"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_networking.md","preview_html":"<p>NetworkManagers global config is <code>/etc/NetworkManager/NetworkManager.conf</code>.\nAdditional config files can be placed in <code>/etc/NetworkManager/conf.d</code>.</p><p>After editing a config file, apply the changes with:</p><pre><code class=\"language-bash\">sudo nmcli general reload\n</code></pre>\n<pre><code class=\"language-bash\">sudo usermod -aG network $USER\n</code></pre>\n<h2>Investigate sockets</h2>\n<p>Display all TCP Sockets with service names:</p>","tags":["security","networking"],"title":"Hardening Networking"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_install.md","preview_html":"<p>The ultimate installation resource is always goint to be the:</p><p><a href=\"https://wiki.archlinux.org/title/Installation_guide\">Arch Wiki Installation Guide</a></p><p><a href=\"https://archlinux.org/download/#checksums\">Verify PGP Signatures</a>, the ISO\ndirectory is just the same directory where your Arch Linux ISO file is stored.</p>","tags":["arch","security"],"title":"Encrypted Arch Install"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_firefox.md","preview_html":"<p><strong>Browser hardening</strong> focuses on reducing attack surface and blocking tracking\nby disabling or restricting features like JavaScript, cookies, telemetry, and\nthird-party scripts.</p><p><strong>Fingerprint protection</strong>, on the other hand, aims to make your browser\nindistinguishable from others. Instead of just blocking data collection, it\nensures that your browser’s configuration; screen size, fonts, user agent,\netc. matches a large group of users, so you blend in.</p><p><strong>Browser compartmentalization</strong> is a technique where different browsers are\ndedicated to distinct online activities to isolate cookies, trackers, and\nbrowsing data. For example, Mullvad Browser can be used solely for activities\nwhere fingerprinting resistance is critical, such as anonymou","tags":["browsers","security"],"title":"Hardening Firefox"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_arch.md","preview_html":"<p>⚠️ Warning: I am not a security expert. This guide presents various options\nfor hardening Arch Linux, but it is your responsibility to evaluate whether\neach adjustment suits your specific needs and environment. Security hardening\nand process isolation can introduce stability challenges, compatibility\nissues, or unexpected behavior. Additionally, these protections often come\nwith performance tradeoffs. Always conduct thorough research, there are no\nplug and play one size fits all security solutions.</p><p>Much of this guide draws inspiration or recommendations from the well-known\n<a href=\"https://madaidans-insecurities.github.io/guides/linux-hardening.html\">Linux Hardening Guide</a>\nby Madaidan’s Insecurities and the Arch Wiki. Arch is great but when anonymity\ntruly matters, use Whonix o","tags":["arch","security"],"title":"Hardening Arch"}],"generated_at":"2026-01-03T19:50:47.222786551+00:00"};</script>
+<h1 id="hardening-firefox-on-arch"><a class="header" href="#hardening-firefox-on-arch">Hardening Firefox on Arch</a></h1>
+<details>
+<summary> ✔️ Click to Expand Table of Contents</summary>
+<ul>
+<li><a href="#-key-terms">🔑 Key Terms</a>
+<ul>
+<li><a href="#fingerprinting-explained">Fingerprinting Explained</a></li>
+</ul>
+</li>
+<li><a href="#metasearch-engines">Metasearch Engines</a>
+<ul>
+<li><a href="#searxng">SearXNG</a></li>
+</ul>
+</li>
+<li><a href="#defenses">Defenses</a>
+<ul>
+<li><a href="#encrypted-dns">Encrypted DNS</a></li>
+<li><a href="#enhanced-tracking-protection-etp">Enhanced Tracking Protection (ETP)</a></li>
+<li><a href="#resist-fingerprinting">Resist Fingerprinting</a></li>
+</ul>
+</li>
+<li><a href="#disable-javascript">Disable JavaScript</a></li>
+<li><a href="#disable-webrtc">Disable WebRTC</a></li>
+<li><a href="#disable-canvas-fingerprinting">Disable Canvas Fingerprinting</a></li>
+<li><a href="#disable-webgl">Disable WebGL</a></li>
+<li><a href="#install-firefoxlibrewolf--arkenfox">Install Firefox/LibreWolf &amp; ArkenFox</a></li>
+<li><a href="#apply">Apply</a></li>
+<li><a href="#check">Check</a>
+<ul>
+<li><a href="#user-agent-spoofing">User Agent Spoofing</a></li>
+</ul>
+</li>
+<li><a href="#ublock-origin">uBlock Origin</a>
+<ul>
+<li><a href="#adding-other-lists">Adding other lists</a></li>
+</ul>
+</li>
+<li><a href="#set-up-a-socks5-proxy-with-arti">Set up a SOCKS5 Proxy with Arti</a></li>
+<li><a href="#setup-an-arti-service-to-run-in-the-background">Setup an Arti service to run in the background</a></li>
+</ul>
+</details>
+<h2 id="-key-terms"><a class="header" href="#-key-terms">🔑 Key Terms</a></h2>
+<ul>
+<li>
+<p><strong>Browser hardening</strong> focuses on reducing attack surface and blocking tracking
+by disabling or restricting features like JavaScript, cookies, telemetry, and
+third-party scripts.</p>
+</li>
+<li>
+<p><strong>Fingerprint protection</strong>, on the other hand, aims to make your browser
+indistinguishable from others. Instead of just blocking data collection, it
+ensures that your browser’s configuration; screen size, fonts, user agent,
+etc. matches a large group of users, so you blend in.</p>
+</li>
+<li>
+<p><strong>Browser compartmentalization</strong> is a technique where different browsers are
+dedicated to distinct online activities to isolate cookies, trackers, and
+browsing data. For example, Mullvad Browser can be used solely for activities
+where fingerprinting resistance is critical, such as anonymous browsing or
+visiting privacy-sensitive sites. Meanwhile, a hardened LibreWolf or Firefox
+can be used for general browsing, email, or banking where you want solid
+security and feature flexibility but aren’t as concerned about fingerprint
+uniqueness.</p>
+</li>
+<li>
+<p><strong>Web APIs</strong>: are sets of rules and protocols that allow browsers or servers
+to communicate and share data or functions over the internet. It lets
+developers access features or data of a web service or application without
+exposing the underlying system details, enabling different software to
+interact smoothly and securely.</p>
+</li>
+<li>
+<p><strong>Anonymity</strong>: Maximizing anonymity often means restricting or masking
+features (setting a generic fingerprint, disabling browser APIs, blocking
+trackers) so the browser blends in with many others. This reduces uniqueness
+but can break website functionality, cause CAPTCHAs, and limit usability.</p>
+</li>
+<li>
+<p><strong>Usability</strong>: Keeping your browser features enabled improves compatibility
+and user experience but increase uniqueness and thus make you easier to track.</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Entropy_(computing)">Entropy</a>: in this
+context, is a measure of how much unique information a specific browser
+feature contributes to your fingerprint. It’s often quantified in <strong>bits of
+entropy</strong>, where higher bits mean more uniqueness (i.e., easier to identify
+you).</p>
+<ul>
+<li>A “bit” is a basic unit of information for computers. Entropy measuring
+sites results are measured in “bits of identifying information”.</li>
+</ul>
+</li>
+<li>
+<p><a href="https://developer.mozilla.org/en-US/docs/Glossary/Origin">Origin</a>: Web
+content’s <em>origin</em> is defined by the <em>scheme</em> (protocol), <em>hostname</em> (domain),
+and port of the URL used to access it. Two objects have the same origin only
+when the scheme, hostname, and port all match.</p>
+</li>
+<li>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">Same-origin policy</a>:
+is a critical security mechanism that restricts how a document or script
+loaded by one origin can interact with a resource from another origin. It
+helps isolate potentially malicious documents, reducing possible attack
+vectors.</p>
+</li>
+<li>
+<p><a href="https://blog.mozilla.org/security/2021/05/18/introducing-site-isolation-in-firefox/">Firefox Site-Isolation</a>.
+Firefox does provide site-isolation as well.</p>
+</li>
+<li>
+<p><a href="https://www.mozilla.org/en-US/security/advisories/mfsa2018-01/">Protection from side-channel attacks</a></p>
+</li>
+<li>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Insecure_passwords">MDN Insecure passwords</a></p>
+<ul>
+<li><a href="https://blog.mozilla.org/tanvi/2016/01/28/no-more-passwords-over-http-please/">Risks of reused passwords</a></li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Tor Browser is <strong>not</strong> the most secure browser, anonymity, and security can
+often be at odds with each other. Having the exact same browser as many other
+people isn’t the best security practice, but it is great for anonymity. Tor is
+also based on Firefox Esr, which only receives patches for vulnerabilities
+considered Critical or High which can be taken advantage of.</p>
+</blockquote>
+<h3 id="fingerprinting-explained"><a class="header" href="#fingerprinting-explained">Fingerprinting Explained</a></h3>
+<p>Modern Web APIs enable highly customized user experiences but also expose
+detailed device information that attackers can exploit to create browser
+fingerprints, unique identifiers used for covert tracking, even when cookies are
+blocked.</p>
+<p><strong>Entropy</strong>, a measure of randomness or uniqueness in data, is a critical metric
+for assessing the risk of browser fingerprinting.</p>
+<p>Browser fingerprinting is a tracking technique, often done by third-party
+companies that specialize in it. They provide code (usually JavaScript) that a
+website owner can embed on their site. When you visit the site, the script runs
+in the background, silently collecting data about your device and browser.</p>
+<p>There are two main approaches to obfuscating your fingerprint:</p>
+<ul>
+<li>
+<p><strong>Standardization</strong>: Make browsers standardized and therefore have the same
+fingerprint to blend into a crowd. This is what Tor and Mullvad Browser do.
+Best for anonymity; increases the crowd you blend into, but may decrease
+usability (site breakage, CAPTCHAs); adversaries may still find subtle
+differences.</p>
+</li>
+<li>
+<p><strong>Randomization</strong>: Randomize fingerprint metrics so it’s not directly linkable
+to you. Brave has this feature, if you run coveryourtracks with Brave you will
+get a result of “your browser has a randomized fingerprint”. This is good for
+privacy but may be detectable by advanced scripts.</p>
+</li>
+</ul>
+<p>Test your browsers fingerprint:</p>
+<ul>
+<li>
+<p><a href="https://coveryourtracks.eff.org/">CoverYourTracks</a></p>
+</li>
+<li>
+<p><a href="https://amiunique.org/">AmIUnique</a></p>
+</li>
+</ul>
+<p>Test how well your browser implements security standards and features:</p>
+<ul>
+<li><a href="https://browseraudit.com">BrowserAudit</a></li>
+</ul>
+<p>Test the sites you visit for trackers:</p>
+<ul>
+<li><a href="https://themarkup.org/ask-the-markup/2020/09/22/i-scanned-the-websites-i-visit-with-blacklight-and-its-horrifying-now-what">Blacklight</a></li>
+</ul>
+<p>Don’t put too much weight into the results as people often check their
+fingerprint, change one metric and check it again over and over skewing the
+results. It is helpful for knowing the fingerprint values that trackers track.</p>
+<ul>
+<li>
+<p><a href="https://forum.torproject.org/t/browser-fingerprinting/1228/25">Browser Fingerprinting Tor Forum</a></p>
+</li>
+<li>
+<p><a href="https://madaidans-insecurities.github.io/browser-tracking.html">Madaidans Hot Take on Browser Tracking</a></p>
+</li>
+</ul>
+<p>You can use something like <a href="https://noscript.net/">NoScript</a> to block
+JavaScript, preventing the scripts from running that do most of the
+fingerprinting. Extensions can make you more unique but it’s a give and take.</p>
+<p>The following website lists the tracking protection mechanisms implemented by
+the major browsers and browser engines:</p>
+<ul>
+<li><a href="https://www.cookiestatus.com/">Cookie Status</a></li>
+</ul>
+<hr>
+<h2 id="metasearch-engines"><a class="header" href="#metasearch-engines">Metasearch Engines</a></h2>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Metasearch_engine">Wikipedia Metasearch engine</a></li>
+</ul>
+<h3 id="searxng"><a class="header" href="#searxng">SearXNG</a></h3>
+<p><strong>SearXNG</strong> an open-source, privacy-respecting metasearch engine that aggregates
+results from various search services, such as Google, DuckDuckGo, etc without
+tracking you or profiling your searches. You can add SearXNG to firefox by going
+to <code>about:preferences#search</code> and at the bottom click <code>Add</code>, URL will be
+<code>https://searx.be/search?q=%s</code>.</p>
+<blockquote>
+<p>❗️ NOTE: The above searx is the default and doesn’t give many relevant
+results. To get relevant results find a
+<a href="https://searx.space/">public instance</a> with a good rating from your area and
+add the <code>search?q=%s</code> to the end of it. For example, I’m using
+<code>https://priv.au/search?q=%s</code>. This gives much better results than DDG in my
+opinion.</p>
+</blockquote>
+<p>SearXNG is a bit different, you can choose which search engine you want for your
+current search with <code>!ddg search term</code> to use duckduckgo for example.</p>
+<ul>
+<li><a href="https://github.com/searxng/searxng?tab=readme-ov-file">searxng repo</a>
+<ul>
+<li>
+<p><a href="https://docs.searxng.org/admin/installation.html">Install guide</a></p>
+</li>
+<li>
+<p><a href="https://docs.searxng.org/admin/settings/index.html">Configuration guide</a></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>Startpage</strong> is another metasearch engine that I’ve heard good things about.</p>
+<ul>
+<li>
+<p><a href="https://www.startpage.com/privacy-please/">Startpage Privacy Please!</a></p>
+</li>
+<li>
+<p><a href="https://www.startpage.com/privacy-please/startpage-articles/easy-privacy-control-across-the-internet-introducing-startpage-privacy-protection">Startpage Privacy Protection</a></p>
+</li>
+</ul>
+<hr>
+<h2 id="defenses"><a class="header" href="#defenses">Defenses</a></h2>
+<h4 id="encrypted-dns"><a class="header" href="#encrypted-dns">Encrypted DNS</a></h4>
+<p>DNS (Domain Name System) resolution is the process of translating a website’s
+domain name into its corresponding IP address. By default, this traffic isn’t
+encrypted, which means anyone on the network, from your ISP to potential
+hackers, can see the websites you’re trying to visit. <strong>Encrypted DNS</strong> uses
+protocols to scramble this information, protecting your queries and responses
+from being intercepted and viewed by others.</p>
+<blockquote>
+<p>❗ NOTE: There are many other ways for someone monitoring your traffic to see
+what domain you looked up via DNS that it’s effectiveness is questionable
+without also using Tor or a VPN. Encrypted DNS will not help you hide any of
+your browsing activity.</p>
+</blockquote>
+<p>There are 3 main types of DNS protection:</p>
+<ul>
+<li>
+<p><strong>DNS over HTTPS (DoH)</strong>: Uses the HTTPS protocol to encrypt data between the
+client and the resolver.</p>
+</li>
+<li>
+<p><strong>DNS over TLS (DoT)</strong>: Similar to (DoH), differs in the methods used for
+encryption and delivery using a separate port from HTTPS.</p>
+</li>
+<li>
+<p><strong>DNSCrypt</strong>: Uses end-to-end encryption with the added benefit of being able
+to prevent DNS spoofing attacks.</p>
+</li>
+</ul>
+<p>Useful resources:</p>
+<details>
+<summary> ✔️ Click to Expand DNS Resources </summary>
+<ul>
+<li>
+<p><a href="https://www.cloudflare.com/learning/dns/what-is-dns/">Domain Name System (DNS)</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/DNS_over_HTTPS">Wikipedia DNS over HTTPS (DoH)</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/DNS_over_TLS">Wikipedia DNS over TLS (DoT)</a></p>
+</li>
+<li>
+<p><a href="https://blog.cloudflare.com/dns-encryption-explained/">Cloudflare Dns Encryption Explained</a></p>
+</li>
+<li>
+<p><a href="https://nordvpn.com/blog/encrypted-dns-traffic/">NordVPN Encrypted Dns Traffic</a></p>
+</li>
+</ul>
+<p><strong>Hot Take</strong>:</p>
+<ul>
+<li><a href="https://madaidans-insecurities.github.io/encrypted-dns.html">Encrypted DNS is ineffective without a VPN or Tor by madaidan</a></li>
+</ul>
+</details>
+<p>I recommend either setting up dnscrypt-proxy:</p>
+<ul>
+<li><a href="https://mako088.github.io/arch/enc_dns.html">dnscrypt-proxy on Arch</a></li>
+</ul>
+<p>Or set Firefox’s DNS over HTTPS to Max protection with a custom resolver:</p>
+<p>In <code>about:preferences#privacy</code> scroll down to <code>DNS over HTTPS</code>, Select
+<code>Max Protection</code> -&gt; <code>Custom</code> -&gt; <code>https://dns.quad9.net/dns-query</code></p>
+<hr>
+<h4 id="enhanced-tracking-protection-etp"><a class="header" href="#enhanced-tracking-protection-etp">Enhanced Tracking Protection (ETP)</a></h4>
+<p>Browsers that have a form of tracking protection typically use lists of known
+trackers and match each outgoing request against these lists.</p>
+<p>Enhanced Tracking Protection is how you deal with cookies and more on Firefox.</p>
+<ul>
+<li>
+<p><a href="https://support.mozilla.org/en-US/kb/enhanced-tracking-protection-firefox-desktop">Enhanced Tracking Protection (ETP)</a>
+blocks known “third-party requests” to companies that participate in
+fingerprinting, according to the
+<a href="https://disconnect.me/trackerprotection">Disconnect List</a></p>
+<ul>
+<li>
+<p>In <code>about:preferences#privacy</code>, setting Enhanced Tracking Protection to
+either Strict or Custom enables FPP as well, explained further down.</p>
+</li>
+<li>
+<p><a href="https://blog.mozilla.org/mozilla/firefox-rolls-out-total-cookie-protection-by-default-to-all-users-worldwide/">Total Cookie Protection</a>
+is enabled by default in Standard mode.</p>
+</li>
+<li>
+<p>When you set ETP to Strict, it includes
+<a href="https://blog.mozilla.org/security/2021/08/10/firefox-91-introduces-enhanced-cookie-clearing/">Enhanced Cookie Clearing</a>,
+which improves on the removal of third-party cookies, as well as Bounce
+Tracking Protection that prevents redirect trackers.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="https://wiki.mozilla.org/Security/FirstPartyIsolation">First-Party Isolation</a>
+From the Tor Uplift Project.</p>
+</li>
+</ul>
+<h3 id="resist-fingerprinting"><a class="header" href="#resist-fingerprinting">Resist Fingerprinting</a></h3>
+<ul>
+<li>
+<p><a href="https://wiki.mozilla.org/Security/Fingerprinting">Fingerprinting</a></p>
+</li>
+<li>
+<p>RFP (Resist Fingerprinting) set in <code>about:config</code> with
+<code>privacy.resistFingerprinting</code>. Resist Fingerprinting alters the following:</p>
+<ul>
+<li>
+<p>The timezone is reported as UTC or Icelandic</p>
+</li>
+<li>
+<p>Locale is reported as en-US</p>
+</li>
+<li>
+<p>Several properties of the navigator object are fixed, including the hardware
+concurrency value, application version and build ID. The User Agent version
+is reported to be the major version (for example, 119.0 instead of 119.1)</p>
+<ul>
+<li>And much more…</li>
+</ul>
+</li>
+<li>
+<p>You can set <code>privacy.resistFingerprinting.pbMode</code> (private-browsing) without
+<code>privacy.resistFingerprinting</code> and still get certain Resist Fingerprinting
+behaviors on normal windows, because it’s impossible to separate these
+behaviors per-window.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>FPP (Fingerprinting Protection) is enabled in normal browsing when Enhanced
+Tracking Protection is set to Strict. Both Known Fingerprinters and Suspected
+Fingerprinters Protection are enabled in Private Browsing and when ETP is set
+to strict. On the Custom level of ETP you can toggle on/off different
+features.</p>
+</li>
+</ul>
+<hr>
+<h2 id="disable-javascript"><a class="header" href="#disable-javascript">Disable JavaScript</a></h2>
+<p>Most trackers run on JavaScript, thus blocking JavaScript prevents them from
+gathering much of the info needed to form a browser fingerprint.</p>
+<ul>
+<li>
+<p><a href="https://noscript.net/">NoScript</a> lets you selectively block scripts on
+websites. Its core function is to block all scripts by default on websites,
+allowing you to manually enable scripts on trusted sites.</p>
+<p><a href="https://blog.jeaye.com/2017/11/30/noscript/">NoScript PrivacyGuides</a> should</p>
+</li>
+<li>
+<p><a href="https://ublockorigin.com/">uBlock Origin</a> also lets you block JavaScript,
+just be aware that many sites may break so you’ll have to whitelist
+selectively.</p>
+</li>
+</ul>
+<h2 id="disable-webrtc"><a class="header" href="#disable-webrtc">Disable WebRTC</a></h2>
+<p>The main reason people disable WebRTC is to prevent an IP address leak. WebRTC
+is designed for real-time communication like video calls and file sharing. If
+you don’t use those features, it makes sense to disable it.</p>
+<p>Disabling WebRTC eliminates specific data points that trackers use, reducing
+entropy &amp; the uniqueness of your fingerprint.</p>
+<p>In <code>about:preferences#privacy</code> -&gt; <code>Privacy &amp; Security</code> -&gt; <code>Permissions</code>. Click
+<code>Settings</code>.</p>
+<ul>
+<li>
+<p><input disabled="" type="checkbox" checked=""> Block new requests asking to access your microphone</p>
+</li>
+<li>
+<p><input disabled="" type="checkbox" checked=""> Block new requests asking to access your camera</p>
+</li>
+<li>
+<p>You may also want to block Location, but that isn’t involving WebRTC.</p>
+</li>
+</ul>
+<p>You can also use the master switch by going to <code>about:config</code> and setting
+<code>media.peerconnection.enabled</code> to <code>false</code></p>
+<p><code>user.js</code> settings related to WebRTC:</p>
+<pre><code class="language-js">/* 2002: force WebRTC inside the proxy [FF70+] ***/
+user_pref("media.peerconnection.ice.proxy_only_if_behind_proxy", true);
+ * When using a system-wide proxy, it uses the proxy interface
+ * [1] https://developer.mozilla.org/docs/Web/API/RTCIceCandidate
+ * [2] https://wiki.mozilla.org/Media/WebRTC/Privacy ***/
+user_pref("media.peerconnection.ice.default_address_only", true);
+user_pref("media.peerconnection.enabled", false);
+user_pref("media.peerconnection.ice.obfuscate_host_address", true);
+/* 2004: force exclusion of private IPs from ICE candidates [FF51+]
+ * [SETUP-HARDEN] This will protect your private IP even in TRUSTED scenarios after you
+ * grant device access, but often results in breakage on video-conferencing platforms ***/
+user_pref("media.peerconnection.ice.no_host", true);
+</code></pre>
+<hr>
+<h2 id="disable-canvas-fingerprinting"><a class="header" href="#disable-canvas-fingerprinting">Disable Canvas Fingerprinting</a></h2>
+<p>Canvas Fingerprinting uses the HTML5 <code>&lt;canvas&gt;</code> element to generate a
+fingerprint. It gets your device to render an image or text on a canvas and then
+reads the pixel data. Since devices render things differently, those differences
+are identifiable.</p>
+<p>When the pref <code>privacy.resistFingerprinting</code> is set to <code>true</code>, restricts APIs
+commonly used for fingerprinting, including the HTML5 Canvas API. When enabled,
+it returns a randomized or generic canvas output to prevent unique
+identification.</p>
+<hr>
+<h2 id="disable-webgl"><a class="header" href="#disable-webgl">Disable WebGL</a></h2>
+<p>Similar to canvas fingerprinting, this technique uses the WebGL API to render 2D
+and 3D graphics. The way your system renders these graphics provides information
+about your GPU and graphics drivers, which contributes to your unique
+fingerprint.</p>
+<blockquote>
+<p>❗️ NOTE: It’s unnecessary to disable webgl if you’re already using RFP and
+will likely make you stand out more because most people don’t disable it.</p>
+</blockquote>
+<p>It can be disabled in <code>about:config</code> by setting <code>webgl.disabled</code> to <code>true</code>.</p>
+<hr>
+<h2 id="install-firefoxlibrewolf--arkenfox"><a class="header" href="#install-firefoxlibrewolf--arkenfox">Install Firefox/LibreWolf &amp; ArkenFox</a></h2>
+<blockquote>
+<p>⚠️ Firefox offers excellent privacy and customization but falls behind
+Chromium-based browsers in isolation and patch timing. Compartmentalization
+can help balance strong privacy with optimal security by using Brave or
+Chromium for high-risk browsing alongside Firefox for general and
+privacy-focused tasks.</p>
+</blockquote>
+<p>Download Firefox from the
+<a href="https://ftp.mozilla.org/pub/firefox/releases/">Mozilla FTP site</a> if you are
+worried about the download token, the FTP site lets you download the version you
+want without a token.</p>
+<p>For example, for the latest firefox as of 09-30-25 for the US:</p>
+<p><code>https://download.mozilla.org/?product=firefox-latest&amp;os=linux64&amp;lang=en-US</code></p>
+<p><strong>LibreWolf</strong> is an open-source fork of Firefox with a strong focus on privacy,
+security, and user freedom. LibreWolf enables always HTTPS, includes
+uBlockOrigin, and more providing strong defaults.</p>
+<details>
+<summary> ✔️ Click to Expand Arkenfox How To </summary>
+<p>The process is the same for both Firefox &amp; LibreWolf. I like LibreWolf for it’s
+strong defaults but may lag behind Firefox getting security patches.</p>
+<pre><code class="language-bash">paru -S librewolf-bin
+</code></pre>
+<p>Read the <a href="https://github.com/arkenfox/user.js/wiki">ArkenFox Wiki</a></p>
+<h2 id="apply"><a class="header" href="#apply">Apply</a></h2>
+<p>Open <code>about:support</code> and look for <code>Profile Directory</code> under <code>Application Basics</code>
+Select <code>Open Directory</code>, it will bring you to somewhere like
+<code>~/.librewolf/pefoo8xx.default-default/</code> and that is where you place the
+<code>user.js</code>.</p>
+<p>Place the following files in your <code>Profile Directory</code>:</p>
+<ol>
+<li>
+<p><a href="https://github.com/arkenfox/user.js/blob/master/user.js">Arkenfox user.js</a>
+Read through the <code>user.js</code>, not all settings are applied by default such as
+RFP Fingerprinting protection.</p>
+</li>
+<li>
+<p><a href="https://github.com/arkenfox/user.js/blob/master/updater.sh">updater.sh</a></p>
+</li>
+<li>
+<p><a href="https://github.com/arkenfox/user.js/blob/master/prefsCleaner.sh">prefsCleaner.sh</a></p>
+</li>
+<li>
+<p>Also create your own <code>user-overrides.js</code> with any changes you want to make to
+the default <code>user.js</code>. These changes are amended to the <code>user.js</code> and applied
+last enabling them to override the default settings. It’s best to make
+changes here so that updating the Arkenfox <code>user.js</code> doesn’t make you lose
+all of your customizations.</p>
+</li>
+</ol>
+<p>Example <code>user-overrides.js</code> spoofing the user agent:</p>
+<blockquote>
+<p>❗️ This is just an example, always check for common useragent strings
+yourself. Read the Arkenfox Wiki!</p>
+</blockquote>
+<pre><code class="language-js">&lt;!-- user_pref( --&gt;
+  &lt;!-- "general.useragent.override", --&gt;
+  &lt;!-- "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36", --&gt;
+&lt;!-- ); --&gt;
+// Disable Activity Stream on new windows and tab pages
+user_pref("browser.newtab.preload", false);
+// Enhanced Tracking Protection (ETP)
+user_pref("privacy.bounceTrackingProtection.mode", 1); // [FF131+] [ETP FF133+]
+user_pref("privacy.trackingprotection.enabled", true);
+// Resist Fingerprinting (RFP)
+user_pref("privacy.resistFingerprinting", true); // [FF41+]
+user_pref("privacy.resistFingerprinting.pbmode", true); // [FF114+]
+// WebRTC
+user_pref("media.peerconnection.enabled", false);
+user_pref("media.peerconnection.ice.default_address_only", true);
+// WebGL
+user_pref("webgl.disabled", true);
+// Geolocation
+user_pref("geo.enabled", false);
+user_pref("full-screen-api.enabled", false);
+user_pref(
+  "geo.provider.network.url",
+  "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%",
+);
+// Disable studies
+user_pref("app.sheild.optoutstudies.enabled", false);
+// Master Switches, Be Careful
+user_pref("browser.safebrowsing.malware.enabled", false);
+user_pref("browser.safebrowsing.phishing.enabled", false);
+user_pref("browser.safebrowsing.provider.google4.gethashURL", "");
+user_pref("browser.safebrowsing.provider.google4.updateURL", "");
+user_pref("browser.safebrowsing.provider.google.gethashURL", "");
+user_pref("browser.safebrowsing.provider.google.updateURL", "");
+user_pref("browser.safebrowsing.provider.google4.dataSharingURL", "");
+user_pref("signon.rememberSignons", false);
+user_pref("browser.xul.error_pages.expert_bad_cert", true);
+//* [NOTE] Will cause breakage: older modems/routers and some sites e.g banks, vimeo, icloud, instagram ***/
+user_pref("network.http.referer.XOriginPolicy", 2);
+user_pref("network.http.sendRefererHeader", 1);
+// 0 is most strict:
+user_pref("network.http.referer.trimmingPolicy", 0);
+user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
+</code></pre>
+<p>To apply your prefs you have to run the <code>updater.sh</code> script.</p>
+<pre><code class="language-bash">~/.mozilla/firefox/v5kwl3c0.default-release&gt; ./updater.sh
+
+                ############################################################################
+                ####                                                                    ####
+                ####                          arkenfox user.js                          ####
+                ####       Hardening the Privacy and Security Settings of Firefox       ####
+                ####           Maintained by @Thorin-Oakenpants and @earthlng           ####
+                ####            Updater for macOS and Linux by @overdodactyl            ####
+                ####                                                                    ####
+                ############################################################################
+
+
+Documentation for this script is available here: https://github.com/arkenfox/user.js/wiki/5.1-Updater-[Options]#-maclinux
+
+Please observe the following information:
+    Firefox profile:  /home/jr/.mozilla/firefox/v5kwl3c0.default-release
+    Available online: * version: 140
+    Currently using:  * version: 140
+
+
+This script will update to the latest user.js file and append any custom configurations from user-overrides.js. Continue Y/N?
+y
+
+Status: user.js has been backed up and replaced with the latest version!
+Status: Override file appended: user-overrides.js
+</code></pre>
+<h2 id="check"><a class="header" href="#check">Check</a></h2>
+<p>Launch LibreWolf or Firefox and press <code>Ctrl-Shift-J</code> to launch Browser Console
+Mode, and look for any errors.</p>
+<p>Go to <code>about:config</code> -&gt; [x] <code>Show only modified preferences</code>. You should see
+<code>SUCCESS: No no he's not dead, he's, he's restin'!</code></p>
+</details>
+<h3 id="user-agent-spoofing"><a class="header" href="#user-agent-spoofing">User Agent Spoofing</a></h3>
+<blockquote>
+<p>❗️ NOTE: Spoofing your useragent alone likely isn’t worth the protections you
+lose from disabling <code>resistFingerprinting</code>. <code>resistFingerprinting</code> spoofs many
+different fingerprinting aspects. If you don’t get it right, you will get
+captcha requests constantly.</p>
+</blockquote>
+<p>Research what the most common user agent is. You’ll need to disable
+<code>privacy.resistFingerprinting</code> for this to work.</p>
+<p>Place the user agent string in <code>general.useragent.override</code> something like:
+<code>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36</code>
+<a href="https://www.whatsmyuseragent.com">https://www.whatsmyuseragent.com</a></p>
+<p><a href="https://www.useragentstring.com">https://www.useragentstring.com</a></p>
+<hr>
+<h2 id="ublock-origin"><a class="header" href="#ublock-origin">uBlock Origin</a></h2>
+<p>BetterFox does a great job explaining how to use uBlock with solid
+recommendations.</p>
+<ul>
+<li><a href="https://github.com/yokoffing/filterlists?tab=readme-ov-file#guidelines">BetterFox uBlock filterlists</a></li>
+</ul>
+<p>If you wanted to apply the
+<a href="https://github.com/yokoffing/filterlists/blob/main/privacy_essentials.txt">Privacy Essentials</a>
+list you would click
+<a href="https://subscribe.adblockplus.org/?location=https://raw.githubusercontent.com/yokoffing/filterlists/main/privacy_essentials.txt&amp;title=Privacy%20Essentials">subscribe</a>,
+which launches the uBlock asset viewer where you can see all of the domains that
+will be blocked before clicking <code>Subscribe</code> again to apply them.</p>
+<h3 id="adding-other-lists"><a class="header" href="#adding-other-lists">Adding other lists</a></h3>
+<ul>
+<li>
+<p><a href="https://github.com/hagezi/dns-blocklists">Hagezi dns-blocklists</a></p>
+</li>
+<li>
+<p><a href="https://github.com/ppfeufer/adguard-filter-list">adguard-filter-list</a></p>
+</li>
+</ul>
+<p>Click the uBlock logo, Settings, Filter lists, scroll to the bottom and choose
+Import…, Paste the url of your chosen list, and click Apply changes.</p>
+<p>For example, Arkenfox suggests adding the Actually Legitimate URL Shortener
+Tool. Add
+<a href="https://raw.githubusercontent.com/DandelionSprout/adfilt/master/LegitimateURLShortener.txt">https://raw.githubusercontent.com/DandelionSprout/adfilt/master/LegitimateURLShortener.txt</a>
+to the Import… section and click Apply changes. If you scroll up, you’ll see
+that it was added and chosen.</p>
+<p>Setup your <a href="https://github.com/gorhill/uBlock/wiki/Blocking-mode">Blocking mode</a></p>
+<p>Many opt for
+<a href="https://github.com/gorhill/uBlock/wiki/Blocking-mode:-medium-mode">medium mode</a>.
+To do so you need to:</p>
+<p><strong>Settings pane</strong>:</p>
+<ul>
+<li>Open the dashboard, and choose I am an advanced user.</li>
+</ul>
+<p><strong>Filter lists pane</strong>:</p>
+<ul>
+<li>
+<p>All of uBO’s filter lists: checked</p>
+</li>
+<li>
+<p>EasyList: checked</p>
+</li>
+<li>
+<p>Peter Lowe’s Ad server list: checked</p>
+</li>
+<li>
+<p>EasyPrivacy: checked</p>
+</li>
+<li>
+<p>Online Malicious URL Blocklist: checked</p>
+</li>
+</ul>
+<p><strong>My rules pane (4th pane from the left)</strong>:</p>
+<p>Underneath Temporary rules add, you literally type this in:</p>
+<ul>
+<li>
+<p>Add <code>* * 3p-script block</code></p>
+</li>
+<li>
+<p>Add <code>* * 3p-frame block</code></p>
+</li>
+<li>
+<p>Click <code>Save</code></p>
+</li>
+<li>
+<p>Click <code>&lt;- Commit</code> (Not required on phone)</p>
+</li>
+</ul>
+<p><strong>Fallback to
+<a href="https://github.com/gorhill/uBlock/wiki/Blocking-mode:-easy-mode">easy mode</a></strong></p>
+<p>Click the uBlock logo while on the site you want to use easy mode on. You’ll see
+the power button to the top right, the Global rules and the Local rules which
+start 3 boxes from the left. Click the box under the Local rules for 3rd-party
+scripts. The box will change colors, dark gray = NOOP (No Operation). This tells
+uBO to ignore the aggressive global block for this site, and let the normal
+filter lists handle the blocking.</p>
+<p>You can also disable JavaScript in My rules as needed.</p>
+<hr>
+<h2 id="set-up-a-socks5-proxy-with-arti"><a class="header" href="#set-up-a-socks5-proxy-with-arti">Set up a SOCKS5 Proxy with Arti</a></h2>
+<blockquote>
+<p>❗️ NOTE: This is one example of using a SOCKS5 proxy to circumvent censorship
+or add additional privacy without the Tor Browser. You can also route other
+apps through the proxy, such as email clients, messaging apps, torrent
+clients, and more.</p>
+</blockquote>
+<ol>
+<li>Clone the arti repo:</li>
+</ol>
+<pre><code class="language-bash"># clone the repo
+git clone https://gitlab.torproject.org/tpo/core/arti.git
+
+# navigate to the directory
+cd arti
+</code></pre>
+<hr>
+<ol start="2">
+<li>To build the Arti binary, compile the code and generate the executable run:</li>
+</ol>
+<p>These are the safer build options so you can leave the arti repo in your home
+directory without it leaking your username:</p>
+<pre><code class="language-bash">RUSTFLAGS="--remap-path-prefix $HOME/.cargo=.cargo --remap-path-prefix $(pwd)=." \
+   cargo build --release -p arti
+</code></pre>
+<hr>
+<ol start="3">
+<li>To allow Arti SOCKS proxy traffic you need to add a rule permitting incoming
+connections to port 9150.</li>
+</ol>
+<p>For nftables, you would open <code>/etc/nftables.conf</code> and add:</p>
+<pre><code class="language-conf">chain input {
+  # ...snip...
+
+  # Allow Arti SOCKS proxy (port 9150)
+    tcp dport 9150 ct state new accept
+
+  # ...snip...
+}
+</code></pre>
+<p>Enable it with <code>sudo nft -f /etc/nftables.conf</code></p>
+<hr>
+<ol start="4">
+<li>To run Arti as a SOCKS proxy on port <code>9150</code>, execute:</li>
+</ol>
+<pre><code class="language-bash">./target/release/arti proxy
+</code></pre>
+<hr>
+<ol start="5">
+<li>Configure LibreWolf/Firefox to use the Arti proxy:</li>
+</ol>
+<p>Open LibreWolf or Firefox</p>
+<p>Go to the menu and open <code>Preferences/Settings</code>.</p>
+<p>Scroll to the bottom <code>Network Settings</code> section.</p>
+<p>Click on “<code>Settings...</code>” under Network Settings.</p>
+<p>In the connection settings dialog:</p>
+<p>Select “<code>Manual proxy configuration</code>”.</p>
+<p>For “SOCKS Host”, enter <code>127.0.0.1</code>.</p>
+<p>For the port next to SOCKS Host, enter <code>9150</code>.</p>
+<p>Select the SOCKS version 5 option (<code>SOCKS v5</code>).</p>
+<p>Optionally check the box “<code>Proxy DNS when using SOCKS v5</code>” to route DNS queries
+through the proxy for enhanced privacy.</p>
+<p>Click “<code>OK</code>” to apply the settings.</p>
+<hr>
+<ol start="6">
+<li>Verify Your Proxy Setup Open a new tab and visit <code>https://dnsleaktest.com</code>
+and run an <code>Extended Test</code>.</li>
+</ol>
+<p>Your IP address should now appear as a Tor exit node IP, indicating your traffic
+is routed through the Arti proxy.</p>
+<ul>
+<li>
+<p>Make sure Arti is running in its terminal or background before you start
+browsing.</p>
+</li>
+<li>
+<p>If you close the terminal or stop Arti, your browser will lose the proxy
+connection.</p>
+</li>
+</ul>
+<p>This setup only proxies the configured browser traffic; other apps are not
+affected unless configured similarly.</p>
+<p>This setup turns LibreWolf or Firefox into a Tor-enabled browser without
+installing the Tor Browser Bundle, using the Arti SOCKS proxy instead. It can be
+useful if you want to use a more customizable or alternative browser while still
+accessing the Tor network securely.</p>
+<blockquote>
+<p>⚠️ While using LibreWolf with the Arti SOCKS5 proxy provides network-level
+anonymity by routing traffic through the Tor network, it does not include the
+extensive browser-level privacy and security enhancements found in the
+official Tor Browser. For casual or moderate privacy needs the SOCKS proxy can
+be useful but for stronger anonymity guarantees and protection, the Tor
+Browser is recommended.</p>
+</blockquote>
+<h2 id="setup-an-arti-service-to-run-in-the-background"><a class="header" href="#setup-an-arti-service-to-run-in-the-background">Setup an Arti service to run in the background</a></h2>
+<blockquote>
+<p>Be careful here, its not as easy to tell if Arti failed for some reason.</p>
+</blockquote>
+<p>Create a service file at <code>/etc/systemd/system/arti.service</code>:</p>
+<p>Replace <code>your-username</code> with your username</p>
+<pre><code class="language-.service">[Unit]
+Description=Arti Tor Proxy Service
+After=network.target
+
+[Service]
+ExecStart=/home/your-username/arti/target/release/arti proxy
+Restart=on-failure
+User=jr
+Group=jr
+WorkingDirectory=/home/your-username/arti
+Environment=RUSTFLAGS="--remap-path-prefix $HOME/.cargo=.cargo --remap-path-prefix $(pwd)=."
+
+[Install]
+WantedBy=multi-user.target
+</code></pre>
+<p>Enable &amp; Start the service:</p>
+<pre><code class="language-bash">sudo systemctl enable arti
+sudo systemctl start arti --now
+</code></pre>
+<p>Ensure its running:</p>
+<pre><code class="language-bash">sudo systemctl status arti
+</code></pre>
+<hr><details>
+<summary> ✔️ Click to Expand Resources </summary>
+<ul>
+<li>
+<p><a href="https://docs.searxng.org/">Welcome to SearXNG</a></p>
+</li>
+<li>
+<p><a href="https://brainfucksec.github.io/firefox-hardening-guide">Firefox Hardening Guide</a></p>
+</li>
+<li>
+<p><a href="https://www.ghacks.net/2015/08/18/a-comprehensive-list-of-firefox-privacy-and-security-settings/">Firefox ghacks</a></p>
+</li>
+<li>
+<p><a href="https://github.com/arkenfox/user.js">ArkenFox user.js</a> Just right IMO.</p>
+</li>
+<li>
+<p><a href="https://github.com/yokoffing/Betterfox">BetterFox user.js</a> Easiest to use
+with less breakage.</p>
+</li>
+<li>
+<p><a href="https://codeberg.org/Narsil/user.js/src/branch/main/desktop">Narsil user.js</a>
+Most hardened.</p>
+</li>
+<li>
+<p><a href="https://www.privacytools.io/private-browser">PrivacyTools.io</a></p>
+</li>
+<li>
+<p><a href="https://privacytests.org/">PrivacyTests.org</a></p>
+</li>
+<li>
+<p><a href="https://github.com/simeononsecurity/FireFox-Privacy-Script">simeononsecurity Firefox-Privacy-Script</a></p>
+</li>
+<li>
+<p><a href="https://anhkhoakz.neocities.org/blog/browsers-for-daily-using/#firefox-but-hardened">Browsers for Daily Using</a></p>
+</li>
+<li>
+<p><a href="https://brainfucksec.github.io/firefox-hardening-guide">brianfucksec firefox-hardening-Guide 2023</a></p>
+</li>
+<li>
+<p><a href="https://simeononsecurity.com/guides/enhance-firefox-security-configuring-guide/">STIG Firefox Hardening</a></p>
+</li>
+</ul>
+<blockquote>
+<p>If you should trust the U.S. Governments recommendations is another story but
+it can be good to compare and contrast with other trusted resources. You’ll
+have to think whether the CISA recommending that everyone uses Signal is solid
+advice or guiding you towards a honeypot, I can’t say for sure.</p>
+</blockquote>
+<ul>
+<li>
+<p><a href="https://stigviewer.com/stigs/mozilla_firefox">Mozilla Firefox Security Technical Implementation Guide</a>
+The STIG for Mozilla Firefox (Security Technical Implementation Guide) is a
+set of security configuration standards developed by the U.S. Department of
+Defense. They are created by the Defense Information Systems Agency (DISA) to
+secure and harden DoD information systems and software.</p>
+</li>
+<li>
+<p><a href="https://thenewoil.org/en/guides/prologue/why/">Privacy, The New Oil (Why Privacy &amp; Security Matter)</a></p>
+</li>
+<li>
+<p><a href="https://www.privacyguides.org/en/">PrivacyGuides</a></p>
+</li>
+<li>
+<p><a href="https://relay.firefox.com/accounts/profile/">Firefox Relay</a> can be used to
+create email aliases that forward to your real email address. The paid plan
+also lets you create phone number aliases that forward to your phone number.</p>
+</li>
+<li>
+<p><a href="https://zebracrossing.narwhalacademy.org/">Zebra Crossing digital safety checklist</a></p>
+</li>
+<li>
+<p><a href="https://datadetoxkit.org/en/privacy/essentials#step-1">DataDetoxKit</a></p>
+</li>
+<li>
+<p><a href="https://datadetoxkit.org/en/privacy/degooglise/">DataDetox Degooglise</a></p>
+</li>
+<li>
+<p><a href="https://tb-manual.torproject.org/">Tor Browser User Manual</a></p>
+</li>
+<li>
+<p><a href="https://gitlab.torproject.org/tpo/team/-/wikis/home">Tor Wiki</a></p>
+</li>
+<li>
+<p><a href="https://blog.torproject.org/">Tor Blog</a></p>
+</li>
+<li>
+<p><a href="https://gitlab.torproject.org/tpo/core/arti/#why-rewrite-tor-in-rust">Arti why-rewrite-tor-in-rust</a></p>
+</li>
+<li>
+<p><a href="https://wiki.mozilla.org/Security/Tor_Uplift/Tracking">The Tor Uplift Project</a></p>
+</li>
+<li>
+<p><a href="https://www.browsercat.com/post/browser-fingerprint-spoofing-explained">BrowserCat Fingerprint Spoofing</a></p>
+</li>
+<li>
+<p><a href="https://cyberinsider.com/firefox-privacy/">cyberinsider Firefox privacy 2025</a></p>
+</li>
+<li>
+<p><a href="https://cyberinsider.com/browser-fingerprinting/">cyberinsider Browser Fingerprinting</a></p>
+</li>
+<li>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Privacy">Mozilla Web Docs Privacy on the web</a></p>
+</li>
+<li>
+<p><a href="https://adguard-dns.io/en/blog/techtok-9-browser-extensions-and-firewall.html">Adguard Blog Browser Extensions and Firewalls explained</a></p>
+</li>
+<li>
+<p><a href="https://searchfox.org/firefox-main/source/toolkit/components/resistfingerprinting/RFPTargetsDefault.inc">searchfox RFPTargetsDefault</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Entropy_(computing)">Wikipedia Entropy (computing)</a></p>
+</li>
+<li>
+<p><a href="https://brave.com/blog/">Brave Blog</a></p>
+</li>
+</ul>
+<p><strong>Cheatsheets</strong></p>
+<ul>
+<li>
+<p><a href="https://cheatsheetseries.owasp.org/cheatsheets/HTTP_Headers_Cheat_Sheet.html">HTTP Security Response Headers Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="https://cheatsheetseries.owasp.org/cheatsheets/Zero_Trust_Architecture_Cheat_Sheet.html">Zero Trust Architecture Cheat Sheet</a></p>
+</li>
+<li>
+<p><a href="https://we.riseup.net/riseup+tech/entropy">riseup entropy</a></p>
+</li>
+<li>
+<p><a href="https://www.kicksecure.com/wiki/Dev/Entropy">kicksecure entropy</a></p>
+</li>
+<li>
+<p><a href="https://riseup.net/en/security">riseup Digital Security</a></p>
+</li>
+</ul>
+</details>
+<footer id="kanagawa-support-footer" style="text-align:center; margin-top: 3rem; font-size: 0.85em; opacity: 0.75;">
+  
+<p><a href="https://github.com/saylesss88/mdbook-kanagawa-theme">Made with mdbook-kanagawa-theme</a></p>
+
+</footer>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../arch/enc_dns.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../arch/hardening_arch.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../arch/enc_dns.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../arch/hardening_arch.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../theme/header-buttons-02f32270.js"></script>
+        <script src="../theme/nix_http-971fb95c.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

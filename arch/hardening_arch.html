@@ -1,0 +1,2493 @@
+<!DOCTYPE HTML>
+<html lang="en" class="coal sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Hardening Arch Linux - privacy-book</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-e4858e4b.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/header-buttons-af1bc2f9.css">
+        <link rel="stylesheet" href="../theme/css/kanagawa-code-0be3dd7a.css">
+        <link rel="stylesheet" href="../theme/css/tokyo-night-code-6a5e27e7.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "coal";
+            const default_dark_theme = "coal";
+            window.path_to_searchindex_js = "../searchindex-4f448ce9.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-0d0d0292.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('coal')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">privacy-book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/saylesss88/privacy-book.git" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <script>window.CONTENT_COLLECTIONS = {"collections":{"blog":[{"author":"saylesss88","collection":"blog","date":"2025-12-07T00:00:00+00:00","description":null,"draft":false,"path":"android/RethinkDNS_Guide.md","preview_html":"<p><img src=\"../images/rethinkdns.cleaned.png\" alt=\"RethinkDNS Logo\" /></p><p>I’m not affiliated with RethinkDNS in any way, I’m just a technologist and\nprivacy advocate.</p><p><strong>HTTP</strong> (HyperText Transfer Protocol): The standard protocol used by web\nbrowsers and servers to transfer web pages and related resources over the\ninternet.</p>","tags":["android","privacy"],"title":"RethinkDNS"},{"author":"saylesss88","collection":"blog","date":"2025-12-05T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_dns.md","preview_html":"<p>❗ NOTE: There are many other ways for someone monitoring your traffic to see\nwhat domain you looked up via DNS that it’s effectiveness is questionable\nwithout also using Tor or a VPN. Encrypted DNS will not help you hide any of\nyour browsing activity.</p><pre><code class=\"language-bash\">sudo pacman -S dnscrypt-proxy\n</code></pre>\n<blockquote>\n<p>NOTE: udp is required for dnscrypt protocol, keep this in mind when\nconfiguring your servers if your output chain is a default drop.</p><p><a href=\"https://wiki.archlinux.org/title/Dnscrypt-proxy\">Arch Wiki dnscrypt-proxy</a></p>","tags":["arch","security"],"title":"Encrypted DNS on Arch"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_networking.md","preview_html":"<p>NetworkManagers global config is <code>/etc/NetworkManager/NetworkManager.conf</code>.\nAdditional config files can be placed in <code>/etc/NetworkManager/conf.d</code>.</p><p>After editing a config file, apply the changes with:</p><pre><code class=\"language-bash\">sudo nmcli general reload\n</code></pre>\n<pre><code class=\"language-bash\">sudo usermod -aG network $USER\n</code></pre>\n<h2>Investigate sockets</h2>\n<p>Display all TCP Sockets with service names:</p>","tags":["security","networking"],"title":"Hardening Networking"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_install.md","preview_html":"<p>The ultimate installation resource is always goint to be the:</p><p><a href=\"https://wiki.archlinux.org/title/Installation_guide\">Arch Wiki Installation Guide</a></p><p><a href=\"https://archlinux.org/download/#checksums\">Verify PGP Signatures</a>, the ISO\ndirectory is just the same directory where your Arch Linux ISO file is stored.</p>","tags":["arch","security"],"title":"Encrypted Arch Install"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_firefox.md","preview_html":"<p><strong>Browser hardening</strong> focuses on reducing attack surface and blocking tracking\nby disabling or restricting features like JavaScript, cookies, telemetry, and\nthird-party scripts.</p><p><strong>Fingerprint protection</strong>, on the other hand, aims to make your browser\nindistinguishable from others. Instead of just blocking data collection, it\nensures that your browser’s configuration; screen size, fonts, user agent,\netc. matches a large group of users, so you blend in.</p><p><strong>Browser compartmentalization</strong> is a technique where different browsers are\ndedicated to distinct online activities to isolate cookies, trackers, and\nbrowsing data. For example, Mullvad Browser can be used solely for activities\nwhere fingerprinting resistance is critical, such as anonymou","tags":["browsers","security"],"title":"Hardening Firefox"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_arch.md","preview_html":"<p>⚠️ Warning: I am not a security expert. This guide presents various options\nfor hardening Arch Linux, but it is your responsibility to evaluate whether\neach adjustment suits your specific needs and environment. Security hardening\nand process isolation can introduce stability challenges, compatibility\nissues, or unexpected behavior. Additionally, these protections often come\nwith performance tradeoffs. Always conduct thorough research, there are no\nplug and play one size fits all security solutions.</p><p>Much of this guide draws inspiration or recommendations from the well-known\n<a href=\"https://madaidans-insecurities.github.io/guides/linux-hardening.html\">Linux Hardening Guide</a>\nby Madaidan’s Insecurities and the Arch Wiki. Arch is great but when anonymity\ntruly matters, use Whonix o","tags":["arch","security"],"title":"Hardening Arch"}],"posts":[{"author":null,"collection":null,"date":"2026-01-03T19:48:28.349243924+00:00","description":"\n","draft":false,"path":"index.md","preview_html":"","tags":[],"title":"index"}]},"entries":[{"author":null,"collection":null,"date":"2026-01-03T19:48:28.349243924+00:00","description":"\n","draft":false,"path":"index.md","preview_html":"","tags":[],"title":"index"},{"author":"saylesss88","collection":"blog","date":"2025-12-07T00:00:00+00:00","description":null,"draft":false,"path":"android/RethinkDNS_Guide.md","preview_html":"<p><img src=\"../images/rethinkdns.cleaned.png\" alt=\"RethinkDNS Logo\" /></p><p>I’m not affiliated with RethinkDNS in any way, I’m just a technologist and\nprivacy advocate.</p><p><strong>HTTP</strong> (HyperText Transfer Protocol): The standard protocol used by web\nbrowsers and servers to transfer web pages and related resources over the\ninternet.</p>","tags":["android","privacy"],"title":"RethinkDNS"},{"author":"saylesss88","collection":"blog","date":"2025-12-05T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_dns.md","preview_html":"<p>❗ NOTE: There are many other ways for someone monitoring your traffic to see\nwhat domain you looked up via DNS that it’s effectiveness is questionable\nwithout also using Tor or a VPN. Encrypted DNS will not help you hide any of\nyour browsing activity.</p><pre><code class=\"language-bash\">sudo pacman -S dnscrypt-proxy\n</code></pre>\n<blockquote>\n<p>NOTE: udp is required for dnscrypt protocol, keep this in mind when\nconfiguring your servers if your output chain is a default drop.</p><p><a href=\"https://wiki.archlinux.org/title/Dnscrypt-proxy\">Arch Wiki dnscrypt-proxy</a></p>","tags":["arch","security"],"title":"Encrypted DNS on Arch"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_networking.md","preview_html":"<p>NetworkManagers global config is <code>/etc/NetworkManager/NetworkManager.conf</code>.\nAdditional config files can be placed in <code>/etc/NetworkManager/conf.d</code>.</p><p>After editing a config file, apply the changes with:</p><pre><code class=\"language-bash\">sudo nmcli general reload\n</code></pre>\n<pre><code class=\"language-bash\">sudo usermod -aG network $USER\n</code></pre>\n<h2>Investigate sockets</h2>\n<p>Display all TCP Sockets with service names:</p>","tags":["security","networking"],"title":"Hardening Networking"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_install.md","preview_html":"<p>The ultimate installation resource is always goint to be the:</p><p><a href=\"https://wiki.archlinux.org/title/Installation_guide\">Arch Wiki Installation Guide</a></p><p><a href=\"https://archlinux.org/download/#checksums\">Verify PGP Signatures</a>, the ISO\ndirectory is just the same directory where your Arch Linux ISO file is stored.</p>","tags":["arch","security"],"title":"Encrypted Arch Install"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_firefox.md","preview_html":"<p><strong>Browser hardening</strong> focuses on reducing attack surface and blocking tracking\nby disabling or restricting features like JavaScript, cookies, telemetry, and\nthird-party scripts.</p><p><strong>Fingerprint protection</strong>, on the other hand, aims to make your browser\nindistinguishable from others. Instead of just blocking data collection, it\nensures that your browser’s configuration; screen size, fonts, user agent,\netc. matches a large group of users, so you blend in.</p><p><strong>Browser compartmentalization</strong> is a technique where different browsers are\ndedicated to distinct online activities to isolate cookies, trackers, and\nbrowsing data. For example, Mullvad Browser can be used solely for activities\nwhere fingerprinting resistance is critical, such as anonymou","tags":["browsers","security"],"title":"Hardening Firefox"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_arch.md","preview_html":"<p>⚠️ Warning: I am not a security expert. This guide presents various options\nfor hardening Arch Linux, but it is your responsibility to evaluate whether\neach adjustment suits your specific needs and environment. Security hardening\nand process isolation can introduce stability challenges, compatibility\nissues, or unexpected behavior. Additionally, these protections often come\nwith performance tradeoffs. Always conduct thorough research, there are no\nplug and play one size fits all security solutions.</p><p>Much of this guide draws inspiration or recommendations from the well-known\n<a href=\"https://madaidans-insecurities.github.io/guides/linux-hardening.html\">Linux Hardening Guide</a>\nby Madaidan’s Insecurities and the Arch Wiki. Arch is great but when anonymity\ntruly matters, use Whonix o","tags":["arch","security"],"title":"Hardening Arch"}],"generated_at":"2026-01-03T19:50:47.222786551+00:00"};</script>
+<h1 id="hardening-arch-linux"><a class="header" href="#hardening-arch-linux">Hardening Arch Linux</a></h1>
+<details>
+<summary> ✔️ Click to Expand Table of Contents</summary>
+<ul>
+<li><a href="#the-basics">The Basics</a>
+<ul>
+<li><a href="#best-practices-and-standards">Best Practices and Standards</a></li>
+<li><a href="#user-and-group-management--strong-passwords">User and group management &amp; Strong Passwords</a></li>
+</ul>
+</li>
+<li><a href="#hardeningsandboxing-systemd">Hardening/Sandboxing systemd</a></li>
+<li><a href="#lynis-and-other-tools">Lynis and other tools</a></li>
+<li><a href="#hardening-the-kernel">Hardening the Kernel</a></li>
+<li><a href="#hardening-your-current-kernel">Hardening your current Kernel</a></li>
+<li><a href="#disable-core-dumps">Disable Core Dumps</a></li>
+<li><a href="#kernel-and-namespace-hardening-and-blacklisting">Kernel and Namespace Hardening and Blacklisting</a></li>
+<li><a href="#firewall">Firewall</a></li>
+<li><a href="#ssh--gpg-key-generation-and-safety">SSH &amp; GPG Key Generation and Safety</a>
+<ul>
+<li><a href="#ssh-keygen">ssh-keygen</a></li>
+<li><a href="#gnupg-and-gpg-agent">GnuPG and gpg-agent</a></li>
+<li><a href="#generate-a-revocation-certificate">Generate a Revocation Certificate</a></li>
+<li><a href="#generate-gpg-subkeys">Generate Gpg Subkeys</a></li>
+<li><a href="#backing-up-your-keys">Backing up Your Keys</a></li>
+<li><a href="#remove-and-store-your-primary-key-offline">Remove and Store your Primary Key offline</a></li>
+</ul>
+</li>
+<li><a href="#hardening-openssh">Hardening OpenSSH</a>
+<ul>
+<li><a href="#tip-change-the-default-port">Tip Change the Default Port</a></li>
+</ul>
+</li>
+<li><a href="#usb-port-protection">USB Port Protection</a>
+<ul>
+<li><a href="#usbguard-daemon">USBGuard Daemon</a></li>
+<li><a href="#firejail">Firejail</a></li>
+</ul>
+</li>
+<li><a href="#hardening-firejail">Hardening Firejail</a>
+<ul>
+<li><a href="#remove-firejail-symlinks">Remove Firejail symlinks</a></li>
+</ul>
+</li>
+<li><a href="#apparmor">AppArmor</a>
+<ul>
+<li><a href="#switching-an-app-from-unconfined-mode-to-enforce">Switching an app from unconfined mode to enforce</a></li>
+<li><a href="#disabling-apparmor">Disabling AppArmor</a></li>
+</ul>
+</li>
+<li><a href="#creating-or-adding-profiles-that-arent-pre-configured">Creating or adding profiles that aren’t pre-configured</a>
+<ul>
+<li><a href="#profiling-by-hand">Profiling by Hand</a></li>
+<li><a href="#auditd">Auditd</a></li>
+<li><a href="#doas-over-sudo">Doas over sudo</a></li>
+</ul>
+</li>
+<li><a href="#intrusion-detection">Intrusion Detection</a>
+<ul>
+<li><a href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+</details>
+<blockquote>
+<p>⚠️ Warning: I am not a security expert. This guide presents various options
+for hardening Arch Linux, but it is your responsibility to evaluate whether
+each adjustment suits your specific needs and environment. Security hardening
+and process isolation can introduce stability challenges, compatibility
+issues, or unexpected behavior. Additionally, these protections often come
+with performance tradeoffs. Always conduct thorough research, there are no
+plug and play one size fits all security solutions.</p>
+</blockquote>
+<blockquote>
+<p>Much of this guide draws inspiration or recommendations from the well-known
+<a href="https://madaidans-insecurities.github.io/guides/linux-hardening.html">Linux Hardening Guide</a>
+by Madaidan’s Insecurities and the Arch Wiki. Arch is great but when anonymity
+truly matters, use Whonix or Tails. The Whonix Docs have a specific section or
+Arch with KVM that is an excellent resource.</p>
+</blockquote>
+<ul>
+<li><a href="https://www.whonix.org/wiki/KVM#Arch_Linux">Whonix KVM#Arch_Linux</a>, if you
+plan on using this think twice before enabling <code>dnscrypt-proxy</code> and you might
+want to consider ufw firewall rather than the nftables I share in this guide
+because of Port conflicts.</li>
+</ul>
+<p>Keep in mind that Arch’s security posture is ultimately constrained by the
+broader limitations of Linux security mechanisms, upstream tooling, and ongoing
+development priorities.</p>
+<p>I will assume that you’re using a UKI with Secure Boot enabled with systemd-boot
+for this section. If you don’t and want to, you can follow the
+<a href="https://mako088.github.io/arch/enc_install.html">Guide</a> that I wrote or more
+obviously, the Wiki.</p>
+<h2 id="the-basics"><a class="header" href="#the-basics">The Basics</a></h2>
+<p>Check the <a href="https://security.archlinux.org/">Arch Linux Security Tracker</a> for
+information about known vulnerabilities affecting Arch packages. It lists CVEs
+(Common Vulnerabilities and Exposures) affecting packages, the severity, the
+fixed versions, and advisory details.</p>
+<p>Backup your system regularly, many guides consider the data already lost if it
+isn’t backed up because without a backup, any data loss event (hardware failure,
+ransomware attack, accidental deletion, natural disaster) becomes irreversible.
+Backups act as a critical safety net that enables recovery. Without them, once
+data is corrupted, deleted, or encrypted, there is no reliable way to restore
+it, effectively making it lost permanently.</p>
+<p>The 3-2-1 Backup Rule:</p>
+<ul>
+<li>
+<p>3 copies of data. (Ensuring redundancy)</p>
+</li>
+<li>
+<p>2 storage types. (Reduces risk)</p>
+</li>
+<li>
+<p>1 offsite backup. (Protects against cyber threats and natural disasters)</p>
+</li>
+<li>
+<p>There is a backup guide for btrfs in
+<a href="https://mako088.github.io/arch/enc_install.html">enc_install</a></p>
+</li>
+</ul>
+<p>Use Full Disk Encryption to protect your data at rest.</p>
+<p>Encryption is the process of using an algorithm to scramble plaintext data into
+ciphertext, making it unreadable except to a person who has the key to decrypt
+it.</p>
+<p><strong>Data at rest</strong> is data in storage, such as a computer’s or a servers hard
+disk.</p>
+<p><strong>Data at rest encryption</strong> (typically hard disk encryption), secures the
+documents, directories, and files behind an encryption key. Encrypting your data
+at rest prevents data leakage, physical theft, unauthorized access, and more as
+long as the key management scheme isn’t compromised.</p>
+<p>Enable a UEFI password or Administrator password where it requires
+authentication in order to access the UEFI/BIOS.</p>
+<p>Use a different password/passphrase for encryption and userspace.(i.e., user
+passwd)</p>
+<p>Use Secure Boot, with a Unified Kernel Image (UKI). TPM can, in some ways
+increase security; I may add a section in the future.</p>
+<p>When Secure Boot is used with a Unified Kernel Image, it provides enhanced
+protection compared to traditional boot methods because when Secure Boot
+verifies the UKI’s signature, it ensures the integrity and authenticity of:</p>
+<ul>
+<li>
+<p>The kernel itself,</p>
+</li>
+<li>
+<p>The <code>initramfs</code>,</p>
+</li>
+<li>
+<p>The kernel command line parameters,</p>
+</li>
+<li>
+<p>And indirectly, the bootloader that loads the UKI (since the bootloader
+verifies the UKI signature before execution).</p>
+</li>
+<li>
+<p>Secure boot doesn’t protect against runtime kernel exploits.</p>
+</li>
+</ul>
+<p>This means that any tampering with these components, such as injecting malware
+into the <code>initramfs</code>, altering boot parameters, or swapping the kernel would
+break the signature verification and prevent the system from booting.</p>
+<p><code>systemd-boot</code> has a smaller attack surface and is often recommended over GRUB
+for hardened systems.</p>
+<ul>
+<li><a href="https://mako088.github.io/arch/enc_install.html">Encrypted Install Guide w/ systemd-boot and UKI Secure Boot</a></li>
+</ul>
+<p>Useful Resources:</p>
+<details>
+<summary> ✔️ Click to Expand Secure Boot Resources </summary>
+<ul>
+<li>
+<p><a href="https://0pointer.net/blog/authenticated-boot-and-disk-encryption-on-linux.html">The Strange State of Authenticated Boot and Encryption</a></p>
+</li>
+<li>
+<p>When using a UKI with Secure Boot, the initrd is authenticated because it’s a
+sealed component of the single signed image.</p>
+</li>
+</ul>
+</details>
+<hr>
+<h3 id="best-practices-and-standards"><a class="header" href="#best-practices-and-standards">Best Practices and Standards</a></h3>
+<p>It’s crucial to <strong>document every system change</strong> meticulously. Since Arch Linux
+typically relies on manual configuration and does not use full declarative
+version control by default, maintaining clear records, such as detailed
+changelogs, notes, or Git repositories for your config files is essential.</p>
+<p>A few options to version control some of your dotfiles:</p>
+<p>Tools like <a href="https://www.gnu.org/s/stow/manual/stow.html">GNU Stow</a> and
+<a href="https://chezmoi.io/install/">chezmoi</a> help bring structure and version control
+to manual configurations in Arch Linux.</p>
+<ul>
+<li>
+<p>GNU Stow uses a symlink farm approach to manage dotfiles and configuration
+directories cleanly, making it easy to track and revert changes by organizing
+files under a single version-controlled directory.</p>
+</li>
+<li>
+<p><a href="https://www.chezmoi.io/">chezmoi</a> is a powerful dotfile manager focused on
+reproducible, encrypted, and template-driven config management. It simplifies
+applying changes across multiple machines and maintaining a documented history
+of modifications.</p>
+</li>
+</ul>
+<p>Using these tools enhances your ability to maintain clear, version-controlled
+records of system changes. Consider making your dotfiles repo private if you’re
+unsure what you need to protect.</p>
+<p>By breaking changes into smaller, manageable tasks and documenting them with
+descriptive messages, you create a clear history of modifications. This makes it
+far simpler to troubleshoot issues, revert problematic changes, and maintain
+security best practices over time.</p>
+<p><strong>User and Permission Management</strong></p>
+<ul>
+<li>
+<p><strong>Implement distinct user accounts</strong> to minimize the risk associated with
+compromised accounts.</p>
+</li>
+<li>
+<p><strong>Execute Specific Commands</strong>: Always execute the specific command that
+requires elevation, rather than using sudo to open an entire root shell:</p>
+<ul>
+<li>
+<p><strong>Good</strong>: <code>sudo pacman -Syu</code></p>
+</li>
+<li>
+<p><strong>Bad</strong>: Running <code>sudo su -</code> and then running <code>pacman -Syu</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Consider using a more secure or minimal form of privilege escalation like
+<code>doas</code>, <code>sudo-rs</code>, or <code>run0</code> instead of standard <code>sudo</code>.</p>
+</li>
+</ul>
+<hr>
+<h3 id="user-and-group-management--strong-passwords"><a class="header" href="#user-and-group-management--strong-passwords">User and group management &amp; Strong Passwords</a></h3>
+<ul>
+<li>
+<p>Users and groups are used as a form of
+<a href="https://en.wikipedia.org/wiki/access_control#Computer_security">access control</a>.
+They control access to the system’s files, directories, and peripherals. This
+is a security feature that limits access in certain specific ways.</p>
+<ul>
+<li>When granting access to a resource, create a specific group and add only the
+necessary users to it, rather than granting broad access to all root or
+wheel users. Demonstrated in: <strong><a href="#doas-over-sudo">Doas over sudo</a></strong>.</li>
+</ul>
+</li>
+<li>
+<p>Apply the principle of least privilege by assigning users only the permissions
+they actually need.</p>
+</li>
+<li>
+<p>Avoid running services or applications as root; use dedicated service accounts
+where possible.</p>
+</li>
+</ul>
+<p><strong>Passwords/Password Quality</strong></p>
+<pre><code class="language-bash">sudo pacman -S libpwquality
+</code></pre>
+<p>Edit <code>/etc/pam.d/passwd</code> file to read as:</p>
+<pre><code class="language-passwd">#%PAM-1.0
+password required pam_pwquality.so retry=2 minlen=10 difok=6 dcredit=-1 ucredit=-1 ocredit=-1 lcredit=-1 [badwords=myservice mydomain] enforce_for_root
+password required pam_unix.so use_authtok sha512 shadow
+</code></pre>
+<p>The <code>/etc/pam.d/passwd</code> file with <code>pam_pwquality.so</code> specifies the enforcement
+directives and some immediate password rules, which apply dynamically during
+password changes.</p>
+<ul>
+<li>
+<p><a href="https://man.archlinux.org/man/pam_pwquality.8">pam_pwuality(8)</a></p>
+</li>
+<li>
+<p><a href="https://man.archlinux.org/man/pam_unix.8">pam_unix(8)</a></p>
+</li>
+<li>
+<p>Use strong passwords and a password manager. The Arch Wiki
+<a href="https://wiki.archlinux.org/title/Security">Security</a> section goes in depth
+about this.</p>
+</li>
+<li>
+<p>Regularly review group memberships and file permissions, especially on
+sensitive system files.</p>
+</li>
+</ul>
+<p>Edit <code>/etc/security/pwquality.conf</code> to read as:</p>
+<pre><code class="language-pwquality.conf">minlen = 15
+# digit
+dcredit = -1
+# uppercase
+ucredit = -1
+# lowercase
+lcredit = -1
+# Special character
+ocredit = -1
+# dictionary checks
+dictcheck = 1
+# username checks
+usercheck = 1
+usersubstr = 5
+enforcing = 1
+# check roots pwquality
+enforce_for_root
+</code></pre>
+<p>The <code>/etc/security/pwquality.conf</code> file holds system-wide default parameters
+that cannot all be easy expressed on the PAM line. This is a bit more
+comprehensive than <code>/etc/pam.d/passwd</code>.</p>
+<p>Setting <code>enforcing = 0</code> disables enforcement.</p>
+<ul>
+<li>
+<p>Using negative values like <code>dcredit = -1</code>, <code>ucredit = -1</code>, <code>lcredit = -1</code>, and
+<code>ocredit = -1</code> requires at least one digit, uppercase, lowercase, and other
+(special) character respectively.</p>
+</li>
+<li>
+<p><code>dictcheck = 1</code> and <code>usercheck = 1</code> enable dictionary checks and user name
+checks to prevent weak or related passwords.</p>
+</li>
+</ul>
+<hr>
+<p><strong>Package Management and System Minimalism</strong></p>
+<ul>
+<li>
+<p>Favor packages from the official Arch repositories managed with pacman, as
+they are cryptographically signed and vetted by trusted Arch developers.</p>
+</li>
+<li>
+<p>Use AUR packages cautiously; they lack official cryptographic signatures and
+require manual review and vetting before installation.</p>
+</li>
+<li>
+<p>Install only the software and services you truly need to reduce the attack
+surface and minimize vulnerabilities.</p>
+</li>
+<li>
+<p>Remove unused packages and disable unnecessary services to free up resources
+and limit potential entry points.</p>
+</li>
+<li>
+<p>Consider using <code>arch-audit</code> to find packages with vulnerabilities and patch
+said vulnerabilities.</p>
+</li>
+</ul>
+<hr>
+<p><strong>Network and Privacy Best Practices</strong></p>
+<p>On a hardened Linux system, the browser is most often the weakest link exposed
+to the internet, and so security, privacy, and anti-tracking features of
+browsers are now as important, or even more important than platform-level
+protections.</p>
+<ul>
+<li>
+<p><a href="https://mako088.github.io/arch/hardening_firefox.html">Hardening Firefox/Librewolf Guide</a></p>
+</li>
+<li>
+<p>Prefer software and hardware with privacy-respecting defaults and a strong
+security posture.</p>
+</li>
+<li>
+<p>Use encrypted DNS and VPNs where possible: encrypted DNS protects your
+queries, while VPNs hide your IP address. Note that VPNs do not provide
+anonymity on their own and fingerprinting techniques can still reveal
+information.</p>
+<ul>
+<li><a href="https://mako088.github.io/arch/enc_dns.html">dnscrypt-proxy w/ dnsmasq guide</a></li>
+</ul>
+</li>
+<li>
+<p>Implement a firewall to control inbound and outbound network traffic based on
+predefined security rules. Firewalls serve as a critical layer of defense to
+reduce attack surfaces and monitor suspicious activity.</p>
+</li>
+<li>
+<p>Secure SSH access by disabling root login, changing default ports, and
+enforcing public-key authentication to prevent brute-force and unauthorized
+access attempts.</p>
+</li>
+</ul>
+<hr>
+<p><strong>Cryptography and Future-Proofing</strong></p>
+<ul>
+<li>
+<p>The
+<a href="https://www.nsa.gov/Press-Room/Press-Releases-Statements/Press-Release-View/Article/3498776/post-quantum-cryptography-cisa-nist-and-nsa-recommend-how-to-prepare-now/">NSA, CISA, and NIST warn</a>
+that nation-state actors are likely stockpiling encrypted data now, preparing
+for a future when quantum computers could break today’s most widely used
+encryption algorithms. Sensitive data with long-term secrecy needs is
+especially at risk.</p>
+</li>
+<li>
+<p>This is a wake-up call to use the strongest encryption available today and to
+plan early for post-quantum security.</p>
+</li>
+<li>
+<p><a href="https://www.nist.gov/news-events/news/2024/08/nist-releases-first-3-finalized-post-quantum-encryption-standards">NIST First 3 Post-Quantum Encryption Standards</a>
+Organizations and individuals should prepare to migrate cryptographic systems
+to these new standards as soon as practical.</p>
+</li>
+<li>
+<p>They chose
+<a href="https://www.nist.gov/news-events/news/2022/07/nist-announces-first-four-quantum-resistant-cryptographic-algorithms">Four Quantum-Resistant Cryptographic Algorithms</a>
+warning that public-key cryptography is especially vulnerable and widely used
+to protect digital information.</p>
+</li>
+<li>
+<p>Follow developments from entities like
+<a href="https://www.nist.gov/news-events/news/2024/08/nist-releases-first-3-finalized-post-quantum-encryption-standards">NIST’s post-quantum encryption standards</a>
+and implement recommendations as soon as practical.</p>
+</li>
+<li>
+<p>Stay informed of quantum-resistant algorithm updates, especially for
+public-key cryptography, as recommended by NIST and security agencies.</p>
+</li>
+</ul>
+<hr>
+<h2 id="hardeningsandboxing-systemd"><a class="header" href="#hardeningsandboxing-systemd">Hardening/Sandboxing systemd</a></h2>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/Systemd/Sandboxing">Arch Wiki systemd/sandboxing</a></li>
+</ul>
+<p><code>systemd</code> is the core “init system” and service manager that controls how
+services, daemons, and basic system processes are started, stopped and
+supervised on modern Linux distributions, including Arch. It provides a suite of
+basic building blocks for a Linux system as well as a system and service manager
+that runs as <code>PID 1</code> and starts the rest of the system.</p>
+<p>Because it launches and supervises almost all system services, hardening systemd
+means raising the baseline security of your entire system.</p>
+<pre><code class="language-bash">sudo systemd-analyze security
+# ...snip
+systemd-hostnamed.service                 1.7 OK        🙂
+systemd-importd.service                   5.0 MEDIUM    😐
+systemd-journald.service                  4.9 OK        🙂
+systemd-logind.service                    2.8 OK        🙂
+systemd-machined.service                  6.2 MEDIUM    😐
+</code></pre>
+<p>Check a specific unit:</p>
+<pre><code class="language-bash">sudo systemd-analyze security NetworkManager
+</code></pre>
+<pre><code class="language-bash">sudo systemctl edit NetworkManager.service
+→ Overall exposure level for NetworkManager.service: 9.6 UNSAFE    😨
+</code></pre>
+<p>The following file will open in your $EDITOR, these settings take it from UNSAFE
+to OK:</p>
+<pre><code class="language-conf">[Service]
+NoNewPrivileges = true
+ProtectHome = true
+ProtectKernelModules = true
+ProtectKernelLogs = true
+ProtectControlGroups = true
+ProtectClock = true
+ProtectHostname = true
+ProtectProc = "invisible"
+ProtectKernelTunables=yes
+PrivateTmp = true
+RestrictRealtime = true
+SystemCallFilter=~@mount ~@module ~@swap ~@obsolete ~@cpu-emulation ptrace
+CapabilityBoundingSet=~CAP_KILL ~CAP_SYS_CHROOT ~CAP_AUDIT_* ~CAP_SETUID ~CAP_SETGID ~CAP_SETPCAP ~CAP_SYS_ADMIN ~CAP_NET_BIND_SERVICE ~CAP_NET_BROADCAST ~CAP_NET_RAW ~CAP_DAC_OVERRIDE ~CAP
+_FOWNER ~CAP_IPC_OWNER
+
+# Allow only the essential families (AF_PACKET and exotic ones are blocked by omission)
+#RestrictAddressFamilies=AF_UNIX AF_NETLINK AF_INET AF_INET6
+RestrictNamespaces = true
+RestrictSUIDSGID = true
+MemoryDenyWriteExecute = true
+SystemCallArchitectures = "native"
+LockPersonality= true
+UMask=0077
+User=root
+PrivateDevices=yes
+
+### Edits below this comment will be discarded
+</code></pre>
+<pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl restart NetworkManager
+</code></pre>
+<p>Sometimes you may need to reboot for the changes to take effect.</p>
+<pre><code class="language-bash">sudo systemd-analyze security NetworkManager
+→ Overall exposure level for NetworkManager.service: 4.5 OK 🙂
+</code></pre>
+<blockquote>
+<p>❗️ This is just one example of the many services that you can harden if you so
+choose.</p>
+</blockquote>
+<p>Further reading on systemd:</p>
+<details>
+<summary> ✔️ Click to Expand Systemd Resources </summary>
+<ul>
+<li>
+<p><a href="https://systemd.io/">systemd.io</a></p>
+</li>
+<li>
+<p><a href="https://0pointer.de/blog/projects/systemd.html">Rethinking PID 1</a></p>
+</li>
+<li>
+<p><a href="https://0pointer.de/blog/projects/the-biggest-myths.html">Biggest Myths about Systemd</a></p>
+</li>
+</ul>
+</details>
+<hr>
+<h2 id="lynis-and-other-tools"><a class="header" href="#lynis-and-other-tools">Lynis and other tools</a></h2>
+<p>Lynis is a security auditing tool for systems based on UNIX like Linux, macOS,
+BSD, and others.–<a href="https://github.com/CISOfy/lynis">lynis repo</a></p>
+<pre><code class="language-bash">sudo pacman -S lynis
+</code></pre>
+<p>List commands:</p>
+<pre><code class="language-bash">sudo lynis show commands
+Commands:
+lynis audit
+lynis configure
+lynis generate
+lynis show
+lynis update
+lynis upload-only
+</code></pre>
+<p>Audit the system:</p>
+<pre><code class="language-bash">sudo lynis audit system
+ Lynis security scan details:
+
+  Hardening index : 83 [################    ]
+  Tests performed : 255
+  Plugins enabled : 0
+</code></pre>
+<ul>
+<li>
+<p>The “Lynis hardening index” is an overall impression on how well a system is
+hardened. However, this is just an indicator on measures taken - not a
+percentage of how safe a system might be. A score over 75 typically indicates
+a system with more than average safety measures implemented.</p>
+</li>
+<li>
+<p>Lynis will give you more recommendations for securing your system as well.</p>
+</li>
+</ul>
+<hr>
+<p><strong>rkhunter</strong> (Rootkit Hunter):</p>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/Rkhunter">Arch Wiki RKhunter</a></li>
+</ul>
+<pre><code class="language-bash">sudo pacman -S rkhunter
+</code></pre>
+<p>Update the file properties database:</p>
+<pre><code class="language-bash">sudo rkhunter --propupd
+</code></pre>
+<p>Keep rkhunters data files up-to-date with:</p>
+<pre><code class="language-bash">sudo rkhunter --update
+</code></pre>
+<p>Run a system check:</p>
+<pre><code class="language-bash">sudo rkhunter --check --sk
+</code></pre>
+<p>Validate the config files:</p>
+<pre><code class="language-bash">sudo rkhunter --config-check
+</code></pre>
+<p>Get rid of false positives by adding the following to <code>/etc/rkhunter.conf</code>:</p>
+<pre><code class="language-conf">SCRIPTWHITELIST=/usr/bin/egrep
+SCRIPTWHITELIST=/usr/bin/fgrep
+SCRIPTWHITELIST=/usr/bin/ldd
+SCRIPTWHITELIST=/usr/bin/vendor_perl/GET
+</code></pre>
+<p>Run a config check:</p>
+<pre><code class="language-bash">sudo rkhunter --config-check
+</code></pre>
+<hr>
+<p><strong>ClamAV</strong></p>
+<ul>
+<li>
+<p>Malware stands for malicious software. A computer virus is an undesirable
+program running on the user’s computer often without their consent or even
+without their knowledge.</p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/ClamAV">Arch Wiki ClamAV</a></p>
+</li>
+</ul>
+<pre><code class="language-bash">sudo pacman -S clamav
+</code></pre>
+<p>Update the virus databases manually:</p>
+<pre><code class="language-bash">sudo freshclam
+</code></pre>
+<p>Scan your system:</p>
+<pre><code class="language-bash">sudo clamscan -r ~
+----------- SCAN SUMMARY -----------
+Known viruses: 8708646
+Engine version: 1.4.3
+Scanned directories: 6505
+Scanned files: 79796
+Infected files: 0
+Data scanned: 4387.29 MB
+Data read: 5191.41 MB (ratio 0.85:1)
+Time: 1748.802 sec (29 m 8 s)
+Start Date: 2025:10:03 14:32:58
+End Date:   2025:10:03 15:02:07
+</code></pre>
+<blockquote>
+<p>❗️ NOTE: This can take a while, I recommend using <code>caffeine-ng</code> or <code>caffeine</code>
+for this to prevent your system going to sleep while the scan completes.</p>
+</blockquote>
+<pre><code class="language-bash">paru -S caffeine-ng
+</code></pre>
+<p>This creates a coffee cup icon in your bar config on next reboot. If you’re in
+the middle of something and don’t want to reboot run:</p>
+<pre><code class="language-bash">caffeine &amp;
+</code></pre>
+<p>Click the icon and <code>Enable Caffeine</code> to prevent sleep.</p>
+<hr>
+<h2 id="hardening-the-kernel"><a class="header" href="#hardening-the-kernel">Hardening the Kernel</a></h2>
+<p>Given the kernel’s central role, it’s a frequent target for malicious actors,
+making robust hardening essential.</p>
+<p>You can use the <code>linux-hardened</code> kernel to have a kernel that prioritizes
+security over anything else:</p>
+<pre><code class="language-bash">sudo pacman -S linux-hardened linux-hardened-headers
+</code></pre>
+<p>Generate the <code>initramfs</code> for the hardened kernel:</p>
+<pre><code class="language-bash">sudo mkinitcpio -p linux-hardened
+</code></pre>
+<p>Configure systemd-boot to boot the hardened kernel, the entries are configured
+under <code>/boot/loader/entries/</code>. Create or edit an entry file, for example
+<code>/boot/loader/entries/arch-linux-hardened.conf</code>:</p>
+<pre><code class="language-text">title   Arch Linux Hardened
+linux   /vmlinuz-linux-hardened
+initrd  /initramfs-linux-hardened.img
+options rd.luks.name=YOUR_UUID=cryptroot root=/dev/mapper/cryptroot rw quiet
+</code></pre>
+<p>Replace <code>YOUR_UUID</code> with the UUID of the encrypted root partition (from <code>blkid</code>)</p>
+<p>To set this as the default boot entry and enable booting the last selected
+kernel automatically, edit <code>/boot/loader/loader.conf</code>:</p>
+<pre><code class="language-text">default arch-linux-hardened.conf
+timeout 4
+console-mode auto
+</code></pre>
+<p>Edit <code>/etc/mkinitcpio.d/linux-hardened.preset</code>:</p>
+<pre><code class="language-preset"># mkinitcpio preset file for the 'linux-hardened' package
+
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-hardened"
+
+PRESETS=('default' 'fallback')
+
+#default_config="/etc/mkinitcpio.conf"
+# default_image="/boot/initramfs-linux-hardened.img"
+default_uki="/boot/EFI/Linux/arch-linux-hardened.efi"
+default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
+
+#fallback_config="/etc/mkinitcpio.conf"
+# fallback_image="/boot/initramfs-linux-hardened-fallback.img"
+fallback_uki="/boot/EFI/Linux/arch-linux-hardened-fallback.efi"
+fallback_options="-S autodetect"
+</code></pre>
+<p>Reboot and <code>linux-hardened</code> should be chosen by default. You can also choose
+additional kernels if needed.</p>
+<hr>
+<h2 id="hardening-your-current-kernel"><a class="header" href="#hardening-your-current-kernel">Hardening your current Kernel</a></h2>
+<p>Sometimes <code>linux-hardened</code> just won’t work on your system without some serious
+digging. You can harden your current kernel, or even better would be to harden
+the Long-Term Support (LTS) kernel.</p>
+<p>The Linux kernel is typically released under two forms: stable and long-term
+support (LTS). Choosing either has consequences, do your research.
+<a href="https://madaidans-insecurities.github.io/guides/linux-hardening.html#stable-vs-lts">Stable vs. LTS kernels</a></p>
+<ul>
+<li><a href="https://www.kernel.org/category/releases.html">The Linux Kernel Archives Active kernel releases</a></li>
+</ul>
+<p>See which kernel you’re currently using with:</p>
+<pre><code class="language-bash"># show the kernel release
+uname -r
+# show kernel version, hostname, and architecture
+uname -a
+</code></pre>
+<p>Show the configuration of your current kernel:</p>
+<pre><code class="language-bash">zcat /proc/config.gz
+</code></pre>
+<p><code>sysctl</code> is a tool that allows you to view or modify kernel settings and
+enable/disable different features.</p>
+<p>Check what each setting does <a href="https://sysctl-explorer.net/">sysctl-explorer</a></p>
+<p>Refer to
+<a href="https://madaidans-insecurities.github.io/guides/linux-hardening.html#sysctl-kernel">madadaidans-insecurities#sysctl-kernel</a>
+for the following settings and their explainations.</p>
+<p>Create a file <code>/etc/sysctl.d/99-custom.conf</code>, since files are read in
+lexicographical order this file will be read last, allowing it to override any
+settings from earlier files.</p>
+<p>To check if a parameter is already set:</p>
+<pre><code class="language-bash">sysctl fs.protected_symlinks
+sysctl -a | grep fs.protected
+</code></pre>
+<p>To list all parameters:</p>
+<pre><code class="language-bash">sysctl -a &gt; params.txt
+</code></pre>
+<ul>
+<li>
+<p><code>1</code> typically means enable</p>
+</li>
+<li>
+<p><code>0</code> typically means disable</p>
+</li>
+</ul>
+<p>Example, both of these were the default in the zen-kernel:</p>
+<pre><code class="language-bash"># 99-custom.conf
+# prevent hardlink misuse
+fs.protected_hardlinks = 1
+# prevent symlink misuse
+fs.protected_symlinks = 1
+</code></pre>
+<p>Apply the changes immediately:</p>
+<pre><code class="language-bash">sudo sysctl --system
+</code></pre>
+<p>Check Active Linux Security Modules:</p>
+<pre><code class="language-bash">cat /sys/kernel/security/lsm
+# Output:
+File: /sys/kernel/security/lsm
+capability,landlock,yama,bpf,apparmor
+</code></pre>
+<p>Check Kernel Configuration Options:</p>
+<pre><code class="language-bash">zcat /proc/config.gz | grep CONFIG_SECURITY_SELINUX
+zcat /proc/config.gz | grep CONFIG_HARDENED_USERCOPY
+zcat /proc/config.gz | grep CONFIG_STACKPROTECTOR
+</code></pre>
+<pre><code class="language-bash">sudo pacman -S kernel-hardening-checker
+</code></pre>
+<p>While in the same directory as the <code>params.txt</code> that we created earlier, run:</p>
+<pre><code class="language-bash">kernel-hardening-checker -l /proc/cmdline -c /proc/config.gz -s ./params.txt
+</code></pre>
+<p>Only the warnings listed with <code>| sysctl |</code> can be edited with the above method.</p>
+<p>Example <code>99-custom.conf</code> with some settings to prevent breakage:</p>
+<details>
+<summary> ✔️ Click to Expand `99-custom.conf` example </summary>
+<blockquote>
+<p>⚠️ WARNING: Always do your own research, you can find explanations to the
+following settings in:
+<a href="https://madaidans-insecurities.github.io/guides/linux-hardening.html#sysctl-kernel">madaidans insecurities Linux Hardening guide</a>.</p>
+</blockquote>
+<p>You can apply these on top of the hardened kernel as well:</p>
+<pre><code class="language-conf"># Kernel Security Hardening
+# ----------------------------------------------------------------------
+# allow set-user-ID processes to dump core
+fs.suid_dumpable = 2
+
+# prevent pointer leaks
+kernel.kptr_restrict = 2
+
+# restrict kernel log to CAP_SYSLOG capability
+kernel.dmesg_restrict = 1
+
+# Note: certian container runtimes or browser sandboxes might rely on the following
+# restrict eBPF to the CAP_BPF capability
+kernel.unprivileged_bpf_disabled = 1
+
+# should be enabled along with bpf above
+# net.core.bpf_jit_harden = 2
+
+# restrict loading TTY line disciplines to the CAP_SYS_MODULE
+dev.tty.ldisk_autoload = 0
+
+# prevent exploit of use-after-free flaws
+vm.unprivileged_userfaultfd = 0
+
+# kexec is used to boot another kernel during runtime and can be abused
+kernel.kexec_load_disabled = 1
+
+# Kernel self-protection
+# SysRq exposes a lot of potentially dangerous debugging functionality to unprivileged users
+# 4 makes it so a user can only use the secure attention key. A value of 0 would disable completely
+kernel.sysrq = 4
+
+# disable unprivileged user namespaces, Note: Docker and other apps may need this
+# kernel.unprivileged_userns_clone = 0 # commented out because it makes apps I need fail
+
+# restrict all usage of performance events to the CAP_PERFMON capability
+kernel.perf_event_paranoid = 3
+
+# Network Security Hardening
+# ----------------------------------------------------------------------
+
+# protect against SYN flood attacks (denial of service attack)
+net.ipv4.tcp_syncookies = 1
+
+# protection against TIME-WAIT assassination
+net.ipv4.tcp_rfc1337 = 1
+
+# enable source validation of packets received (prevents IP spoofing)
+net.ipv4.conf.default.rp_filter = 1
+net.ipv4.conf.all.rp_filter = 1
+
+# Disable ICMP redirects for IPv4
+net.ipv4.conf.all.accept_redirects = 0
+net.ipv4.conf.default.accept_redirects = 0
+net.ipv4.conf.all.secure_redirects = 0
+net.ipv4.conf.default.secure_redirects = 0
+
+# Disable ICMP redirects for IPv6 (Protect against IP spoofing)
+net.ipv6.conf.all.accept_redirects = 0
+net.ipv6.conf.default.accept_redirects = 0
+net.ipv4.conf.all.send_redirects = 0
+net.ipv4.conf.default.send_redirects = 0
+
+# prevent man-in-the-middle attacks (by ignoring ICMP echo requests)
+net.ipv4.icmp_echo_ignore_all = 1
+
+# ignore bogus ICMP errors, helps avoid Smurf attacks
+net.ipv4.icmp_ignore_bogus_error_responses = 1
+
+# Disable IP forwarding
+net.ipv4.conf.all.forwarding = 0
+
+# Disable acceptance of source-routed packets for IPv4
+net.ipv4.conf.default.accept_source_route = 0
+net.ipv4.conf.all.accept_source_route = 0
+
+# Disable acceptance of source-routed packets for IPv6
+net.ipv6.conf.all.accept_source_route = 0
+net.ipv6.conf.default.accept_source_route = 0
+
+# Disable IPv6 forwarding
+net.ipv6.conf.all.forwarding = 0
+
+# Disable Router Advertisements acceptance
+net.ipv6.conf.all.accept_ra = 0
+net.ipv6.conf.default.accept_ra = 0
+
+# TCP Hardening
+# ----------------------------------------------------------------------
+
+# Disable TCP SACK (Selective Acknowledgement)
+net.ipv4.tcp_sack = 0
+net.ipv4.tcp_dsack = 0
+net.ipv4.tcp_fack = 0
+
+# Userspace/Memory Security
+# ----------------------------------------------------------------------
+
+# restrict usage of ptrace
+kernel.yama.ptrace_scope = 2
+
+# ASLR memory protection (64-bit systems)
+vm.mmap_rnd_bits = 32
+vm.mmap_rnd_compat_bits = 16
+
+# only permit symlinks to be followed when outside of a world-writable sticky directory
+fs.protected_symlinks = 1
+fs.protected_hardlinks = 1
+
+# Prevent creating files in potentially attacker-controlled environments
+fs.protected_fifos = 2
+fs.protected_regular = 2
+
+# Randomize memory
+kernel.randomize_va_space = 2
+
+# Exec Shield (Stack protection)
+# NOTE: This is generally deprecated/obsolete on modern kernels that use other hardening measures
+# kernel.exec-shield = 1
+
+# TCP Optimization
+# ----------------------------------------------------------------------
+
+# TCP Fast Open: 3 = enable for both incoming and outgoing connections
+net.ipv4.tcp_fastopen = 3
+
+# Bufferbloat mitigations + slight improvement in throughput &amp; latency
+net.ipv4.tcp_congestion_control = bbr
+net.core.default_qdisc = cake
+</code></pre>
+<h2 id="disable-core-dumps"><a class="header" href="#disable-core-dumps">Disable Core Dumps</a></h2>
+<p>A core dump consists of the recorded state of the working memory of a computer
+program at a specific time, generally when a program crashes or terminates
+abnormally. They can be useful for debugging but can also contain sensitive
+information, to disable core dumps:</p>
+<p>Create <code>/etc/sysctl.d/50-coredump.conf</code>:</p>
+<pre><code class="language-conf"># disable coredumps
+kernel.core_pattern = |/bin/false
+# disable core dumps from setuid binaries
+fs.suid_dumpable = 0
+</code></pre>
+<p>Apply with:</p>
+<pre><code class="language-bash">sudo sysctl --system
+# or
+sudo sysctl -p /etc/sysctl.d/50-coredump.conf
+</code></pre>
+<p>Arch uses <code>systemd-coredump</code> by default, which still intercepts dumps. To fully
+disable that component, create <code>/etc/systemd/coredump.conf/custom.conf</code>:</p>
+<pre><code class="language-conf">[Coredump]
+Storage=none
+ProcessSizeMax=0
+</code></pre>
+<p>Then reload systemd:</p>
+<pre><code class="language-bash">sudo systemctl daemon-reload
+sudo systemctl mask systemd-coredump.socket
+</code></pre>
+</details>
+<h2 id="kernel-and-namespace-hardening-and-blacklisting"><a class="header" href="#kernel-and-namespace-hardening-and-blacklisting">Kernel and Namespace Hardening and Blacklisting</a></h2>
+<ul>
+<li>
+<p><strong>Protect the kernel image</strong>:</p>
+<ul>
+<li>
+<p>Enable Secure Boot to ensure only trusted boot components are loaded.</p>
+</li>
+<li>
+<p>Enforce kernel module signature verification by adding
+<code>module.sig_enforce=1</code> to your kernel parameters (e.g., create
+<code>/etc/cmdline.d/security.conf</code> with this line). This restricts loading
+unsigned kernel modules.</p>
+</li>
+<li>
+<p>NOTE: This setting is strict and may break compatibility with some drivers
+or modules. Thorough testing and research are recommended before enforcing
+it.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Protect the <code>/boot</code> partition</strong>:</p>
+<ul>
+<li>
+<p>The above setting is fairly strict and will break some things. Do research
+before going so strict.</p>
+</li>
+<li>
+<p>Make <code>/boot</code> read-only if you have a high threat model. It can cause issues
+though, setting more strict permissions helps.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Lock kernel modules (optional):</p>
+<ul>
+<li>Set <code>module.sig_enforce=1</code> in kernel parameters.(i.e.,
+<code>/etc/cmdline.d/security.conf</code>)</li>
+</ul>
+</li>
+</ul>
+<p>Blacklist unneeded modules in <code>/etc/modprobe.d/blacklist.conf</code>:</p>
+<pre><code class="language-conf">blacklist dccp          # Datagram Congestion Control Protocol
+blacklist sctp          # Stream Control Transmission Protocol
+blacklist rds           # Reliable Datagram Sockets
+blacklist tipc          # Transparent Inter-Process Communication
+blacklist n_hdlc        # High-level Data Link Control
+blacklist ax25          # Amateur X.25
+blacklist netrom        # NetRom
+blacklist x25           # X.25
+blacklist rose
+blacklist decnet
+blacklist econet
+blacklist af_802154     # IEE 802.15.4
+blacklist ipx           # Internetwork Packet Exchange
+blacklist appletalk
+blacklist psnap         # SubnetworkAccess Protocol
+blacklist p8023         # Novell raw IEE 802.3
+blacklist p8022         # IEE 802.3
+blacklist can           # Controller Area Network
+blacklist atm
+# Various rare filesystems
+blacklist cramfs
+blacklist freevxfs
+blacklist jffs2
+blacklist hfs
+blacklist hfsplus
+blacklist udf
+# Less rare but often recommended
+# Optionally blacklist squashfs, cifs, nfs etc. by uncommenting:
+# blacklist squashfs
+# blacklist cifs
+# blacklist nfs
+# blacklist nfsv3
+# blacklist nfsv4
+# blacklist ksmbd
+# blacklist gfs2
+# blacklist vivid
+</code></pre>
+<p>There are more suggestions in the madaidans insecurities guide.</p>
+<p>Apply the changes:</p>
+<pre><code class="language-bash">sudo mkinitcpio -P
+</code></pre>
+<p>Check which modules were included in the initramfs (Long Output):</p>
+<pre><code class="language-bash">mkinitcpio -v &gt; /tmp/mk.txt
+</code></pre>
+<p>Then search through the file and ensure they weren’t loaded.</p>
+<blockquote>
+<p>❗️ Note: This may break some networking and virtualization tools.</p>
+</blockquote>
+<ul>
+<li>
+<p>Force-enable PTI (Page Table Isolation):</p>
+<ul>
+<li>Add <code>pti=on</code> to the kernel command line.</li>
+</ul>
+</li>
+<li>
+<p>User namespaces:</p>
+<ul>
+<li>
+<p>Do <strong>not</strong> set <code>kernel.unprivileged_userns_clone=0</code> if desktop
+sandboxing/containers are used.</p>
+</li>
+<li>
+<p>Set <code>kernel.unprivileged_userns_clone=0</code> in <code>/etc/sysctl.d/</code> to disable if
+containers are not required.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>SMT/Hyperthreading policy:</p>
+<ul>
+<li>
+<p>For extra isolation, add <code>nosmt</code> to kernel parameters.</p>
+</li>
+<li>
+<p>Disabling SMT reduces performance.</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="firewall"><a class="header" href="#firewall">Firewall</a></h2>
+<p><strong>nftables</strong> is designed to replace <strong>iptables</strong> by providing a modern,
+simplified, and unified packet filtering and classification framework in the
+Linux kernel. It reuses the underlying Netfilter infrastructure but introduces a
+new kernel API and completely different user-space tool (<code>nft</code>).</p>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/Nftables">Arch Wiki nftables</a></li>
+</ul>
+<p><strong>Installation</strong>:</p>
+<pre><code class="language-bash">sudo pacman -S nftables
+</code></pre>
+<p>There is an example firewall ruleset located at <code>/etc/nftables.conf</code> and more
+examples located in <code>/usr/share/nftables/</code> and
+<code>/usr/share/doc/nftables/examples/</code></p>
+<p>Flush existing iptables Rules &amp; Disable iptables if necessary.</p>
+<p><strong>Create nftables ruleset</strong>:</p>
+<pre><code class="language-bash">#-----------------------------------------------------------------------------
+# Flush existing rules: ensure a clean slate before loading new rules
+#-----------------------------------------------------------------------------
+flush ruleset
+table inet filter {
+    # -------------------------------------------------------------------------
+    # INPUT CHAIN (Incoming Traffic destined for this host)
+    # Default is to DROP all incoming traffic
+    # -------------------------------------------------------------------------
+    chain input {
+        type filter hook input priority filter; policy drop;
+
+        # Drop invalid packets (e.g., malformed or out-of-state)
+        ct state invalid drop
+
+        # Allow loopback traffic (localhost to localhost)
+        iif "lo" accept
+
+        # Allow established and related connections (replies to outgoing, FTP helper)
+        ct state established,related accept
+
+        # Allow specific ICMP types for IPv4
+        ip protocol icmp icmp type { echo-request, echo-reply, destination-unreachable, time-exceeded } accept
+
+        # Allow critical ICMPv6 types for IPv6 (essential for network function)
+        ip6 nexthdr icmpv6 icmpv6 type { echo-request, echo-reply, destination-unreachable, packet-too-big, time-exceeded, parameter-problem, nd-router-advert, nd-router-solicit, nd-neighbor-solicit, nd-neighbor-advert } accept
+
+        # Allow SSH (port 2222) with rate-limiting to prevent brute-force attacks
+        tcp dport 2222 ct state new limit rate 15/minute accept
+
+        # Allow HTTP and HTTPS (ports 80 and 443)
+        tcp dport { 80, 443 } ct state new accept
+
+        # Log packets that reach the end of the chain before they are dropped by the policy (optional)
+        log prefix "nft-input-drop: "
+    }
+
+    # -------------------------------------------------------------------------
+    # FORWARD CHAIN (Routed Traffic passing through this host)
+    # Default is to DROP all routed traffic (host-based firewall)
+    # -------------------------------------------------------------------------
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+
+        # Drop invalid packets
+        ct state invalid drop
+
+        # Allow established and related connections
+        ct state established,related accept
+
+        # Add specific FORWARD rules here if the machine is acting as a router/gateway
+    }
+
+    # -------------------------------------------------------------------------
+    # OUTPUT CHAIN (Outgoing Traffic originating from this host)
+    # Default is to DROP all outgoing traffic for maximum security
+    # -------------------------------------------------------------------------
+    chain output {
+    type filter hook output priority filter; policy drop;
+
+    # Allow essential local communication
+    oif "lo" accept
+
+    # Allow replies for established and related connections (critical)
+    ct state established,related accept
+
+    # Allow DNS queries (UDP and TCP)
+    udp dport 53 accept
+    tcp dport 53 accept
+
+    # Allow general outbound web access (e.g., for updates, API calls)
+    tcp dport { 80, 443 } accept
+
+    # Allow Git (and general SSH client) outgoing connections
+    tcp dport 22 ct state new accept
+
+    # Allow NTP (Network Time Protocol) for time synchronization
+    udp dport 123 accept
+
+    # Use meta l4proto to correctly match MLDv2 Type 143 packets
+    meta l4proto ipv6-icmp icmpv6 type {
+        echo-request,
+        destination-unreachable,
+        time-exceeded,
+        parameter-problem,
+        nd-neighbor-solicit,
+        nd-neighbor-advert,
+        mld2-listener-report
+    } accept
+
+    # Log packets that reach the end of the chain before they are dropped by the policy (optional)
+    log prefix "nft-output-drop: "
+    }
+}
+</code></pre>
+<blockquote>
+<p>❗️ Most desktop firewalls default to <strong>allow all outgoing traffic</strong>
+(<code>policy accept</code> on the output chain). This is done for convenience, as it
+prevents applications from breaking. However, for a system practicing zero
+trust, the best practice is to enforce a <strong>default deny</strong>(<code>policy drop</code>) on
+the output chain and <strong>only explicitly allow</strong> the services the system needs.</p>
+</blockquote>
+<pre><code class="language-bash">sudo systemctl enable nftables.service
+sudo systemctl start nftables.service
+</code></pre>
+<p>Load and test the rules if in a different location than the default:</p>
+<pre><code class="language-bash">sudo nft -f /path/to/your/nftables.conf
+</code></pre>
+<p>or in default location:</p>
+<pre><code class="language-bash">sudo nft -f /etc/nftables.conf
+</code></pre>
+<blockquote>
+<p>❗️ If you don’t use SSH or host a web server or any service, don’t allow SSH
+and HTTP/HTTPS.</p>
+</blockquote>
+<pre><code class="language-bash">sudo nft list ruleset
+</code></pre>
+<hr>
+<h2 id="ssh--gpg-key-generation-and-safety"><a class="header" href="#ssh--gpg-key-generation-and-safety">SSH &amp; GPG Key Generation and Safety</a></h2>
+<h3 id="ssh-keygen"><a class="header" href="#ssh-keygen">ssh-keygen</a></h3>
+<p>The <code>ed25519</code> algorithm is significantly faster and more secure when compared to
+<code>RSA</code>. You can also specify the key derivation function (KDF) rounds to
+strengthen protection even more.</p>
+<p>For example, to generate a strong key for MdBook:</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -a 32
+</code></pre>
+<p>Or more specifically:</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -a 32 -f ~/.ssh/id_ed25519_github_$(date +%Y-%m-%d) -C "SSH Key for GitHub"
+</code></pre>
+<ul>
+<li>
+<p><code>-t</code> is for type</p>
+</li>
+<li>
+<p><code>-a 32</code> sets the number of KDF rounds. The standard is usually good enough,
+adding extra rounds can make it harder to brute-force.</p>
+</li>
+<li>
+<p><code>-f</code> is for filename</p>
+</li>
+</ul>
+<hr>
+<h3 id="gnupg-and-gpg-agent"><a class="header" href="#gnupg-and-gpg-agent">GnuPG and gpg-agent</a></h3>
+<details>
+<summary> ✔️ Click to Expand GnuPG section </summary>
+<p><code>gpg --full-generate-key</code> can be used to generate a basic keypair.</p>
+<p><code>gpg --expert --full-generate-key</code> can be used for keys that require more
+capabilities.</p>
+<blockquote>
+<p>❗ NOTE: We will first generate our GPG primary key that is required to
+atleast have sign capabilities, we will then derive subkeys from said primary
+key and use them for signing and encrypting. It is recommended to generate a
+revoke certificate right after creating your primary key.</p>
+</blockquote>
+<p>To generate your gpg primary key you can do the following:</p>
+<pre><code class="language-bash">gpg --full-generate-key
+</code></pre>
+<ul>
+<li>
+<p>Choose <code>(10) (sign only)</code></p>
+</li>
+<li>
+<p>Give it a name and description</p>
+</li>
+<li>
+<p>Give it an expiration date, 1y is common</p>
+</li>
+<li>
+<p>Use a strong passphrase or password</p>
+</li>
+<li>
+<p>Give it a comment, I typically add the date</p>
+</li>
+</ul>
+<p>If you see a warning about incorrect permissions, you can run the following:</p>
+<pre><code class="language-bash">chmod 700 ~/.gnupg
+chmod 600 ~/.gnupg/*
+</code></pre>
+<p>Verify:</p>
+<pre><code class="language-bash">ls -ld ~/.gnupg
+# Should show: drwx------
+
+ls -l ~/.gnupg
+# Files should show: -rw-------
+</code></pre>
+<hr>
+<h3 id="generate-a-revocation-certificate"><a class="header" href="#generate-a-revocation-certificate">Generate a Revocation Certificate</a></h3>
+<p><code>mykey</code> must be a key specifier, either the keyID of the primary keypair or any
+part of the user ID that identifies the keypair:</p>
+<p>Replace <code>mykeyID</code> with the keyID of your primary key and store the cert in a
+safe place:</p>
+<pre><code class="language-bash">gpg --output revoke.asc --gen-revoke mykeyID
+Create a revocation certificate for this key? (y/N)
+Please select the reason for the revocation:
+  0 = No reason specified
+  1 = Key has been compromised
+  2 = Key is superseded
+  3 = Key is no longer used
+  Q = Cancel
+(Probably you want to select 1 here)
+Your decision?
+</code></pre>
+<p>The certificate will be output to a file <code>revoke.asc</code>. If the <code>--output</code> is
+ommitted, the result will be placed on stdout.</p>
+<p>Since it’s a short certificate, you can print a hardcopy and store it somewhere
+safe. The cert shouldn’t be somewhere that others can access it since anyone
+could publish the revoke cert and render the corresponding public key useless.</p>
+<p>To apply the revoke cert, import it:</p>
+<pre><code class="language-bash">gpg --import revoke.asc
+# And optionally push the revoked key to public keyservers to notify others:
+gpg --keyserver keyserver.ubuntu.com --send-keys YOUR_KEYID
+</code></pre>
+<hr>
+<h3 id="generate-gpg-subkeys"><a class="header" href="#generate-gpg-subkeys">Generate Gpg Subkeys</a></h3>
+<pre><code class="language-bash"># Take note of your public key
+gpg --list-keys --with-fingerprint
+/home/jr/.gnupg/pubring.kbx
+---------------------------
+pub   ed25519/0x095782A1B124AF15 2025-08-23 [SCA] [expires: 2026-08-23]
+Key fingerprint = 5908 9C5B FEC8 0D75 FCB0  E206 0958 82C1 A124 CF15
+uid                   [ultimate] Jr (08-23-25) &lt;sayls8@proton.me&gt;
+</code></pre>
+<ul>
+<li>Copy the KeyID, in this example it would be <code>0x095722B2A123CF15</code>. We will use
+it for the command below.</li>
+</ul>
+<p>Now we will generate 2 subkeys, 1 for encryption and 1 for authentication.</p>
+<pre><code class="language-bash">gpg --expert --edit-key 0x095722B2A123CF15
+</code></pre>
+<p>Choose 11 (set your own capabilities) and add A (Authenticate) and type Q.
+Create another key while still in the menu with only encrypt capabilities.</p>
+<blockquote>
+<p>❗ <code>gpg --edit-key</code> has many more capabilities, after launching type <code>help</code>.</p>
+</blockquote>
+<p><strong>Add Keygrip of Authenticate Subkey to <code>sshcontrol</code> for gpg-agent</strong></p>
+<pre><code class="language-bash">gpg --list-secret-keys --with-keygrip --keyid-format LONG
+</code></pre>
+<p>Copy the keygrip of the subkey with Authenticate capabilities</p>
+<pre><code class="language-bash">echo "6BD11826F3845BC222127FE3D22C92C91BB3FB32" &gt; ~/.gnupg/sshcontrol
+</code></pre>
+<pre><code class="language-bash">ssh-add -L
+# you should see something like:
+ssh-ed25519 AABCC3NzaC1lZDI1NTE5ABBAIHyujgyCjjBTqIuFM3EMUSo6RGklmOXQW3uWRhWdJ1Mm (none)
+</code></pre>
+<ul>
+<li>By itself, a keygrip cannot be used to reconstruct your private key. It’s
+derived from the public key material, not from the secret key itself so it’s
+safe to version control. Don’t put your keygrip in a public repo if you don’t
+want people to know you use that key for signing/authentication. It’s not a
+security risk, but it leaks a tiny bit of metadata.</li>
+</ul>
+<p>The following article mentions the keygrip being computed from public elements
+of the key:</p>
+<ul>
+<li><a href="https://gnupg-users.gnupg.narkive.com/q5JtahdV/gpg-agent-what-is-a-keygrip">gnupg-users what-is-a-keygrip</a></li>
+</ul>
+<p>Create a <code>~/.gnupg/gpg.conf</code>:</p>
+<p>Copy the KeyID of the key with Authenticate capabilities and use it as your
+default-key in <code>gpg.conf</code>:</p>
+<ul>
+<li><a href="https://riseup.net/ru/security/message-security/openpgp/gpg-best-practices">RiseUp GPG Best Practices</a></li>
+</ul>
+<pre><code class="language-bash">#
+# This is an implementation of the Riseup OpenPGP Best Practices
+# https://help.riseup.net/en/security/message-security/openpgp/best-practices
+#
+
+
+#-----------------------------
+# default key
+#-----------------------------
+
+# The default key to sign with. If this option is not used, the default key is
+# the first key found in the secret keyring
+
+#default-key 0xD8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+
+
+#-----------------------------
+# behavior
+#-----------------------------
+
+# Disable inclusion of the version string in ASCII armored output
+no-emit-version
+
+# Disable comment string in clear text signatures and ASCII armored messages
+no-comments
+
+# Display long key IDs
+keyid-format 0xlong
+
+# List all keys (or the specified ones) along with their fingerprints
+with-fingerprint
+
+# Display the calculated validity of user IDs during key listings
+list-options show-uid-validity
+verify-options show-uid-validity
+
+# Try to use the GnuPG-Agent. With this option, GnuPG first tries to connect to
+# the agent before it asks for a passphrase.
+use-agent
+
+
+#-----------------------------
+# keyserver
+#-----------------------------
+
+# This is the server that --recv-keys, --send-keys, and --search-keys will
+# communicate with to receive keys from, send keys to, and search for keys on
+keyserver hkps://keys.openpgp.org/
+
+# Set the proxy to use for HTTP and HKP keyservers - default to the standard
+# local Tor socks proxy
+# It is encouraged to use Tor for improved anonymity. Preferrably use either a
+# dedicated SOCKSPort for GnuPG and/or enable IsolateDestPort and
+# IsolateDestAddr
+#keyserver-options http-proxy=socks5-hostname://127.0.0.1:9050
+
+# Don't leak DNS, see https://trac.torproject.org/projects/tor/ticket/2846
+keyserver-options no-try-dns-srv
+
+# When using --refresh-keys, if the key in question has a preferred keyserver
+# URL, then disable use of that preferred keyserver to refresh the key from
+keyserver-options no-honor-keyserver-url
+
+# When searching for a key with --search-keys, include keys that are marked on
+# the keyserver as revoked
+keyserver-options include-revoked
+
+
+#-----------------------------
+# algorithm and ciphers
+#-----------------------------
+
+# list of personal digest preferences. When multiple digests are supported by
+# all recipients, choose the strongest one
+personal-cipher-preferences AES256 AES192 AES CAST5
+
+# list of personal digest preferences. When multiple ciphers are supported by
+# all recipients, choose the strongest one
+personal-digest-preferences SHA512 SHA384 SHA256 SHA224
+
+# message digest algorithm used when signing a key
+cert-digest-algo SHA512
+
+# This preference list is used for new keys and becomes the default for
+# "setpref" in the edit menu
+default-preference-list SHA512 SHA384 SHA256 SHA224 AES256 AES192 AES CAST5 ZLIB BZIP2 ZIP Uncompressed
+</code></pre>
+<p>Add the following to your shell config, either <code>.bashrc</code> or <code>.zshrc</code>:</p>
+<pre><code class="language-zsh">GPG_TTY=$(tty)
+export GPG_TTY
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+gpgconf --launch gpg-agent
+</code></pre>
+<p>Rebuild and then restart <code>gpg-agent</code> if necessary:</p>
+<pre><code class="language-bash">gpgconf --kill gpg-agent
+gpgconf --launch gpg-agent
+</code></pre>
+<p>Test, these should match:</p>
+<pre><code class="language-bash">echo "$SSH_AUTH_SOCK"
+# output
+/run/user/1000/gnupg/d.wft5hcsny4qqq3g31c76534j/S.gpg-agent.ssh
+
+gpgconf --list-dirs agent-ssh-socket
+# output
+/run/user/1000/gnupg/d.wft5hcsny4qqq3g31c76834j/S.gpg-agent.ssh
+</code></pre>
+<pre><code class="language-bash">ssh-add -L
+# Copy the entire following line:
+ssh-ed25519 AABBC3NzaC1lZDI1NTE5AAAAIGXwhVokJ6cKgodYT+0+0ZrU0sBqMPPRDPJqFxqRtM+I (none)
+</code></pre>
+<ul>
+<li>It shows <code>(none)</code> because the comment field is blank on subkeys.</li>
+</ul>
+<h3 id="backing-up-your-keys"><a class="header" href="#backing-up-your-keys">Backing up Your Keys</a></h3>
+<pre><code class="language-bash">gpg --export-secret-keys --armor --output my-private-key-backup.gpg
+</code></pre>
+<p>Your private keys will be encrypted with a passphrase into a .gpg file. Store
+this backup in a secure location line an encrypted USB drive. This can prevent
+you from losing access to your keys in the case of disk failure or accidents.</p>
+<p>You can export your public keys and publish them publicly if you choose:</p>
+<pre><code class="language-bash">gpg --export --armor --output my-public-keys.gpg
+</code></pre>
+<p>Now if your keys ever get lost or corrupted, you can import these backups.</p>
+<hr>
+<h3 id="remove-and-store-your-primary-key-offline"><a class="header" href="#remove-and-store-your-primary-key-offline">Remove and Store your Primary Key offline</a></h3>
+<blockquote>
+<p>❗ NOTE: After you remove your primary key, you will no longer be able to
+derive subkeys from it or sign keys unless you re-import it.</p>
+</blockquote>
+<pre><code class="language-bash"># extract the primary key
+gpg -a --export-secret-key sayls8@proton.me &gt; secret_key
+# extract the subkeys, which we will reimport later
+gpg -a --export-secret-subkeys sayls8@proton.me &gt; secret_subkeys.gpg
+# delete the secret keys from the keyring, so only subkeys are left
+gpg --delete-secret-keys sayls8@proton.me
+Delete this key from the keyring? (y/N) y
+This is a secret key! - really delete? (y/N) y
+# reimport the subkeys
+gpg --import secret_subkeys.gpg
+# verify everything is in order
+gpg --list-secret-keys
+# remove the subkeys from disk
+rm secret_subkeys.gpg
+</code></pre>
+<p>I recommend also keeping a <code>.gpg</code> version to make it easy to re-import your
+primary key: <code>gpg --export-secret-keys --armor --output private-key-bak.gpg</code></p>
+<p>Then store <code>secret_key</code> on an encrypted USB drive or somewhere offline. If you
+want to protect it for now, you can just use the encryption subkey that we
+created to encrypt <code>secret_key</code> with a passphrase:</p>
+<pre><code class="language-bash">gpg --list-keys --keyid-format LONG
+</code></pre>
+<p>Copy the KeyID of the subkey with encrypt capabilities for the following
+command:</p>
+<pre><code class="language-bash"># Encrypting your secret key for yourself
+gpg --encrypt --recipient Ox37ACA569C5C44787 secret_key
+</code></pre>
+<p>You can check that the secret key material is missing with
+<code>gpg --list-secret-keys</code>, you should see <code>sec#</code> instead of <code>sec</code>.</p>
+<pre><code class="language-bash">gpg --list-secret-keys
+# Output:
+sec#  ed25519/0x
+# ...snip...
+</code></pre>
+<p>The above set of commands are from the
+<a href="https://riseup.net/ru/security/message-security/openpgp/gpg-best-practices#keep-your-primary-key-entirely-offline">RiseUp Keep your primary key offline</a></p>
+</details>
+<hr>
+<h2 id="hardening-openssh"><a class="header" href="#hardening-openssh">Hardening OpenSSH</a></h2>
+<p>OpenSSH is a tool that allows you to remotely connect to your machine with the
+SSH protocol. It encrypts all traffic to prevent eavesdropping, connection
+hijacking, and other attacks.</p>
+<ul>
+<li>
+<p><a href="https://wiki.archlinux.org/title/OpenSSH">Arch Wiki OpenSSH</a></p>
+</li>
+<li>
+<p><a href="https://www.openssh.com/">OpenSSH</a></p>
+</li>
+</ul>
+<p>Install and configure fail2ban:</p>
+<pre><code class="language-bash">sudo pacman -S fail2ban
+</code></pre>
+<p>Create a <code>/etc/fail2ban/jail.local</code> file:</p>
+<pre><code class="language-bash">[sshd]
+enabled = true
+port = ssh
+filter = sshd
+logpath = /var/log/auth.log
+maxretry = 5
+bantime = 3600  # 1 hour in seconds
+findtime = 600
+ignoreip = 127.0.0.1/8 ::1
+banaction = iptables-multiport
+</code></pre>
+<p>Start and enable the service:</p>
+<pre><code class="language-bash">sudo systemctl enable fail2ban
+sudo systemctl start fail2ban
+</code></pre>
+<p>Harden OpenSSH settings in <code>/etc/ssh/sshd_config</code>:</p>
+<pre><code class="language-bash">PasswordAuthentication no
+PermitEmptyPasswords no
+PubkeyAuthentication yes
+AuthorizedKeysFile     %h/.ssh/authorized_keys
+UsePAM yes
+PermitTunnel no
+UseDNS no
+KbdInteractiveAuthentication no
+X11Forwarding no  # or yes if you have X server enabled
+MaxAuthTries 3
+MaxSessions 2
+ClientAliveInterval 300
+ClientAliveCountMax 0
+AllowUsers your-user
+TCPKeepAlive no
+AllowTcpForwarding no
+AllowAgentForwarding no
+LogLevel VERBOSE
+PermitRootLogin no
+KexAlgorithms curve25519-sha256@libssh.org,ecdh-sha2-nistp521,ecdh-sha2-nistp384,ecdh-sha2-nistp256,diffie-hellman-group-exchange-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+</code></pre>
+<p>Enable and start sshd:</p>
+<pre><code class="language-bash">sudo systemctl enable sshd
+sudo systemctl start sshd
+</code></pre>
+<p>Ensure all of the permissions are correct:</p>
+<pre><code class="language-bash">chmod 755 $HOME
+chmod 700 $HOME/.ssh
+</code></pre>
+<p>Add the output of <code>ssh-add -L</code> to <code>~/.ssh/authorized_keys</code></p>
+<pre><code class="language-bash">echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGXwhVokJ6cKgodYT+0+0ZrU0sBqMPPRDPJqFxqRtM+I (none)" &gt; ~/.ssh/authorized_keys
+</code></pre>
+<p>After adding the <code>authorized_key</code>, adjust the permission:</p>
+<pre><code class="language-bash">chmod 600 $HOME/.ssh/authorized_keys
+</code></pre>
+<p>Finally, test an ssh connection:</p>
+<pre><code class="language-bash">ssh user@hostname
+# Example
+ssh jr@archlinux
+# Specify the port
+ssh -p 22 user@hostname
+</code></pre>
+<hr>
+<h4 id="tip-change-the-default-port"><a class="header" href="#tip-change-the-default-port">Tip Change the Default Port</a></h4>
+<blockquote>
+<p>⚠️ Critical Warning: Do not close your existing SSH session until you
+successfully connect using the new port. If you make a mistake and get locked
+out, you’ll need console access to your server to fix it</p>
+</blockquote>
+<p>Edit <code>/etc/ssh/sshd_config</code> to add the line:</p>
+<pre><code class="language-config">Port 2222
+</code></pre>
+<p>Update the Firewall Rules in <code>/etc/nftables.conf</code>:</p>
+<p>Replace this line:</p>
+<pre><code class="language-conf">tcp dport ssh accept comment "allow sshd"
+</code></pre>
+<p>with:</p>
+<pre><code class="language-conf">tcp dport 2222 accept comment "allow sshd on port 2222"
+</code></pre>
+<p>This change explicitly allows new incomming TCP connections on port 2222 for
+SSH, ensuring remote access will work through the firewall.</p>
+<p>Reload the Firewall:</p>
+<pre><code class="language-bash">sudo nft -f /etc/nftables.conf
+</code></pre>
+<p>Restart sshd:</p>
+<pre><code class="language-bash">sudo systemctl restart sshd
+</code></pre>
+<p>Finally, text a connection:</p>
+<pre><code class="language-bash">ssh -p 2222 user@hostname
+</code></pre>
+<hr>
+<h2 id="usb-port-protection"><a class="header" href="#usb-port-protection">USB Port Protection</a></h2>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/USBGuard">Arch Wiki USBGuard</a></li>
+</ul>
+<p>It’s important to protect your USB ports to prevent BadUSB attacks, data
+exfiltration, unauthorized device access, malware injection, etc.</p>
+<p>To get a list of your connected USB devices you can use <code>lsusb</code> from the
+<code>usbutils</code> package.</p>
+<pre><code class="language-bash">lsusb
+</code></pre>
+<p>Install usbguard:</p>
+<pre><code class="language-bash">sudo pacman -S usbguard
+# Optionally; paru -S usbguard-notifier fails with bad keys
+# paru -S usbguard-notifier-git
+</code></pre>
+<p>Create a <code>usbguard</code> group and add your user to it:</p>
+<pre><code class="language-bash">sudo groupadd usbguard
+sudo usermod -aG usbguard username
+</code></pre>
+<p>Generate a policy based on your currently attached USB devices with:</p>
+<pre><code class="language-bash">sudo usbguard generate-policy | sudo tee /etc/usbguard/rules.conf
+# Or if everything else fails
+# sudo bash -c "usbguard generate-policy &gt; /etc/usbguard/rules.conf"
+</code></pre>
+<pre><code class="language-bash">sudo chmod 600 /etc/usbguard/rules.d/99-policy.conf
+</code></pre>
+<h3 id="usbguard-daemon"><a class="header" href="#usbguard-daemon">USBGuard Daemon</a></h3>
+<blockquote>
+<p>❗️ If practicing zero-trust, you would want to change your default policy to
+<code>apply-policy</code>. This way any device that isn’t explicitly allowed will be
+blocked. It’s easy to lock yourself out if done incorrectly.</p>
+</blockquote>
+<p>Edit <code>/etc/usbguard/usbguard-daemon.conf</code> to set the policy to allow devices
+that are already connected for members of the <code>usbguard</code> group:</p>
+<pre><code class="language-conf"># ...snip...
+RuleFile=/etc/usbguard/rules.conf
+
+# Default policy for devices that were already connected when the daemon started.
+# Supported values: apply-policy, allow, block, reject, keep.
+PresentDevicePolicy=allow
+
+# A list of users and groups that are allowed to interact with the daemon
+# via the IPC interface.
+#IPCAllowedUsers=root your-user
+IPCAllowedUsers=usbguard
+</code></pre>
+<p>From the above file we can see that it expects its configuration file to be
+located at <code>/etc/usbguard/rules.d/</code>:</p>
+<pre><code class="language-bash">sudo mkdir -p /etc/usbguard/rules.d
+</code></pre>
+<p>Create a file <code>/etc/usbguard/rules.d/99-policy.conf</code>:</p>
+<pre><code class="language-conf"># allow `only` devices with mass storage interfaces (USB Mass Storage)
+allow with-interface equals { 08:*:* }
+
+# allow mice and keyboards
+# allow with-interface equals { 03:*:* }
+
+# Reject devices with suspicious combination of interfaces
+reject with-interface all-of { 08:*:* 03:00:* }
+reject with-interface all-of { 08:*:* 03:01:* }
+reject with-interface all-of { 08:*:* e0:*:* }
+reject with-interface all-of { 08:*:* 02:*:* }
+</code></pre>
+<p>The above policy can be found in
+<a href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/security_guide/sec-using-usbguard">RedHat UsbGuard</a></p>
+<p>The only allow rule is for devices with only mass storage interfaces (08:<em>:</em>)
+i.e., USB Mass storage devices, devices like keyboards and mice (which use
+interface class <code>03:*:*</code>) implicitly not allowed.(commented out)</p>
+<p>The reject rules reject devices with a suspicious combination of interfaces. A
+USB drive that implements a keyboard or a network interface is very suspicious,
+these reject rules prevent that.</p>
+<p>The <code>presentDevicePolicy = "allow"</code> allows any device that is present at daemon
+start up even if they’re not explicitly allowed. However, newly plugged in
+devices must match an allow rule or get denied implicitly.</p>
+<p>Enable/Start <code>usbguard.service</code>:</p>
+<pre><code class="language-bash">sudo systemctl enable usbguard
+sudo systemctl start usbguard --now
+</code></pre>
+<ul>
+<li>Sometimes a reboot is required. If your keyboard doesn’t work, after entering
+your encryption passphrase, enter the TTY with <code>Alt+Ctrl+F2</code> and ensure the
+<code>usbguard</code> group exists and your user is a member.</li>
+</ul>
+<p>Check status:</p>
+<pre><code class="language-bash">sudo systemctl status usbguard
+</code></pre>
+<pre><code class="language-bash">sudo usbguard list-devices
+</code></pre>
+<ul>
+<li>
+<p>If you plug something new in and it doesn’t work, this is why. Remember this!</p>
+</li>
+<li>
+<p><a href="https://docs.kernel.org/usb/authorization.html">Authorizing (or not) USB devices</a></p>
+</li>
+</ul>
+<hr>
+<h3 id="firejail"><a class="header" href="#firejail">Firejail</a></h3>
+<blockquote>
+<p>❗️ Critics such as madaidan say that Firejail worsens security by acting as a
+privilege escalation hole. Firejail requires the executable to be setuid,
+meaning it runs with root privileges. Experienced users are encouraged to use
+bubblewrap for it’s minimal design and specificity of its purpose.</p>
+</blockquote>
+<p>A <strong>setuid binary</strong> is an executable file with a special permission bit set
+called “set user ID” (setuid). When a user runs a setuid binary, the program
+executes with the permissions of the binary’s owner, rather than the permissions
+of the user running it.</p>
+<p>There are mitigations for the above risks I will share further down.</p>
+<p>Another option here is <a href="https://wiki.archlinux.org/title/Bubblewrap">Bubblewrap</a></p>
+<ul>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Firejail">Arch Wiki Firejail</a></p>
+</li>
+<li>
+<p><a href="https://madaidans-insecurities.github.io/linux.html#firejail">Firejail weaknesses</a></p>
+</li>
+</ul>
+<pre><code class="language-bash">sudo pacman -S firejail
+</code></pre>
+<p>Usage:</p>
+<pre><code class="language-bash">firejail librewolf
+</code></pre>
+<p>Using by default:</p>
+<pre><code class="language-bash">sudo firecfg
+</code></pre>
+<p>fix <code>.desktop</code> files with:</p>
+<pre><code class="language-bash">firecfg --fix
+</code></pre>
+<p>This creates symbolic links in <code>/usr/local/bin/</code> pointing to <code>/usr/bin/firejail</code>
+for programs for which Firejail has default or self-created profiles.</p>
+<p>You can inspect <code>/etc/firejail/</code> to see all the pre-baked profiles available.</p>
+<h2 id="hardening-firejail"><a class="header" href="#hardening-firejail">Hardening Firejail</a></h2>
+<p>Add the following line to <code>/etc/firejail/firejail.config</code>:</p>
+<pre><code class="language-config">force-nonewprivs yes
+</code></pre>
+<ul>
+<li>The above setting prevents Firejail and its child processes from gaining new
+privileges after the sandbox is started.
+<ul>
+<li>Changing the owner and group to <code>root:firejail</code> and permissions to <code>4750</code>
+means Firejail runs with setuid root but only allows execution by users in
+the firejail group reducing the attack surface.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>❗️ This breaks some apps such as VirtualBox which I don’t recommend and if
+using the hardened kernel, Wireshark and Chromium-based browsers are also
+affected.</p>
+</blockquote>
+<ul>
+<li><a href="https://www.whonix.org/wiki/KVM#Why_Use_KVM_Over_VirtualBox?">Why Use KVM over VirtualBox</a></li>
+</ul>
+<p>Add a pacman hook to automatically change firejail owner and mode. Create
+<code>/etc/pacman.d/hooks/firejail-permissions.hook</code> and place the following in it:</p>
+<pre><code class="language-hook">[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = firejail
+[Action]
+Depends = coreutils
+Depends = bash
+When = PostTransaction
+Exec = /usr/bin/sh -c "chown root:firejail /usr/bin/firejail &amp;&amp; chmod 4750 /usr/bin/firejail"
+Description = Setting /usr/bin/firejail owner to "root:firejail" and mode "4750"
+</code></pre>
+<p>Create a <code>firejail</code> group:</p>
+<pre><code class="language-bash">sudo groupadd firejail
+</code></pre>
+<p>and add your user to it:</p>
+<pre><code class="language-bash">sudo gpasswd -a $USER firejail
+</code></pre>
+<p><strong>Verify Firejail’s being used</strong>:</p>
+<p>Launch the program that you want to ensure is running sandboxed and run:</p>
+<pre><code class="language-bash">firejail --list
+# or more comprehensive
+firejail --tree
+</code></pre>
+<p><strong>Enable AppArmor support</strong>:</p>
+<pre><code class="language-bash">sudo apparmor_parser -r /etc/apparmor.d/firejail-default
+</code></pre>
+<p>With firejail running, I noticed that none of my browsers would allow me to
+download anything. A fix for this is to run:</p>
+<pre><code class="language-bash">sudo firejail --noprofile firefox
+</code></pre>
+<p>Download your file, close firefox and run again in the firejail sandbox.</p>
+<blockquote>
+<p>Tip from Arch Wiki <code>/etc/pacman.d/hooks/firejail.hook</code></p>
+<p>For cases where you need to manually modify the <code>Exec=</code> line of the .desktop
+file in <code>~/.local/share/applications</code> to explicitly call Firejail.</p>
+<pre><code class="language-hook"> [Trigger]
+ Type = Path
+ Operation = Install
+ Operation = Upgrade
+ Operation = Remove
+ Target = usr/bin/*
+ Target = usr/share/applications/*.desktop
+
+ [Action]
+ Description = Configure symlinks in /usr/local/bin based on firecfg.config...
+ When = PostTransaction
+ Depends = firejail
+ Exec = /bin/sh -c 'firecfg &gt;/dev/null 2&gt;&amp;1'
+</code></pre>
+</blockquote>
+<p>To manually map individual applications, execute:</p>
+<pre><code class="language-bash">sudo ln -s /usr/bin/firejail /usr/local/bin/application-to-sandbox
+</code></pre>
+<h3 id="remove-firejail-symlinks"><a class="header" href="#remove-firejail-symlinks">Remove Firejail symlinks</a></h3>
+<pre><code class="language-bash">sudo firecfg --clean
+</code></pre>
+<p>If you would rather confine an app with AppArmor or Bubblewrap:</p>
+<pre><code class="language-bash">sudo rm /usr/local/bin/application
+</code></pre>
+<p>Also, comment out <code>application</code> in the <code>/etc/firejail/firecfg.config</code> to prevent
+it from being added if you run <code>firecfg</code> again.</p>
+<details>
+<summary> ✔️ Click to Expand Firejail Resources </summary>
+<ul>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Firejail">Arch Wiki Firejail</a></p>
+</li>
+<li>
+<p><a href="https://github.com/netblue30/firejail/issues/2507">Profiles not in firecfg</a></p>
+</li>
+<li>
+<p><a href="https://firejail.wordpress.com/documentation-2/">Firejail Docs</a></p>
+</li>
+<li>
+<p><a href="https://github.com/netblue30/firejail/wiki/Debugging-Firejail">Debugging Firejail</a></p>
+</li>
+<li>
+<p><a href="https://debugging.works/blog/debugging-firejail/">How to debug a firejail sandbox</a></p>
+</li>
+</ul>
+</details>
+<hr>
+<h2 id="apparmor"><a class="header" href="#apparmor">AppArmor</a></h2>
+<p><a href="https://apparmor.net/">AppArmor</a> is a
+<a href="https://wiki.archlinux.org/title/Mandatory_Access_Control">Mandatory Access Control</a>
+(MAC) system, implemented upon the
+<a href="https://en.wikipedia.org/wiki/Linux_Security_Modules">Linux Security Modules</a>(LSM)
+– Arch Wiki</p>
+<p>MAC systems generally block all access by default, only permitting actions that
+are explicitly defined as allowed in their security policy or access profiles.</p>
+<p>This is why, if you read about creating your own policy that they recommend
+setting AppArmor to complain mode while you use said app using all functionality
+and APIs you can think of before setting to enforce. Within a policy everything
+is default-deny so any action not covered in the above steps will be blocked by
+default.</p>
+<blockquote>
+<p>❗️ The AppArmor policy con only be considered default deny if it is deployed
+as a complete system policy which we don’t do here. The apps and parts of the
+system that don’t have pre-defined policies aren’t covered by AppArmor so are
+therefore default allow. You can get there in time but it’s beyond the scope
+of this section.</p>
+</blockquote>
+<p>Install:</p>
+<pre><code class="language-bash">sudo pacman -S apparmor
+</code></pre>
+<p>Edit <code>/etc/cmdline.d/security.conf</code>:</p>
+<pre><code class="language-conf"># enable apparmor
+lsm=landlock,lockdown,yama,integrity,apparmor,bpf audit=1 audit_backlog_limit=256
+</code></pre>
+<p>Save &amp; Reboot</p>
+<p>Start/Enable AppArmor:</p>
+<pre><code class="language-bash">sudo systemctl enable apparmor
+sudo systemctl start apparmor
+</code></pre>
+<p>Ensure the LSM is loaded with:</p>
+<pre><code class="language-bash">zgrep CONFIG_LSM=/proc/config.gz
+# &amp;
+cat /sys/kernel/security/lsm
+</code></pre>
+<p>Reboot, and run <code>sudo aa-enabled</code>, and <code>sudo aa-status</code>. You should see many
+profiles in enforce mode.</p>
+<h3 id="switching-an-app-from-unconfined-mode-to-enforce"><a class="header" href="#switching-an-app-from-unconfined-mode-to-enforce">Switching an app from unconfined mode to enforce</a></h3>
+<ul>
+<li>First, ensure a profile exists</li>
+</ul>
+<p>Check AppArmor log messages:</p>
+<p>Each time AppArmor denies applications from doing something potentially harmful
+the event is logged.</p>
+<pre><code class="language-bash">sudo journalctl -fx
+</code></pre>
+<p>NOTE: Your firewall can also trigger this.</p>
+<h3 id="disabling-apparmor"><a class="header" href="#disabling-apparmor">Disabling AppArmor</a></h3>
+<p>Disable AppArmor by unloading all profiles for the current session:</p>
+<pre><code class="language-bash">sudo aa-teardown
+</code></pre>
+<p>Further reading:</p>
+<ul>
+<li>
+<p><a href="https://apparmor.net/">AppArmor Quick Intro</a></p>
+</li>
+<li>
+<p><a href="https://gitlab.com/apparmor/apparmor/-/wikis/home">AppArmor Wiki</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/AppArmor">Arch Wiki AppArmor</a></p>
+</li>
+</ul>
+<h2 id="creating-or-adding-profiles-that-arent-pre-configured"><a class="header" href="#creating-or-adding-profiles-that-arent-pre-configured">Creating or adding profiles that aren’t pre-configured</a></h2>
+<p>For example, thunderbird came with a profile that just allowed everything.
+Rather than creating my own profile I cloned the <code>apparmor-profiles</code> repo and
+got it from there.</p>
+<pre><code class="language-bash">mkdir aa &amp;&amp; cd aa
+git clone git://git.launchpad.net/apparmor-profiles
+</code></pre>
+<pre><code class="language-bash">sudo cp ~/aa/apparmor-profiles/thunderbird /etc/apparmor.d/usr.bin.thunderbird
+</code></pre>
+<p>Create a local override file, this is where you will make your personal changes
+to existing profiles:</p>
+<pre><code class="language-bash">sudo mkdir -p /etc/apparmor.d/local
+sudo touch /etc/apparmor.d/local/usr.bin.thunderbird
+</code></pre>
+<p>Set the new profile to enforce mode:</p>
+<pre><code class="language-bash">sudo aa-enforce /etc/apparmor.d/usr.bin.thunderbird
+</code></pre>
+<hr>
+<p><strong>Creating a new profile</strong></p>
+<ul>
+<li><a href="https://gitlab.com/apparmor/apparmor/-/wikis/Profiling_with_tools">Profiling_with_tools</a></li>
+</ul>
+<ol>
+<li>Temporarily disable kernel rate limiting on logs:</li>
+</ol>
+<pre><code class="language-bash">sudo sysctl -w kernel.printk_ratelimit=0
+</code></pre>
+<ol start="2">
+<li>Start <code>aa-genprof</code>:</li>
+</ol>
+<pre><code class="language-bash">sudo aa-genprof &lt;path-to-executable&gt;
+# Example
+sudo aa-genprof /usr/bin/brave
+</code></pre>
+<ol start="3">
+<li>Execute a test plan, open and close brave, download a file through brave,
+adjust settings, do anything you can think of with brave.</li>
+</ol>
+<ul>
+<li>
+<p>Press S to Scan system log for AppArmor events</p>
+</li>
+<li>
+<p>Press F to Finish</p>
+</li>
+</ul>
+<p>This simple example created this profile in <code>/etc/apparmor.d/usr.bin.brave</code>:</p>
+<pre><code class="language-text"># Last Modified: Wed Oct  8 09:29:51 2025
+abi &lt;abi/4.0&gt;,
+
+include &lt;tunables/global&gt;
+
+/usr/bin/brave flags=(complain) {
+  include &lt;abstractions/base&gt;
+
+  /usr/bin/brave r,
+  /usr/bin/env ix,
+
+}
+</code></pre>
+<h3 id="profiling-by-hand"><a class="header" href="#profiling-by-hand">Profiling by Hand</a></h3>
+<p>Disable kernel rate limiting:</p>
+<pre><code class="language-bash">sysctl -w kernel.printk_ratelimit=0
+</code></pre>
+<p>Lets pick up from our /usr/bin/brave example:</p>
+<p>Create a preliminary profile</p>
+<pre><code class="language-text"># Last Modified: Wed Oct  8 09:29:51 2025
+abi &lt;abi/4.0&gt;,
+
+include &lt;tunables/global&gt;
+
+/usr/bin/brave flags=(complain) {
+  include &lt;abstractions/base&gt;
+
+  /usr/bin/brave r,
+  /usr/bin/env ix,
+
+}
+
+</code></pre>
+<h3 id="auditd"><a class="header" href="#auditd">Auditd</a></h3>
+<p>Linux audit makes your system more secure by providing you the means to analyze
+what’s going on in your system in great detail. It does not provide any security
+itself, but instead is useful for tracking these issues and helps you take
+additional security measures to prevent them.</p>
+<p>Install with:</p>
+<pre><code class="language-bash">sudo pacman -S audit
+</code></pre>
+<ul>
+<li>Enable audit at boot-time by setting <code>audit=1</code> as a kernel parameter,
+typically either in <code>/etc/kernel/cmdline</code> or <code>/etc/cmdline.d/security.conf</code>
+for UKIs.</li>
+</ul>
+<p>For example, this is my <code>/etc/cmdline.d/security.conf</code>:</p>
+<pre><code class="language-conf"># enable apparmor                               # enable audit
+lsm=landlock,lockdown,yama,integrity,apparmor,bpf audit=1 audit_backlog_limit=256
+</code></pre>
+<p>Create a group to follow principle of least privilege:</p>
+<pre><code class="language-bash">sudo groupadd audit-view
+sudo usermod -a -G audit-view $USER
+</code></pre>
+<p>In <code>/etc/audit/auditd.conf</code>, change <code>log_group = root</code> to:</p>
+<pre><code class="language-conf">log_group = audit-view
+</code></pre>
+<p>Enable:</p>
+<pre><code class="language-bash">sudo systemctl enable auditd
+sudo systemctl start auditd --now
+</code></pre>
+<p>To create new profiles, <code>auditd</code> should be running. AppArmor can use kernel
+audit logs from the userspace auditd daemon, allowing you to build new profiles.</p>
+<ul>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Audit_framework">Audit Framework</a></p>
+</li>
+<li>
+<p><a href="https://man.archlinux.org/man/auditd.8.en">Arch manpage auditd</a></p>
+</li>
+</ul>
+<p>A basic set of rules could be to create a <code>/etc/audit/rules.d/audit.rules</code> with
+the following contents:</p>
+<pre><code class="language-audit.rules"># Clear existing rules
+-D
+
+# Set buffer size
+-b 8192
+
+# Monitor /etc/passwd for modifications
+-w /etc/passwd -p wa -k passwd_changes
+
+# Monitor sudo command execution
+-w /usr/bin/sudo -p x -k sudo_usage
+
+# Enable auditing
+-e 1
+
+# Make rules immutable
+-e 2
+</code></pre>
+<p>Validate and load the rules, this will populate <code>/etc/audit/audit.rules</code> with
+the rules we just set:</p>
+<pre><code class="language-bash">sudo augenrules --load
+</code></pre>
+<p>Ensure <code>auditd</code> is running:</p>
+<pre><code class="language-bash">sudo systemctl status auditd
+</code></pre>
+<p>Since we set a watch rule for sudo let’s run an update and check the auditd
+logs:</p>
+<pre><code class="language-bash">sudo pacman -Syu
+</code></pre>
+<p>View the logs:</p>
+<pre><code class="language-bash">sudo ausearch -k sudo_usage
+</code></pre>
+<p>View the Summary Report:</p>
+<pre><code class="language-bash">sudo aureport
+sudo aureport --auth
+man aureport
+</code></pre>
+<p>Verify the rules are loaded:</p>
+<pre><code class="language-bash">sudo auditctl -l
+</code></pre>
+<p>Be careful here, if you enable <code>auditd</code> and don’t iron out the kinks I’ve found
+that it freezes after you enter your cryptroot passphrase. If this happens to
+you, follow the chroot steps but skip the <code>arch-chroot /mnt</code> step and instead
+run:</p>
+<pre><code class="language-bash">systemctl --root=/mnt disable auditd
+</code></pre>
+<p>Unmount the partitions, close cryptroot, and Reboot.</p>
+<hr>
+<h3 id="doas-over-sudo"><a class="header" href="#doas-over-sudo">Doas over sudo</a></h3>
+<blockquote>
+<p>❗️ Removing sudo may cause compatibility issues with some scripts/tools that
+expect it, I haven’t had many issues but you should test before completely
+removing it.</p>
+</blockquote>
+<p>For a more minimalist version of <code>sudo</code> with a smaller codebase and attack
+surface, consider <code>doas</code>:</p>
+<pre><code class="language-bash">sudo pacman -S opendoas
+</code></pre>
+<p>Create a <code>doas</code> group:</p>
+<pre><code class="language-bash">sudo groupadd doas
+</code></pre>
+<p>Add your user to the <code>doas</code> group:</p>
+<pre><code class="language-bash">sudo usermod -aG doas $USER
+</code></pre>
+<p>Create <code>/etc/doas.conf</code> with the following contents:</p>
+<pre><code class="language-conf">permit setenv {PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin} :doas
+</code></pre>
+<p>You can add a line below that one like <code>permit nopass your-username as root:</code>
+Enabling your user passwordless usage, it’s much less secure but an option.</p>
+<p>Alternatively, you can setup the doas persist feature with the following:</p>
+<pre><code class="language-conf">permit persist setenv {PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin} :doas
+</code></pre>
+<ul>
+<li>
+<p>With the above setting, after you successfully authenticate. You won’t be
+asked for your password for the next 5 minutes. It’s disabled by default
+because it can be dangerous if used in the wrong environment.</p>
+</li>
+<li>
+<p>You may need to either reboot or do a soft-reset for the groups to take
+effect.</p>
+</li>
+</ul>
+<p>For <code>yay</code>, you can run:</p>
+<pre><code class="language-bash">yay --sudo doas --save
+</code></pre>
+<p>For <code>paru</code>, edit <code>/etc/paru.conf</code>. Near bottom:</p>
+<pre><code class="language-conf">Sudo = doas
+</code></pre>
+<p>Edit <code>/etc/mkepkg.conf</code>:</p>
+<pre><code class="language-bash">doas hx /etc/makepkg.conf
+</code></pre>
+<p>At the bottom of the file uncomment <code>PACMAN_AUTH=()</code> and add <code>doas</code>:</p>
+<pre><code class="language-conf">PACMAN_AUTH=(doas)
+</code></pre>
+<p>Secure the <code>doas.conf</code>:</p>
+<pre><code class="language-conf">doas chown -c root:root /etc/doas.conf
+doas chmod -c 0400 /etc/doas.conf
+</code></pre>
+<pre><code class="language-bash">doas pacman -Syu
+</code></pre>
+<p>Test and ensure most commands that you use work before removing sudo so you’re
+aware of potential issues. To benefit from the smaller codebase and attack
+surface, you have to remove sudo.</p>
+<pre><code class="language-bash">doas pacman -R sudo base-devel
+</code></pre>
+<p>Create a symlink replacing sudo with doas:</p>
+<pre><code class="language-bash">ln -s $(which doas) /usr/bin/sudo
+</code></pre>
+<p>Now, when you run <code>sudo</code>, <code>doas</code> will be executed. There are some compatibility
+issues with this method but not super common.</p>
+<h2 id="intrusion-detection"><a class="header" href="#intrusion-detection">Intrusion Detection</a></h2>
+<details>
+<summary> ✔️ Click to Expand AIDE Example </summary>
+<p>From what I’ve seen, this would work best if you’re running a server or self
+hosting where your system will be running without you there tweaking settings
+and AIDE will alert you if anything changes in the meantime.</p>
+<pre><code class="language-bash">paru -S aide
+</code></pre>
+<ul>
+<li>
+<p><a href="https://aide.github.io/doc/">AIDE Manual</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/AIDE">Arch Wiki AIDE</a></p>
+</li>
+</ul>
+<p>AIDE is an intrusion detection system (IDS) that will notify us whenever it
+detects that a potential intrusion has occurred. When a system is compromised,
+attackers typically will try to change file permissions and escalate to the root
+user account and start to modify system files, AIDE can detect this.</p>
+<p>To set up AIDE on your system follow these steps:</p>
+<ol>
+<li>
+<p>There is a default config at <code>/etc/aide.conf</code>:</p>
+</li>
+<li>
+<p>Initialize the database:</p>
+</li>
+</ol>
+<pre><code class="language-bash">sudo aide -i
+</code></pre>
+<p>You will see in the output of the above command that
+<code>AIDE successfully initialized database. New AIDE database written to /var/lib/aide/aide.db.new.gz</code></p>
+<ol start="3">
+<li>Move the new database and remove the <code>.new</code>:</li>
+</ol>
+<pre><code class="language-bash">sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+</code></pre>
+<ol start="4">
+<li>Check the system against the baseline database:</li>
+</ol>
+<pre><code class="language-bash">sudo aide -C
+</code></pre>
+<ol start="5">
+<li>Whenever you make changes to system files, or especially after running a
+system update or installing new tools, you have to rescan all files to update
+their checksums in the AIDE database:</li>
+</ol>
+<pre><code class="language-bash">sudo aide -u
+</code></pre>
+<p>Unfortunately, AIDE doesn’t automatically replace the old database so you have
+to rename the new one again:</p>
+<pre><code class="language-bash">sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+</code></pre>
+<p>And finally check again:</p>
+<pre><code class="language-bash">sudo aide -C
+Start timestamp: 2025-10-02 14:57:49 -0400 (AIDE 0.19.2)
+AIDE found NO differences between database and filesystem. Looks okay!!
+</code></pre>
+<ul>
+<li>
+<p>The default settings are fairly strict, I kept getting reports of changes
+detected because the mtime and ctime of a directory changed. It’s fairly easy
+to set ignore rules by adding a <code>!</code> in front of the path.</p>
+</li>
+<li>
+<p><a href="https://linux.die.net/man/1/aide">aide(1) man page</a></p>
+</li>
+</ul>
+<p>Create the logfile:</p>
+<pre><code class="language-bash">sudo mkdir -p /var/log/aide
+sudo touch /var/log/aide/aide.log
+</code></pre>
+</details>
+<h3 id="resources"><a class="header" href="#resources">Resources</a></h3>
+<details>
+<summary> ✔️ Click to Expand Resources </summary>
+<ul>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot">Arch Wiki Secure Boot</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/OpenVAS">Arch Wiki OpenVAS</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/AppArmor">Arch Wiki AppArmor</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/SELinux">Arch Wiki SELinux</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Security">Arch Wiki Security</a></p>
+</li>
+<li>
+<p><a href="https://github.com/archlinuxhardened/selinux">archlinuxhardened/selinux</a></p>
+</li>
+<li>
+<p><a href="https://wiki.gentoo.org/wiki/Security_Handbook/Concepts">Gentoo Security_Handbook Concepts</a></p>
+</li>
+<li>
+<p>STIGs are configuration standards developed by the Defense Information Systems
+Agency (DISA) to secure systems and software for the U.S. Department of
+Defense (DoD). They are considered a highly authoritative source for system
+hardening.There are recommendations for hardening all kinds of software in the
+<a href="https://stigviewer.com/stigs">Stig Viewer</a></p>
+</li>
+<li>
+<p><a href="https://www.cisecurity.org/cis-benchmarks">CIS Benchmarks</a></p>
+</li>
+<li>
+<p><a href="https://github.com/nsacyber">NSA Cybersecurity Directorate</a></p>
+</li>
+<li>
+<p><a href="https://www.rodsbooks.com/efi-bootloaders/secureboot.html">rodsbooks Secure Boot</a></p>
+</li>
+<li>
+<p><a href="https://web.archive.org/web/20140422190914/https://securityinabox.org/en/truecrypt_main">TrueCrypt Guide</a></p>
+</li>
+<li>
+<p><a href="https://web.archive.org/web/20140220055801/http://crunchbang.org:80/forums/viewtopic.php?id=24722">#! Paranoid Security Guide</a></p>
+</li>
+<li>
+<p><a href="https://cybersecuritynews.com/hardening-linux-servers">Hardening-Linux-Servers</a></p>
+</li>
+<li>
+<p><a href="https://linux-audit.com/linux-server-hardening-most-important-steps-to-secure-systems/">linux-audit Linux Server hardening best practices</a></p>
+</li>
+<li>
+<p><a href="https://linux-audit.com/linux-security-guide-extended-version/">linux-audit Linux security guide extended</a></p>
+</li>
+<li>
+<p><a href="https://madaidans-insecurities.github.io/linux.html">madaidans-insecurities</a></p>
+</li>
+<li>
+<p><a href="https://madaidans-insecurities.github.io/guides/linux-hardening.html">madaidans-insecurities Linux Hardening Guide</a></p>
+</li>
+<li>
+<p><a href="https://zebracrossing.narwhalacademy.org/">Zebra Crossing digital safety checklist</a></p>
+</li>
+<li>
+<p><a href="https://datadetoxkit.org/en/privacy/essentials#step-1">DataDetoxKit</a></p>
+</li>
+<li>
+<p><a href="https://datadetoxkit.org/en/privacy/degooglise/">DataDetox Degooglise</a></p>
+</li>
+<li>
+<p><a href="https://tb-manual.torproject.org/">Tor Browser User Manual</a></p>
+</li>
+<li>
+<p><a href="https://gitlab.torproject.org/tpo/team/-/wikis/home">Tor Wiki</a></p>
+</li>
+<li>
+<p><a href="https://onionshare.org/">VeraCrypt Beginners Tutorial</a></p>
+</li>
+</ul>
+</details>
+<footer id="kanagawa-support-footer" style="text-align:center; margin-top: 3rem; font-size: 0.85em; opacity: 0.75;">
+  
+<p><a href="https://github.com/saylesss88/mdbook-kanagawa-theme">Made with mdbook-kanagawa-theme</a></p>
+
+</footer>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../arch/hardening_firefox.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../arch/hardening_networking.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../arch/hardening_firefox.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../arch/hardening_networking.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../theme/header-buttons-02f32270.js"></script>
+        <script src="../theme/nix_http-971fb95c.js"></script>
+
+
+
+    </div>
+    </body>
+</html>

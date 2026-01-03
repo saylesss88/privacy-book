@@ -1,0 +1,1017 @@
+<!DOCTYPE HTML>
+<html lang="en" class="coal sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Encrypted Arch Install - privacy-book</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="../favicon-8114d1fc.png">
+        <link rel="stylesheet" href="../css/variables-8adf115d.css">
+        <link rel="stylesheet" href="../css/general-2459343d.css">
+        <link rel="stylesheet" href="../css/chrome-e4858e4b.css">
+        <link rel="stylesheet" href="../css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="../highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="../tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="../ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="../theme/header-buttons-af1bc2f9.css">
+        <link rel="stylesheet" href="../theme/css/kanagawa-code-0be3dd7a.css">
+        <link rel="stylesheet" href="../theme/css/tokyo-night-code-6a5e27e7.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "coal";
+            const default_dark_theme = "coal";
+            window.path_to_searchindex_js = "../searchindex-4f448ce9.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc-0d0d0292.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('coal')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">privacy-book</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/saylesss88/privacy-book.git" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <script>window.CONTENT_COLLECTIONS = {"collections":{"blog":[{"author":"saylesss88","collection":"blog","date":"2025-12-07T00:00:00+00:00","description":null,"draft":false,"path":"android/RethinkDNS_Guide.md","preview_html":"<p><img src=\"../images/rethinkdns.cleaned.png\" alt=\"RethinkDNS Logo\" /></p><p>I’m not affiliated with RethinkDNS in any way, I’m just a technologist and\nprivacy advocate.</p><p><strong>HTTP</strong> (HyperText Transfer Protocol): The standard protocol used by web\nbrowsers and servers to transfer web pages and related resources over the\ninternet.</p>","tags":["android","privacy"],"title":"RethinkDNS"},{"author":"saylesss88","collection":"blog","date":"2025-12-05T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_dns.md","preview_html":"<p>❗ NOTE: There are many other ways for someone monitoring your traffic to see\nwhat domain you looked up via DNS that it’s effectiveness is questionable\nwithout also using Tor or a VPN. Encrypted DNS will not help you hide any of\nyour browsing activity.</p><pre><code class=\"language-bash\">sudo pacman -S dnscrypt-proxy\n</code></pre>\n<blockquote>\n<p>NOTE: udp is required for dnscrypt protocol, keep this in mind when\nconfiguring your servers if your output chain is a default drop.</p><p><a href=\"https://wiki.archlinux.org/title/Dnscrypt-proxy\">Arch Wiki dnscrypt-proxy</a></p>","tags":["arch","security"],"title":"Encrypted DNS on Arch"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_networking.md","preview_html":"<p>NetworkManagers global config is <code>/etc/NetworkManager/NetworkManager.conf</code>.\nAdditional config files can be placed in <code>/etc/NetworkManager/conf.d</code>.</p><p>After editing a config file, apply the changes with:</p><pre><code class=\"language-bash\">sudo nmcli general reload\n</code></pre>\n<pre><code class=\"language-bash\">sudo usermod -aG network $USER\n</code></pre>\n<h2>Investigate sockets</h2>\n<p>Display all TCP Sockets with service names:</p>","tags":["security","networking"],"title":"Hardening Networking"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_install.md","preview_html":"<p>The ultimate installation resource is always goint to be the:</p><p><a href=\"https://wiki.archlinux.org/title/Installation_guide\">Arch Wiki Installation Guide</a></p><p><a href=\"https://archlinux.org/download/#checksums\">Verify PGP Signatures</a>, the ISO\ndirectory is just the same directory where your Arch Linux ISO file is stored.</p>","tags":["arch","security"],"title":"Encrypted Arch Install"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_firefox.md","preview_html":"<p><strong>Browser hardening</strong> focuses on reducing attack surface and blocking tracking\nby disabling or restricting features like JavaScript, cookies, telemetry, and\nthird-party scripts.</p><p><strong>Fingerprint protection</strong>, on the other hand, aims to make your browser\nindistinguishable from others. Instead of just blocking data collection, it\nensures that your browser’s configuration; screen size, fonts, user agent,\netc. matches a large group of users, so you blend in.</p><p><strong>Browser compartmentalization</strong> is a technique where different browsers are\ndedicated to distinct online activities to isolate cookies, trackers, and\nbrowsing data. For example, Mullvad Browser can be used solely for activities\nwhere fingerprinting resistance is critical, such as anonymou","tags":["browsers","security"],"title":"Hardening Firefox"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_arch.md","preview_html":"<p>⚠️ Warning: I am not a security expert. This guide presents various options\nfor hardening Arch Linux, but it is your responsibility to evaluate whether\neach adjustment suits your specific needs and environment. Security hardening\nand process isolation can introduce stability challenges, compatibility\nissues, or unexpected behavior. Additionally, these protections often come\nwith performance tradeoffs. Always conduct thorough research, there are no\nplug and play one size fits all security solutions.</p><p>Much of this guide draws inspiration or recommendations from the well-known\n<a href=\"https://madaidans-insecurities.github.io/guides/linux-hardening.html\">Linux Hardening Guide</a>\nby Madaidan’s Insecurities and the Arch Wiki. Arch is great but when anonymity\ntruly matters, use Whonix o","tags":["arch","security"],"title":"Hardening Arch"}],"posts":[{"author":null,"collection":null,"date":"2026-01-03T19:48:28.349243924+00:00","description":"\n","draft":false,"path":"index.md","preview_html":"","tags":[],"title":"index"}]},"entries":[{"author":null,"collection":null,"date":"2026-01-03T19:48:28.349243924+00:00","description":"\n","draft":false,"path":"index.md","preview_html":"","tags":[],"title":"index"},{"author":"saylesss88","collection":"blog","date":"2025-12-07T00:00:00+00:00","description":null,"draft":false,"path":"android/RethinkDNS_Guide.md","preview_html":"<p><img src=\"../images/rethinkdns.cleaned.png\" alt=\"RethinkDNS Logo\" /></p><p>I’m not affiliated with RethinkDNS in any way, I’m just a technologist and\nprivacy advocate.</p><p><strong>HTTP</strong> (HyperText Transfer Protocol): The standard protocol used by web\nbrowsers and servers to transfer web pages and related resources over the\ninternet.</p>","tags":["android","privacy"],"title":"RethinkDNS"},{"author":"saylesss88","collection":"blog","date":"2025-12-05T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_dns.md","preview_html":"<p>❗ NOTE: There are many other ways for someone monitoring your traffic to see\nwhat domain you looked up via DNS that it’s effectiveness is questionable\nwithout also using Tor or a VPN. Encrypted DNS will not help you hide any of\nyour browsing activity.</p><pre><code class=\"language-bash\">sudo pacman -S dnscrypt-proxy\n</code></pre>\n<blockquote>\n<p>NOTE: udp is required for dnscrypt protocol, keep this in mind when\nconfiguring your servers if your output chain is a default drop.</p><p><a href=\"https://wiki.archlinux.org/title/Dnscrypt-proxy\">Arch Wiki dnscrypt-proxy</a></p>","tags":["arch","security"],"title":"Encrypted DNS on Arch"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_networking.md","preview_html":"<p>NetworkManagers global config is <code>/etc/NetworkManager/NetworkManager.conf</code>.\nAdditional config files can be placed in <code>/etc/NetworkManager/conf.d</code>.</p><p>After editing a config file, apply the changes with:</p><pre><code class=\"language-bash\">sudo nmcli general reload\n</code></pre>\n<pre><code class=\"language-bash\">sudo usermod -aG network $USER\n</code></pre>\n<h2>Investigate sockets</h2>\n<p>Display all TCP Sockets with service names:</p>","tags":["security","networking"],"title":"Hardening Networking"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/enc_install.md","preview_html":"<p>The ultimate installation resource is always goint to be the:</p><p><a href=\"https://wiki.archlinux.org/title/Installation_guide\">Arch Wiki Installation Guide</a></p><p><a href=\"https://archlinux.org/download/#checksums\">Verify PGP Signatures</a>, the ISO\ndirectory is just the same directory where your Arch Linux ISO file is stored.</p>","tags":["arch","security"],"title":"Encrypted Arch Install"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_firefox.md","preview_html":"<p><strong>Browser hardening</strong> focuses on reducing attack surface and blocking tracking\nby disabling or restricting features like JavaScript, cookies, telemetry, and\nthird-party scripts.</p><p><strong>Fingerprint protection</strong>, on the other hand, aims to make your browser\nindistinguishable from others. Instead of just blocking data collection, it\nensures that your browser’s configuration; screen size, fonts, user agent,\netc. matches a large group of users, so you blend in.</p><p><strong>Browser compartmentalization</strong> is a technique where different browsers are\ndedicated to distinct online activities to isolate cookies, trackers, and\nbrowsing data. For example, Mullvad Browser can be used solely for activities\nwhere fingerprinting resistance is critical, such as anonymou","tags":["browsers","security"],"title":"Hardening Firefox"},{"author":"saylesss88","collection":"blog","date":"2025-11-28T00:00:00+00:00","description":null,"draft":false,"path":"arch/hardening_arch.md","preview_html":"<p>⚠️ Warning: I am not a security expert. This guide presents various options\nfor hardening Arch Linux, but it is your responsibility to evaluate whether\neach adjustment suits your specific needs and environment. Security hardening\nand process isolation can introduce stability challenges, compatibility\nissues, or unexpected behavior. Additionally, these protections often come\nwith performance tradeoffs. Always conduct thorough research, there are no\nplug and play one size fits all security solutions.</p><p>Much of this guide draws inspiration or recommendations from the well-known\n<a href=\"https://madaidans-insecurities.github.io/guides/linux-hardening.html\">Linux Hardening Guide</a>\nby Madaidan’s Insecurities and the Arch Wiki. Arch is great but when anonymity\ntruly matters, use Whonix o","tags":["arch","security"],"title":"Hardening Arch"}],"generated_at":"2026-01-03T19:50:47.222786551+00:00"};</script>
+<h1 id="encrypted-arch-install-for-uefi-systems-with-uki-and-secure-boot"><a class="header" href="#encrypted-arch-install-for-uefi-systems-with-uki-and-secure-boot">Encrypted Arch Install for UEFI Systems with UKI and Secure Boot</a></h1>
+<details>
+<summary> ✔️ Click to Expand Table of Contents</summary>
+<ul>
+<li><a href="#install-the-base-system-on-mnt-with-pacstrap">Install the Base System on <code>/mnt</code> with <code>pacstrap</code></a>
+<ul>
+<li><a href="#creating-a-readonly-snapshot-of-your-root-subvolume">Creating a readonly snapshot of your root subvolume:</a></li>
+<li><a href="#restoring-from-a-backup">Restoring from a Backup</a></li>
+<li><a href="#automated-backup">Automated backup</a></li>
+<li><a href="#arch-chroot">arch-chroot</a></li>
+<li><a href="#resources">Resources</a></li>
+</ul>
+</li>
+</ul>
+</details>
+<p>The ultimate installation resource is always goint to be the:</p>
+<ul>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Installation_guide">Arch Wiki Installation Guide</a></p>
+</li>
+<li>
+<p><a href="https://archlinux.org/download/#checksums">Verify PGP Signatures</a>, the ISO
+directory is just the same directory where your Arch Linux ISO file is stored.</p>
+</li>
+</ul>
+<blockquote>
+<p>Always review the Wiki and never just plug random things suggested by me or
+anyone else without first doing your own research.</p>
+</blockquote>
+<p>Edited: 09-25-25 Removed encrypted swap section. Big usability downside IMO.</p>
+<details>
+<summary> ✔️ Verifying Arch Linux ISO on Other Distributions </summary>
+<blockquote>
+<p>❗ NOTE: If you only want to verify the ISO once, you can temporarily import
+the public key, verify the signature, and then you don’t need to keep the key
+permanently in your keyring or sign it locally. This example is from the last
+release, but the process is the same.</p>
+</blockquote>
+<p>With <code>sequoia-sq</code>, you can get the Arch release signing key with:</p>
+<pre><code class="language-bash">sq network wkd search pierre@archlinux.org --output release-key.pgp
+</code></pre>
+<p>Export the chosen key to a <code>.pgp</code> file:</p>
+<pre><code class="language-bash">sq cert export --keyring=release-key.pgp --cert=3E80CA1A8B89F69CBA57D98A76A5EF9054449A5C &gt; pierre-archlinux.pgp
+</code></pre>
+<p>Import into your keychain:</p>
+<pre><code class="language-bash">gpg --import pierre-archlinux.pgp
+gpg: key 0x76A5EF9054449A5C: 9 signatures not checked due to missing keys
+gpg: key 0x76A5EF9054449A5C: public key "Pierre Schmitz &lt;pierre@archlinux.org&gt;" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   3  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 3u
+gpg: next trustdb check due at 2026-08-23
+</code></pre>
+<ul>
+<li>Now, you should see <code>&lt;pierre@archlinux.org&gt;</code> and his keys when you run
+<code>gpg --list-keys</code></li>
+</ul>
+<p>Finally, verify the signature:</p>
+<pre><code class="language-bash">sq verify --signer-file release-key.pgp --signature-file archlinux-2025.08.01-x86_64.iso.sig archlinux-2025.08.01-x86_64.iso
+Authenticated signature made by 3E80CA1A8B89F69CBA57D98A76A5EF9054449A5C (Pierre Schmitz &lt;pierre@archlinux.org&gt;)
+
+1 authenticated signature.
+</code></pre>
+<blockquote>
+<p>❗ To ensure the key is authentic and not spoofed, verify that the key
+fingerprint matches the official Arch Linux signing key fingerprint, which can
+is linked below and on the Arch website.</p>
+</blockquote>
+<p>This shows that the signature was made by the key with the ID
+<code>3E80CA1A8B89F69CBA57D98A76A5EF9054449A5C (Pierre Schmitz)</code></p>
+<p>You can check the keys fingerprint with:</p>
+<pre><code class="language-bash">gpg --fingerprint 3E80CA1A8B89F69CBA57D98A76A5EF9054449A5C
+</code></pre>
+<ul>
+<li>Verify it against the
+<a href="https://archlinux.org/master-keys/">Arch Linux master-keys</a></li>
+</ul>
+<p>Verify it against the Arch Linux master-keys</p>
+<p>With the <code>sq verify</code> command GPG authenticated that the signature is valid and
+that the key used to sign is trusted in our keyring.</p>
+<p><code>1 authenticated signature</code> confirms the files integrity and authenticity.</p>
+<p>We have successfully verified that the file was signed by Pierr’s official Arch
+Linux key and has not been tampered with.</p>
+<p>The following is only if you currently already have keys on your gpg keyring.</p>
+<details>
+<summary> ☑️ Click to expand Key Signing and Publishing Example </summary>
+<p>List your keys to get the arch keyID:</p>
+<pre><code class="language-bash">gpg --list-keys
+# ... snip ...
+pub   ed25519/0x76A5EF9054449A5C 2022-10-31 [SC] [expires: 2037-10-27]
+      Key fingerprint = 3E80 CA1A 8B89 F69C BA57  D98A 76A5 EF90 5444 9A5C
+uid                   [  full  ] Pierre Schmitz &lt;pierre@archlinux.org&gt;
+uid                   [  full  ] Pierre Schmitz &lt;pierre@archlinux.de&gt;
+sub   ed25519/0xD6D13C45BFCFBAFD 2022-10-31 [A] [expires: 2037-10-27]
+sub   cv25519/0x7F56ADE50CA3D899 2022-10-31 [E] [expires: 2037-10-27]
+</code></pre>
+<p>Sign the key:</p>
+<pre><code class="language-bash">gpg --sign-key 0x76A5EF9054449A5C
+</code></pre>
+<p>Now you can export and publish the new public key and send it to a keyserver:</p>
+<pre><code class="language-bash">gpg --export --armor 0x76A5EF9054449A5C &gt; archlinux-signed.asc
+gpg --send-keys 0x76A5EF9054449A5C
+</code></pre>
+<p>The more people that verify, sign, and re-export and publish their keys the
+better for the web of trust that gpg uses making the network more secure for
+everyone.</p>
+</details>
+</details>
+<hr>
+<ol>
+<li><strong>Connect to Wi-Fi</strong>:</li>
+</ol>
+<pre><code class="language-bash">iwctl
+[iwd]# device list
+[iwd]# station wlan0 scan
+[iwd]# station wlan0 connect NETGEAR80
+# Enter your Password
+# Check Connection
+[iwd]# station wlan0 show
+[iwd]# exit
+</code></pre>
+<pre><code class="language-bash">ping -c 3 archlinux.org
+</code></pre>
+<hr>
+<ol start="2">
+<li><strong>Update package databases and mirrorlist</strong>:</li>
+</ol>
+<pre><code class="language-bash">pacman -Syyu
+</code></pre>
+<p>Save a backup of your current mirrorlist so we can safely update it:</p>
+<pre><code class="language-bash">cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak
+</code></pre>
+<pre><code class="language-bash">pacman -S reflector
+reflector --list-countries
+# Example if you live in the US
+reflector -c US --protocol https --age 6 --fastest 5 --sort rate --save /etc/pacman.d/mirrorlist
+</code></pre>
+<p>This actually improves security by only providing <code>HTTPS</code> mirrors, by default
+both HTTP and HTTPS are used.</p>
+<p>NOTE: This can take a bit and you can expect some failures..</p>
+<hr>
+<ol start="3">
+<li><strong>Set keyboard layout, font, and system clock</strong>:</li>
+</ol>
+<p>Default keymap is US, if you need something different:</p>
+<pre><code class="language-bash">localectl list-keymaps
+loadkeys &lt;chosen-map&gt;
+# Increase font size
+setfont ter-132b
+</code></pre>
+<pre><code class="language-bash">sudo pacman -S chrony
+</code></pre>
+<p><code>/etc/chrony.conf</code>:</p>
+<pre><code class="language-conf"># Copyright © 2014-2025 GrapheneOS
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+server time.cloudflare.com iburst nts
+server ntppool1.time.nl iburst nts
+server nts.netnod.se iburst nts
+server ptbtime1.ptb.de iburst nts
+server time.dfm.dk iburst nts
+server time.cifelli.xyz iburst nts
+
+minsources 3
+authselectmode require
+
+# EF
+dscp 46
+
+driftfile /var/lib/chrony/drift
+dumpdir /var/lib/chrony
+ntsdumpdir /var/lib/chrony
+
+leapseclist /usr/share/zoneinfo/leap-seconds.list
+makestep 1.0 3
+
+rtconutc
+rtcsync
+
+cmdport 0
+
+noclientlog
+</code></pre>
+<p>The above setup uses Network Time Security (NTS) and is a more modern safer way
+to synchronize time using chrony.</p>
+<pre><code class="language-bash">sudo systemctl disable --now systemd-timesyncd
+sudo systemctl enable --now chronyd
+</code></pre>
+<pre><code class="language-bash">timedatectl set-ntp true
+timedatectl list-timezones
+# Example
+sudo timedatectl set-timezone America/New_York
+</code></pre>
+<hr>
+<ol start="4">
+<li><strong>Partition your Disk</strong>:</li>
+</ol>
+<p>The only required partitions are one for the root directory <code>/</code> (typically <code>1G</code>)
+and one for booting in UEFI mode, an EFI system partition (typically the rest of
+the space left).</p>
+<p>In this section, I’ll assume that you’re starting with a clean slate. If you’re
+not, you can use your existing partitions if they meet the above requirements or
+delete them.</p>
+<p>To delete existing partitions with <code>cfdisk</code>, you launch it on the target
+filesystem, select the partition you want to delete and Select -&gt; <code>[ Delete ]</code>
+until all you see is <code>Free space</code> and a clean slate and <code>[ Write ]</code> &amp; <code>[ Quit ]</code>
+to save your changes.</p>
+<p>Identify your target disk (e.g., <code>/dev/nvme0n1</code>):</p>
+<pre><code class="language-bash">fdisk -l
+</code></pre>
+<pre><code class="language-bash">cfdisk /dev/nvme0n1
+</code></pre>
+<ul>
+<li>
+<p>Select -&gt; <code>[ Free Space ]</code></p>
+<ul>
+<li>
+<p>Select -&gt; <code>[ New ]</code></p>
+</li>
+<li>
+<p>Partition size: <code>1G</code></p>
+</li>
+<li>
+<p>Type -&gt; <code>EFI System</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Select -&gt; <code>[ Free Space ]</code></p>
+<ul>
+<li>
+<p>Partition size: The rest of the space</p>
+</li>
+<li>
+<p>Type -&gt; <code>Linux filesystem</code></p>
+</li>
+<li>
+<p>Select -&gt; <code>[ Write ]</code></p>
+</li>
+<li>
+<p>Select -&gt; <code>[ Quit ]</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ol start="5">
+<li><strong>Format the EFI partition as FAT32</strong>:</li>
+</ol>
+<pre><code class="language-bash">mkfs.fat -F32 /dev/nvme0n1p1
+</code></pre>
+<p>Leave the root partition unformatted for the next step.</p>
+<hr>
+<ol start="6">
+<li><strong>Encrypt the Root partition and Open it</strong>:</li>
+</ol>
+<pre><code class="language-bash">cryptsetup luksFormat /dev/nvme0n1p2
+cryptsetup open /dev/nvme0n1p2 cryptroot
+</code></pre>
+<p>Create a filesystem:</p>
+<pre><code class="language-bash">mkfs.btrfs /dev/mapper/cryptroot
+</code></pre>
+<p>If you mount the filesystem with compression before running <code>genfstab</code>, it will
+automatically add the chosen compression to the <code>fstab</code>.</p>
+<pre><code class="language-bash">mount /dev/nvme0n1p1 /mnt/boot  # Mount EFI partition at /mnt/boot
+mount -o compress=zstd /dev/mapper/cryptroot /mnt
+</code></pre>
+<hr>
+<h2 id="install-the-base-system-on-mnt-with-pacstrap"><a class="header" href="#install-the-base-system-on-mnt-with-pacstrap">Install the Base System on <code>/mnt</code> with <code>pacstrap</code></a></h2>
+<p>If you prefer Nvim or a hardened kernel, change it here.</p>
+<pre><code class="language-bash">pacstrap -K /mnt base linux-zen linux-zen-headers linux-firmware networkmanager helix lightdm lightdm-gtk-greeter btrfs-progs cryptsetup sudo base-devel efibootmgr systemd-ukify
+</code></pre>
+<hr>
+<ol start="7">
+<li><strong>Generate the Filesystem Table</strong>:</li>
+</ol>
+<p>The EFI and root partitions need to be mounted before you generate the
+filesystem table in the next step.</p>
+<pre><code class="language-bash">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+#
+hx /mnt/etc/fstab
+cat /mnt/etc/fstab
+</code></pre>
+<p>Fix security hole and harden <code>/boot</code> permissions by adding
+<code>fmask=0137, dmask=0027</code>:</p>
+<pre><code class="language-bash">hx /mnt/etc/fstab
+</code></pre>
+<p>Example</p>
+<pre><code class="language-fstab"># Static information about the filesystems.
+# See fstab(5) for details.
+
+# &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+# /dev/mapper/cryptroot
+UUID=6d68a2bf-34ea-4adc-86d5-cb1d56de44a4	/         	btrfs     	rw,relatime,compress=zstd:3,ssd,space_cache=v2,subvol=/	0 0
+
+# /dev/nvme0n1p1
+UUID=B88B-844F      	/boot     	vfat      	rw,relatime,fmask=0137,dmask=0027,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0 2
+</code></pre>
+<pre><code class="language-bash">chmod 700 /boot
+chmod 600 /boot/loader/random-seed
+</code></pre>
+<p><strong>Important</strong>: The <code>fstab</code> should list both partitions, if it doesn’t you’ll
+need to ensure both partitions are mounted and regenerate your fstab again with
+<code>genfstab</code>. Also ensure that the root partition was mounted with compression.</p>
+<hr>
+<ol start="8">
+<li><strong>Change Root (<code>chroot</code>) into the New Installation</strong></li>
+</ol>
+<pre><code class="language-bash">arch-chroot /mnt
+</code></pre>
+<p>Create a user:</p>
+<pre><code class="language-bash">useradd -m -G wheel -s /bin/bash yourusername
+passwd yourusername
+</code></pre>
+<p>Create an admin password:</p>
+<pre><code class="language-bash">passwd
+</code></pre>
+<p>Enable sudo for wheel group:</p>
+<p>In <code>/etc/sudoers</code> uncomment the line:</p>
+<pre><code class="language-bash">%wheel ALL=(ALL:All) ALL
+</code></pre>
+<hr>
+<ol start="9">
+<li>Edit <code>/etc/mkinitcpio.conf</code> in the new system to add an <code>sd-encrypt</code> hook
+before the <code>filesystems</code> attribute.</li>
+</ol>
+<ul>
+<li>
+<p>Locate the <code>HOOKS</code> line</p>
+</li>
+<li>
+<p>Insert <code>encrypt</code> <strong>before</strong> filesystems</p>
+</li>
+</ul>
+<pre><code class="language-bash">vim /etc/mkinitcpio.conf
+</code></pre>
+<p>To use <code>sd-encrypt</code>, it is necessary to replace <code>udev</code> with <code>systemd</code> and if you
+require a different keyboard layout from US <code>sd-vconsole</code> is needed.</p>
+<pre><code class="language-bash"># mkinitcpio.conf
+# *IF* you use an nvme drive
+MODULES=(nvme)
+FILES=(/etc/crypttab.initramfs /etc/vconsole.conf)
+# ... snip ...
+HOOKS=(base systemd autodetect microcode modconf kms keyboard keymap consolefont sd-vconsole block sd-encrypt filesystems fsck systemd-ukify)
+# ... snip ...
+</code></pre>
+<p>Create <code>/etc/crypttab.initramfs</code>:</p>
+<pre><code class="language-initramfs">cryptroot UUID=your-uuid none luks,discard
+</code></pre>
+<hr>
+<p>Create <code>/etc/vconsole.conf</code>:</p>
+<p>For example <code>KEYMAP=fr</code> is french</p>
+<pre><code class="language-conf">KEYMAP=us
+FONT=lat9w-16
+</code></pre>
+<hr>
+<p>Edit <code>/etc/mkinitcpio.d/linux-zen.preset</code>, this enables <code>mkinitcpio -P</code> to
+generate a UKI in <code>/boot/EFI/Linux/</code>:</p>
+<pre><code class="language-preset"># mkinitcpio preset file for the 'linux-zen' package
+
+ALL_config="/etc/mkinitcpio.conf"
+ALL_kver="/boot/vmlinuz-linux-zen"
+
+PRESETS=('default' 'fallback')
+# PRESETS=('default')
+
+# default_config="/etc/mkinitcpio.conf"
+# default_image="/boot/initramfs-linux-zen.img"
+default_uki="/boot/EFI/Linux/arch-linux-zen.efi"
+default_options="--splash /usr/share/systemd/bootctl/splash-arch.bmp"
+
+#fallback_config="/etc/mkinitcpio.conf"
+#fallback_image="/boot/initramfs-linux-zen-fallback.img"
+fallback_uki="/boot/EFI/Linux/arch-linux-zen-fallback.efi"
+fallback_options="-S autodetect"
+</code></pre>
+<p>Generate the initial RAM Filesystem (initramfs) image.</p>
+<pre><code class="language-bash">mkinitcpio -P
+</code></pre>
+<blockquote>
+<p>❗️ TIP: If <code>mkinitcpio -P</code> fails, exit <code>arch-chroot</code> and ensure both the boot
+&amp; root partitions are mounted. <code>arch-chroot</code> back into <code>/mnt</code> and try again.
+Ensure that <code>/boot/EFI/Linux/arch-linux-zen.efi</code> and
+<code>/boot/EFI/Linux/arch-linux-zen-fallback.efi</code> exist for your kernel of choice.</p>
+</blockquote>
+<hr>
+<ol start="10">
+<li><strong>Install systemd-boot and setup Unified Kernel Image</strong>, (while still in
+chroot environment):</li>
+</ol>
+<p>Ensure your UEFI variables are accessible:</p>
+<pre><code class="language-bash">efivar --list
+</code></pre>
+<p>This command won’t work if both partitions aren’t mounted, ensure they are both
+mounted and if it still doesn’t work you can use <code>--esp-path=/boot</code> or
+<code>--esp-path=/mnt/boot</code>.</p>
+<pre><code class="language-bash">bootctl install
+</code></pre>
+<p>Edit <code>/etc/kernel/cmdline</code> and add the output of <code>blkid</code> on your root partition.
+For example:</p>
+<pre><code class="language-bash">blkid /dev/nvme0n1p2 &gt; /tmp/uuid.txt
+</code></pre>
+<p>When you open <code>/etc/kernel/cmdline</code> in vim or helix, run <code>:r /tmp/uuid.txt</code> to
+read the UUID of your root partition into the file. You only need the numbers
+like so:</p>
+<pre><code class="language-cmdline">rd.luks.name=7b78e942-f4f7-4dde-a015-3a816305483f=cryptroot root=/dev/mapper/cryptroot rw
+</code></pre>
+<p>In the above example, <code>7b78e942-f4f7-4dde-a015-3a816305483f</code> is the UUID
+extracted from the <code>blkid</code> command.</p>
+<p>Create a <code>/boot/loader/entries/arch.conf</code> with the following:</p>
+<pre><code class="language-conf">title Arch Linux
+linux /vmlinuz-linux-zen
+initrd /initramfs-linux-zen.img
+options rd.luks.name=7b78e942-f4f7-4dde-a015-3a816305483f=cryptroot root=/dev/mapper/cryptroot rw quiet
+</code></pre>
+<blockquote>
+<p>❗️ NOTE: The <code>arch.conf</code> here is redundant because <code>systemd-boot</code> is
+configured to autodetect the UKI. It doesn’t hurt to add it though and can
+prevent issues in the future. Ensure <code>rd.luks.name=</code> contains the UUID from
+the encrypted root partition. (e.g., <code>blkid /dev/nvme0n1p2</code>).</p>
+</blockquote>
+<p>And finally, a <code>/boot/loader/loader.conf</code>:</p>
+<pre><code class="language-conf">default arch.conf
+# default @saved  # return to last choice
+timeout 4
+console-mode auto
+auto-entries 1
+</code></pre>
+<pre><code class="language-bash">bootctl status
+</code></pre>
+<p>Set a password to protect <code>systemd-boot</code> with <code>systemd-boot-password</code>:</p>
+<pre><code class="language-bash">paru -S systemd-boot-password
+</code></pre>
+<pre><code class="language-bash">sudo sbpctl install /boot
+</code></pre>
+<p>You will now be prompted for your password before you can edit kernel
+parameters.</p>
+<hr>
+<p><strong>systemd-ukify and the Unified Kernel Image</strong>:</p>
+<p>We already added <code>systemd-ukify</code> in the pacstrap command, let’s add a few more
+tools for this process:</p>
+<pre><code class="language-bash">sudo pacman -S sbsigntools efitools
+</code></pre>
+<p>Copy the existing template to <code>/etc/kernel/uki.conf</code>:</p>
+<pre><code class="language-bash">cp /usr/lib/kernel/uki.conf /etc/kernel/uki.conf
+</code></pre>
+<p>Edit <code>/etc/kernel/uki.conf</code>:</p>
+<pre><code class="language-conf">[UKI]
+#Initrd=
+#Microcode=
+#Splash=
+#PCRPKey=
+#PCRBanks=
+#SecureBootSigningTool=
+SecureBootPrivateKey=/etc/kernel/secure-boot-private-key.pem
+SecureBootCertificate=/etc/kernel/secure-boot-certificate.pem
+#SecureBootCertificateDir=
+#SecureBootCertificateName=
+#SecureBootCertificateValidity=
+#SigningEngine=
+SignKernel=yes
+</code></pre>
+<p>Generate your signing keys:</p>
+<pre><code class="language-bash">ukify genkey --config /etc/kernel/uki.conf
+</code></pre>
+<p>The above command creates <code>/etc/kernel/secure-boot-certificate.pem</code> and
+<code>/etc/kernel/secure-boot-private-key.pem</code>.</p>
+<p>Building the UKIs:</p>
+<pre><code class="language-bash">mkdir -p /boot/EFI/Linux
+mkinitcpio -P
+# Output
+Wrote signed /boot/EFI/Linux/arch-linux-zen.efi
+==&gt; Unified kernel image generation successful
+</code></pre>
+<p>Sign the boot loader with the new keys:</p>
+<pre><code class="language-bash">/usr/lib/systemd/systemd-sbsign sign \
+--private-key /etc/kernel/secure-boot-private-key.pem \
+--certificate /etc/kernel/secure-boot-certificate.pem \
+--output /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed \
+/usr/lib/systemd/boot/efi/systemd-bootx64.efi
+</code></pre>
+<p>Output:</p>
+<pre><code class="language-text">Wrote signed PE binary to /usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed
+</code></pre>
+<pre><code class="language-bash">sudo bootctl install --secure-boot-auto-enroll yes \
+--certificate /etc/kernel/secure-boot-certificate.pem \
+--private-key /etc/kernel/secure-boot-private-key.pem
+</code></pre>
+<p>Output:</p>
+<pre><code class="language-text">Copied "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed" to "/boot/EFI/systemd/systemd-bootx64.efi".
+    3 Copied "/usr/lib/systemd/boot/efi/systemd-bootx64.efi.signed" to "/boot/EFI/BOOT/BOOTX64.EFI".
+    4 ⚠️  Mount point '/boot' which backs the random seed file is world accessible, which is a security hole!  ⚠️
+    5 ⚠️ Random seed file '/boot/loader/random-seed' is world accessible, which is a security hole! ⚠️
+    6 Random seed file /boot/loader/random-seed successfully refreshed (32 bytes).
+    7 Secure boot auto-enrollment file /boot/loader/keys/auto/PK.auth successfully written.
+    8 Secure boot auto-enrollment file /boot/loader/keys/auto/KEK.auth successfully written.
+    9 Secure boot auto-enrollment file /boot/loader/keys/auto/db.auth successfully written.
+   10 Created EFI boot entry "Linux Boot Manager".
+</code></pre>
+<p>Fix the security hole:</p>
+<pre><code class="language-bash">chmod 700 /boot
+</code></pre>
+<p>Add the following to your <code>/boot/loader/loader.conf</code>:</p>
+<pre><code class="language-conf">secure-boot-enroll force
+</code></pre>
+<p>Reboot into setup-mode and it will start an automatic countdown where it enrolls
+your keys when the time runs out.</p>
+<p>After successful key enrollment, reboot into UEFI again, enable Secure Boot and
+reboot.</p>
+<p>When the desktop launches, check the output of <code>bootctl status</code> to ensure
+<code>Secure Boot: enabled (user)</code></p>
+<p>If your system doesn’t accept them, you may have to do some conversions. You can
+also add the keys manually which is what I did.</p>
+<details>
+<summary> ✔️ Click to Expand conversion Examples </summary>
+<pre><code class="language-bash"># Create workspace for certs and outputs
+mkdir -p ~/secureboot/output
+
+# Define certificate location
+CERT_PEM="/etc/kernel/secure-boot-certificate.pem"
+
+# Convert PEM cert to DER format for UEFI enrollment
+sudo openssl x509 -in $CERT_PEM -out ~/secureboot/output/db.cer -outform DER
+
+# Convert PEM cert to EFI Signature List
+cert-to-efi-sig-list $CERT_PEM ~/secureboot/output/db.esl
+
+# Sign the Signature List (run from wherever your private key is; do not copy it)
+sudo sign-efi-sig-list -k /etc/kernel/secure-boot-private-key.pem -c $CERT_PEM db \
+    ~/secureboot/output/db.esl ~/secureboot/output/db.auth
+</code></pre>
+<p>Manual Key Enrollment:</p>
+<ul>
+<li>
+<p><code>db.cer</code> -&gt; enroll in db (Trusted Signatures), Choose the desired drive, find
+the file and add it. Save as an <code>Authorized Signature</code> instead of <code>Public Key</code></p>
+</li>
+<li>
+<p><code>PK.cer</code> -&gt; enroll in <code>Platform Key</code>(PK)</p>
+</li>
+<li>
+<p>Keep your <code>secure-boot-private-key.pem</code> <strong>private</strong>, with the above commands
+we only use it when signing, and otherwise keep it protected.</p>
+</li>
+</ul>
+</details>
+<hr>
+<ol start="11">
+<li><strong>Enable LightDM and NetworkManager</strong></li>
+</ol>
+<pre><code class="language-bash">systemctl enable lightdm
+systemctl enable NetworkManager
+</code></pre>
+<blockquote>
+<p>❗️ NOTE: If you’re ever unable to run the above commands in the chroot
+environment, exit chroot and run:</p>
+<pre><code class="language-bash">systemctl --root=/mnt enable lightdm
+systemctl --root=/mnt enable NetworkManager
+</code></pre>
+</blockquote>
+<p>Configure LightDM greeter, edit <code>/etc/lightdm/lightdm.conf</code> to add:</p>
+<pre><code class="language-conf"># lightdm.conf
+[Seat:*]
+greeter-session=lightdm-gtk-greeter
+</code></pre>
+<p>Exit <code>arch-chroot</code> with <code>exit</code></p>
+<p>Unmount your partitions and reboot:</p>
+<pre><code class="language-bash">umount /mnt/boot
+umount /mnt
+cryptsetup close cryptroot
+</code></pre>
+<hr>
+<ol start="12">
+<li><strong>Reboot</strong></li>
+</ol>
+<pre><code class="language-bash">bootctl status
+System:
+      Firmware: UEFI 2.70 (American Megatrends)
+ Firmware Arch: x64
+   Secure Boot: enabled (user)
+  TPM2 Support: yes
+  Measured UKI: yes
+  Boot into FW: supported
+</code></pre>
+<hr>
+<h3 id="creating-a-readonly-snapshot-of-your-root-subvolume"><a class="header" href="#creating-a-readonly-snapshot-of-your-root-subvolume">Creating a readonly snapshot of your root subvolume:</a></h3>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/System_backup">Arch Wiki System Backup</a></li>
+</ul>
+<details>
+<summary> ✔️ Click to Expand snapshot &amp; Backup Example </summary>
+<ol>
+<li>Create readonly snapshot of root subvol:</li>
+</ol>
+<pre><code class="language-bash">sudo btrfs subvolume snapshot -r / /root-snapshot-$(date +%Y%m%d%H%M%S)
+</code></pre>
+<ol start="2">
+<li>Mount your external backup disk:</li>
+</ol>
+<pre><code class="language-bash">sudo mkdir -p /mnt/backup
+sudo mount /dev/sdc1 /mnt/backup
+</code></pre>
+<ol start="3">
+<li>Use rsync to copy the snapshot to the external drive:</li>
+</ol>
+<p>List the available snapshots and get the exact name:</p>
+<pre><code class="language-bash">sudo btrfs subvolume list /
+</code></pre>
+<pre><code class="language-bash">sudo rsync -aAXv --delete --progress /root-snapshot-20251002135000/ /mnt/backup/root-backup/
+</code></pre>
+<ol start="4">
+<li>Unmount the external drive:</li>
+</ol>
+<pre><code class="language-bash">sudo umount /mnt/backup
+</code></pre>
+<ol start="5">
+<li>Optionally, delete older snapshots to save space:</li>
+</ol>
+<pre><code class="language-bash">sudo btrfs subvolume delete /root-snapshot-OLD_TIMESTAMP
+</code></pre>
+<h3 id="restoring-from-a-backup"><a class="header" href="#restoring-from-a-backup">Restoring from a Backup</a></h3>
+<p>For this, you mount the partitions but don’t need to <code>arch-chroot</code> in.</p>
+<ol>
+<li>
+<p>Boot from a live USB</p>
+</li>
+<li>
+<p>Mount your encrypted root partition (unlock if encrypted) and the external
+backup drive.</p>
+</li>
+<li>
+<p>Move or delete the corrupted data on the root partition.</p>
+</li>
+<li>
+<p>Use rsync to copy the backed-up snapshot from the external disk back to the
+root partition, preserving permissions and attributes.</p>
+</li>
+</ol>
+<pre><code class="language-bash">sudo rsync -aAXv --delete /mnt/backup/root-backup/ /
+</code></pre>
+<p>Or, the Wiki’s suggestion, (Much more efficient, Direct backup of a running
+system without the need for btrfs snapshots):</p>
+<pre><code class="language-bash">sudo rsync -aAXHv --exclude='/dev/*' --exclude='/proc/*' --exclude='/sys/*' --exclude='/tmp/*' --exclude='/run/*' --exclude='/mnt/*' --exclude='/media/*' --exclude='/lost+found/' / /path/to/backup
+</code></pre>
+<ul>
+<li>
+<p><code>/mnt/backup/root-backup/</code> is the path where the backup snapshot is mounted on
+the external disk.</p>
+</li>
+<li>
+<p><code>/</code> is the root partition mount point where you want to restore the files.</p>
+</li>
+<li>
+<p>The options:</p>
+<ul>
+<li>
+<p><code>-a</code> archive mode to preserve symbolic links, permissions, timestamps, etc.</p>
+</li>
+<li>
+<p><code>-A</code> preserve ACLs (access control lists).</p>
+</li>
+<li>
+<p><code>-X</code> preserve extended attributes.</p>
+</li>
+<li>
+<p><code>-v</code> verbose output.</p>
+</li>
+<li>
+<p><code>--delete</code> deletes files on the destination that don’t exist in the source,
+keeping an exact mirror.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>If you want to restore a specific snapshot directory (e.g.,
+<code>/root-snapshot-20251002135000</code>), replace the source path accordingly, like:</p>
+<pre><code class="language-bash">sudo rsync -aAXv --delete /mnt/backup/root-snapshot-20251002135000/ /
+</code></pre>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/Rsync#As_a_backup_utility">Arch Wiki rsync</a></li>
+</ul>
+<ol start="5">
+<li>
+<p>Reinstall the bootloader if necessary.</p>
+</li>
+<li>
+<p>Unmount everything and reboot.</p>
+</li>
+</ol>
+<h3 id="automated-backup"><a class="header" href="#automated-backup">Automated backup</a></h3>
+<p>Create <code>/etc/cron.daily/backup</code>:</p>
+<pre><code class="language-backup">#!/bin/sh
+rsync -a --delete --quiet /path/to/backup /location/of/backup
+</code></pre>
+<p>Change <code>/path/to/backup</code> to what needs to be backed-up such as <code>/home</code> or <code>/</code></p>
+</details>
+<hr>
+<h3 id="arch-chroot"><a class="header" href="#arch-chroot">arch-chroot</a></h3>
+<details>
+<summary>  ✔️ Click to Expand `arch-chroot` Example </summary>
+<p>Say you forgot something, like forgetting to add a user and password. You reboot
+and go to TTY into your system and are hit with a AHHH I can’t log in WTF!</p>
+<p>It’s as easy as repeating some of the steps above. Reboot into the Live
+environment, remount your partitions and <code>arch-chroot</code> back in:</p>
+<p>Open the encrypted root partition:</p>
+<pre><code class="language-bash">cryptsetup open /dev/nvme0n1p2 cryptroot
+</code></pre>
+<p>Mount the decrypted root:</p>
+<pre><code class="language-bash">mount /dev/mapper/cryptroot /mnt
+</code></pre>
+<p>Mount the EFI partition:</p>
+<pre><code class="language-bash">mount /dev/nvme0n1p1 /mnt/boot
+</code></pre>
+<p>Chroot into your installed system:</p>
+<pre><code class="language-bash">arch-chroot /mnt
+</code></pre>
+<pre><code class="language-bash">useradd -m -G wheel -s /bin/bash yourusername passwd yourusername
+</code></pre>
+<ul>
+<li>The <code>-s /bin/bash</code> sets your default shell, you can use zsh if you have it
+installed.</li>
+</ul>
+<p>Uncomment the line <code>%wheel ALL=(ALL:All) ALL</code> in <code>/etc/sudoers</code></p>
+<p>Exit chroot:</p>
+<pre><code class="language-bash">exit
+</code></pre>
+<p>Unmount and close LUKS:</p>
+<pre><code class="language-bash">umount /mnt/boot
+umount /mnt
+cryptsetup close cryptroot
+reboot
+</code></pre>
+</details>
+<h3 id="resources"><a class="header" href="#resources">Resources</a></h3>
+<details>
+<summary> ✔️ Click to Expand Resources </summary>
+<ul>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Installation_guide">Arch Wiki Installation Guide</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface/Secure_Boot">Arch Wiki UKI/SecureBoot</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Unified_kernel_image">Wiki UKI</a></p>
+</li>
+<li>
+<p><a href="https://wiki.archlinux.org/title/Systemd-boot">Wiki systemd-boot</a></p>
+</li>
+</ul>
+</details>
+<footer id="kanagawa-support-footer" style="text-align:center; margin-top: 3rem; font-size: 0.85em; opacity: 0.75;">
+  
+<p><a href="https://github.com/saylesss88/mdbook-kanagawa-theme">Made with mdbook-kanagawa-theme</a></p>
+
+</footer>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../android/RethinkDNS_Guide.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="../arch/enc_dns.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../android/RethinkDNS_Guide.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="../arch/enc_dns.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr-ef4e11c1.min.js"></script>
+        <script src="../mark-09e88c2c.min.js"></script>
+        <script src="../searcher-c2a407aa.js"></script>
+
+        <script src="../clipboard-1626706a.min.js"></script>
+        <script src="../highlight-abc7f01d.js"></script>
+        <script src="../book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../theme/header-buttons-02f32270.js"></script>
+        <script src="../theme/nix_http-971fb95c.js"></script>
+
+
+
+    </div>
+    </body>
+</html>
