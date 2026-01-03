@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>privacy-book</title><id>/atom.xml</id><updated>1970-01-01T00:00:00+00:00</updated><link href="/atom.xml" rel="self"/><subtitle>An mdBook-generated site</subtitle><entry><title>RethinkDNS</title><id>/android/RethinkDNS_Guide.html</id><updated>2025-12-07T00:00:00+00:00</updated><link href="/android/RethinkDNS_Guide.html" rel="alternate"/><content type="html">&lt;h1&gt;RethinkDNS&lt;/h1&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>privacy-book</title><id>https://mako088.github.io/atom.xml</id><updated>1970-01-01T00:00:00+00:00</updated><link href="https://mako088.github.io/atom.xml" rel="self"/><subtitle>An mdBook-generated site</subtitle><entry><title>RethinkDNS</title><id>https://mako088.github.io/android/RethinkDNS_Guide.html</id><updated>2025-12-07T00:00:00+00:00</updated><link href="https://mako088.github.io/android/RethinkDNS_Guide.html" rel="alternate"/><content type="html">&lt;h1&gt;RethinkDNS&lt;/h1&gt;
 &lt;details&gt;
-&lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
+&lt;summary&gt; ✔️ Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
 &lt;/details&gt;
 &lt;p&gt;&lt;img src=&quot;../images/rethinkdns.cleaned.png&quot; alt=&quot;RethinkDNS Logo&quot; /&gt;&lt;/p&gt;
@@ -237,7 +237,8 @@ apps, preventing them from connecting without permission.&lt;/p&gt;
 &lt;p&gt;I will share how I use RethinkDNS, obviously feel free to make changes based on
 your threat model and needs.&lt;/p&gt;
 &lt;p&gt;Different versions of the RethinkDNS have different features and capabilities.
-The best version in my opinion is the F-Droid version.&lt;/p&gt;
+The best version in my opinion is the F-Droid version. Rather than try to cover
+all versions, I will only cover the F-Droid version in this guide.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://f-droid.org/en/&quot;&gt;F-Droid Download&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -283,29 +284,30 @@ first to use DNSSEC cryptographic validation.&lt;/p&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Mullvad DNS&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Mullvad DNS&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://mullvad.net/en/help/privacy-policy&quot;&gt;Mullvad privacy policy&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;NextDNS&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;NextDNS&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://nextdns.io/privacy&quot;&gt;NextDNS privacy policy&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Cloudflare publishes regular transparency reports and undergoes independent
-audits and have a great blog explaining the technology which is a major plus.
-GrapheneOS sets Cloudflare as the fallback due to their good privacy policy,
-and widespread usage.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cloudflare&lt;/strong&gt; publishes regular transparency reports and undergoes
+independent audits and have a great blog explaining the technology which is a
+major plus. GrapheneOS sets Cloudflare as the fallback due to their good
+privacy policy, and widespread usage.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://www.cloudflare.com/privacypolicy/&quot;&gt;Cloudflare Privacy Policy&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;RethinkDNS: Their DNS code is open source so anyone can audit it themselves.
-They do not collect PII nor seek to profile its users, transparency is great.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;RethinkDNS&lt;/strong&gt;: Their DNS code is open source so anyone can audit it
+themselves. They do not collect PII nor seek to profile its users,
+transparency is great.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://rethinkdns.com/privacy&quot;&gt;DNS Privacy Policy for stub resolvers&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://fly.io/legal/privacy-policy/&quot;&gt;Fly.io privacy policy for the recursive resolver&lt;/a&gt;&lt;/li&gt;
@@ -334,6 +336,7 @@ choose a VPN either.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://cyberinsider.com/internet-service-providers-isp-privacy-data-collection/&quot;&gt;ISP data-collection&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3&gt;Configuring DNS&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; Other DNS&lt;/code&gt;:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -365,8 +368,6 @@ forwards it to a user-set DNS endpoint.&lt;/p&gt;
 &lt;/ul&gt;
 &lt;p&gt;Leave all the &lt;code&gt;Advanced&lt;/code&gt; defaults unless you plan on setting up a SOCKS5 proxy,
 in which case you will want to enable &lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; Never proxy DNS&lt;/code&gt;.&lt;/p&gt;
-&lt;hr /&gt;
-&lt;p&gt;F-Droid Specific:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;code&gt;Split DNS (experimental)&lt;/code&gt;: Forward DNS queries from proxied apps to the
@@ -391,12 +392,12 @@ internal domains is needed.&lt;/p&gt;
 &lt;p&gt;This is a cool feature, similar to NextDNS if I understand correctly. Since it’s
 a system-wide DNS filter it applys to any app that is run through Rethink, not
 only your browser, &lt;strong&gt;every app&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;Blocklists are available when you use Rethink’s DNS.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; Rethink DNS&lt;/code&gt;:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;Choose between &lt;code&gt;Sky&lt;/code&gt; with higher uptime and a stub resolver at cloudflare.com,
-OR &lt;code&gt;Max&lt;/code&gt; which is more private and has its recursive resolver at fly.io.&lt;/p&gt;
+&lt;p&gt;Choose between &lt;code&gt;Sky&lt;/code&gt; with higher uptime and a stub resolver at
+&lt;code&gt;cloudflare.com&lt;/code&gt;, OR &lt;code&gt;Max&lt;/code&gt; which is more private and has its recursive
+resolver at &lt;code&gt;fly.io&lt;/code&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Choose between the preconfigured blocklists, OR Click &lt;code&gt;RDNS Plus&lt;/code&gt;, &lt;code&gt;EDIT&lt;/code&gt;,
@@ -416,14 +417,8 @@ enable &lt;code&gt;Prompt on blocklist update&lt;/code&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr /&gt;
-&lt;p&gt;&lt;strong&gt;F-Droid &amp;amp; Github Versions&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;When on the F-Droid and GitHub versions of the Rethink, you can download
-blocklists from &lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; On-device blocklists&lt;/code&gt;, and have them setup
-for &lt;strong&gt;any&lt;/strong&gt; DNS upstream.&lt;/p&gt;
-&lt;p&gt;There is a known bug where it sometimes when you click &lt;code&gt;DOWNLOAD BLOCKLISTS&lt;/code&gt; it
-just keeps listening and never receives anything. The GitHub &lt;code&gt;v05.5n&lt;/code&gt; was
-affected by this.&lt;/p&gt;
-&lt;p&gt;This &lt;strong&gt;does work&lt;/strong&gt; on the F-Droid version.&lt;/p&gt;
+&lt;p&gt;You can download blocklists from &lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; On-device blocklists&lt;/code&gt;, and
+have them setup for &lt;strong&gt;any&lt;/strong&gt; DNS upstream.&lt;/p&gt;
 &lt;p&gt;For example, if you want to use ODoH with the HAGEZI Blocklist you could:&lt;/p&gt;
 &lt;p&gt;Go to &lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; Other DNS&lt;/code&gt;, Choose &lt;code&gt;ODoH&lt;/code&gt; with &lt;code&gt;Cloudflare&lt;/code&gt;. Start
 it.&lt;/p&gt;
@@ -434,8 +429,7 @@ MULTI PRO++ and maybe oisd small, then press &lt;code&gt;APPLY (ON-DEVICE)&lt;/c
 &lt;p&gt;Now any app that doesn’t bypass Rethink will use your chosen blocklists, denying
 access to malicious URLs.&lt;/p&gt;
 &lt;p&gt;The HAGEZI blocklists are respected for being updated frequently. There are
-different levels with MULTI PRO++ (HAGEZI) being the highest and 4 other lest
-strict levels.&lt;/p&gt;
+different levels with &lt;code&gt;Ultimate (HAGEZI)&lt;/code&gt; being the highest.&lt;/p&gt;
 &lt;hr /&gt;
 &lt;h3&gt;Network&lt;/h3&gt;
 &lt;p&gt;Settings explained:&lt;/p&gt;
@@ -461,6 +455,38 @@ queries made by the app itself, back into the encrypted tunnel through the
 loopback device.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Proxy&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Do not randomize WireGuard listen port&lt;/strong&gt;: Keep WireGuard listen ports fixed
+(no randomization) in Advanced mode. Enabling it makes the tunnel’s local UDP
+port predictable, which is useful for port-forwarding, firewall rules, and any
+setup where the device must be reachable on a known port.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Endpoint-Independent mapping&lt;/strong&gt;: When enabled, UDP sockets maintain a fixed
+address and port for all destinations. Turn this on for UDP-based
+P2P/NAT-traversal scenarios: it keeps one stable UDP mapping for a socket
+across multiple destinations, improving compatibility with hole punching /
+ICE-style flows.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;TCP / IP&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Shorter TCP keep alive&lt;/strong&gt;: Quickly close TCP sockets with no recent activity.
+Use when the device is accumulating lots of idle TCP connections and you’d
+rather reclaim resources quickly (and accept that some apps may need to
+reconnect more often).&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Idle timeout&lt;/strong&gt;: Close idle TCP and UDP sockets after this duration. It
+closes TCP/UDP sockets that have had no traffic for the configured duration,
+which reduces the amount of long-lived idle state your device (and the network
+path) has to keep around. I am testing &lt;strong&gt;5 minutes&lt;/strong&gt; now, lower is more
+aggressive, set it higher if you notice reconnect churn or app breakage.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Setting&lt;/th&gt;&lt;th&gt;Function&lt;/th&gt;&lt;th&gt;When to Use&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;
 &lt;tr&gt;&lt;td&gt;Loopback Proxy Forwarder Apps&lt;/td&gt;&lt;td&gt;Route proxy-forwarder app traffic back into Rethink VPN tunnel&lt;/td&gt;&lt;td&gt;When you want consistent VPN/privacy coverage for proxies&lt;/td&gt;&lt;/tr&gt;
 &lt;tr&gt;&lt;td&gt;Do Not Route Private IPs&lt;/td&gt;&lt;td&gt;Avoid routing local network/private IP traffic through VPN (send directly)&lt;/td&gt;&lt;td&gt;To access local devices without VPN bottlenecks&lt;/td&gt;&lt;/tr&gt;
@@ -469,6 +495,7 @@ loopback device.&lt;/p&gt;
 &lt;p&gt;NOTE: The above settings are disabled by default because some are experimental
 and can easily break functionality. I have found that the settings below give
 the most functionality without breakage 👇️:&lt;/p&gt;
+&lt;h3&gt;Configuring Networking&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;Configure -&amp;gt; Network&lt;/code&gt;:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -480,10 +507,29 @@ be used at the same time by Rethink. (Optional, may use more battery)&lt;/p&gt;
 &lt;code&gt;IPv6 (experimental)&lt;/code&gt; and &lt;code&gt;Auto (experimental)&lt;/code&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Stall on network loss&lt;/strong&gt;: Not a full VPN kill switch, but kill-switch-like on
+outages: when the device has no connectivity, Rethink stalls all traffic so
+apps can’t keep retrying or leaking during the gap.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Meter mobile networks&lt;/strong&gt;: It reduces mobile data usage by telling Android/app
+code that cellular is a metered link, so background transfers and heavy
+downloads are more likely to wait for Wi‑Fi. (Optional)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Connection change policy&lt;/strong&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Most users should leave set to &lt;strong&gt;Auto&lt;/strong&gt; because it aims to react to
+&lt;em&gt;important&lt;/em&gt; changes without trashing the tunnel on noisy events.&lt;/li&gt;
+&lt;li&gt;If connectivity doesn’t recover fast on transitions: try &lt;strong&gt;Sensitive&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;If Rethink seems to flap/restart too often on your network: try &lt;strong&gt;Relaxed&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
 &lt;p&gt;&lt;strong&gt;Choose fallback DNS&lt;/strong&gt;: When your user-preferred DNS is not reachable,
 fallback DNS will used.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;With the F-Droid version in &lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; ADVANCED&lt;/code&gt;. You can enable
+&lt;li&gt;In &lt;code&gt;Configure -&amp;gt; DNS -&amp;gt; ADVANCED&lt;/code&gt;. You can enable
 &lt;code&gt;Use fallback DNS as bypass&lt;/code&gt;, which always uses fallback DNS for bypassed
 apps, domains, and IPs.&lt;/li&gt;
 &lt;/ul&gt;
@@ -500,7 +546,7 @@ require this)&lt;/li&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr /&gt;
-&lt;h3&gt;Firewall&lt;/h3&gt;
+&lt;h3&gt;Configuring the Firewall&lt;/h3&gt;
 &lt;p&gt;&lt;code&gt;Configure -&amp;gt; Firewall -&amp;gt; Universal firewall rules&lt;/code&gt; and set the following to ON:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
@@ -511,6 +557,36 @@ require this)&lt;/li&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;&lt;code&gt;Block port 80 (insecure HTTP) traffic&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Optional&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Block on metered (mobile) network&lt;/code&gt;: Use if you have limited data and want to
+do the heavy lifting with WiFi.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Block when source app is unknown&lt;/code&gt;: Enable this for a stricter, ‘block
+unattributed traffic’ posture; if anything breaks (missing notifications /
+random app connectivity issues), disable it first and check logs for ‘unknown’
+blocks.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use &lt;code&gt;Block UDP except DNS and NTP&lt;/code&gt; when the goal is to make the device behave
+like a “TCP-only internet client” (plus the minimum UDP needed for name
+resolution and time sync), which can reduce attack surface and shut down whole
+classes of UDP-based bypass channels. Avoid if you need UDP-heavy apps: WebRTC
+voice/video, many online games, some VPNs, some streaming/live calls, device
+discovery, and some enterprise tooling will degrade or fail when UDP is
+broadly blocked.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;Block all except bypassed apps and IPs&lt;/code&gt;: All traffic is blocked to everything
+&lt;strong&gt;except&lt;/strong&gt; apps you’ve marked as bypassed (&lt;em&gt;Bypass Universal&lt;/em&gt;, &lt;em&gt;Bypass DNS &amp;amp;
+Firewall&lt;/em&gt;, &lt;em&gt;Isolate&lt;/em&gt;) and IPs you’ve explicitly trusted/allowed. Expect
+breakage until bypasses are configured. If an app is “bypassed” Rethink is
+still able to monitor/apply app-specific rules, whereas exclude removes the
+app from Rethink’s control entirely (last resort).&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;You can get more restrictive from here, but it will take some manual
@@ -539,7 +615,7 @@ some apps require special permissions or bypasses due to their network behavior.
 Many apps rely on multiple external services, backend APIs, etc. that may be
 blocked by the firewall.&lt;/p&gt;
 &lt;hr /&gt;
-&lt;h3&gt;Apps that Don’t work&lt;/h3&gt;
+&lt;h3&gt;Apps that Don’t Work&lt;/h3&gt;
 &lt;p&gt;I will use Reddit as an example, the process is the same for any app. Reddit’s
 app and website rely on multiple third-party services and external domains
 beyond just &lt;code&gt;reddit.com&lt;/code&gt; itself.&lt;/p&gt;
@@ -801,7 +877,7 @@ can be opted out of.&lt;/p&gt;
 network access to every app. We will then go through and only enable networking
 for the apps that we need and trust.&lt;/p&gt;
 &lt;details&gt;
-&lt;summary&gt; ✔️ Click to Expand Android Privacy Tips for the paranoid &lt;/summary&gt;
+&lt;summary&gt; ✔️ Android Privacy Tips for the paranoid &lt;/summary&gt;
 &lt;p&gt;If you don’t like the idea of someone forcing you to unlock your phone so they
 can sift through your data:&lt;/p&gt;
 &lt;ul&gt;
@@ -972,7 +1048,27 @@ that lets you support devs without PII.&lt;/p&gt;
 &lt;a href=&quot;https://github.com/Crazy-Marvin/MetadataRemover&quot;&gt;Metadata Remover&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr /&gt;
+&lt;h4&gt;Default Search Engines&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;Startpage&lt;/strong&gt;: Advertised as the world’s most private search engine. “Startpage
+delivers Google search results via their proprietary personal data protection
+technology.”&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.startpage.com/&quot;&gt;Startpage&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;To add Startpage as a search engine, add
+&lt;code&gt;https://www.startpage.com/sp/search?query=%s&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;SearXNG&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;❗️ NOTE: SearXNGs google results are not working as of 11-17-25 and haven’t
+for a while now leading to bad results being returned for most instances. It’s
+my understanding this is because Google is actively blocking automated
+requests from SearXNG. Devs sometimes publish patches or workarounds, but
+these are quickly blocked when Google changes their back-end.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;While we’re on the topic of browsers, it’s worth considering a privacy-focused
 metasearch engine like SearXNG. SearXNG anonymizes your search queries and
 removes any identifying data before passing them along to Google or other search
@@ -1000,6 +1096,7 @@ highest level of privacy and full control, running your own instance is the
 best option—though it requires more setup. Using public instances is a great
 way to get started and improve privacy compared to regular search engines.&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;hr /&gt;
 &lt;p&gt;&lt;strong&gt;Browser compartmentalization&lt;/strong&gt; is a technique where you use multiple browsers
 to separate different types of online activities. Instead of doing all browsing
 in a single browser, you dedicate specific browsers to distinct tasks, for
@@ -1024,7 +1121,7 @@ the major browsers and browser engines:&lt;/p&gt;
 &lt;/ul&gt;
 &lt;hr /&gt;
 &lt;details&gt;
-&lt;summary&gt; ✔️ Click to Expand uBlock Guide &lt;/summary&gt;
+&lt;summary&gt; ✔️ uBlock Guide &lt;/summary&gt;
 &lt;h2&gt;uBlock Origin&lt;/h2&gt;
 &lt;p&gt;Arkenfox and Betterfox are JavaScript configuration files used to harden/control
 Firefox settings on a computer.&lt;/p&gt;
@@ -1707,9 +1804,7 @@ state-of-the-art cryptography. –&lt;a href=&quot;https://www.wireguard.com/&qu
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
-&lt;pre&gt;&lt;code class=&quot;language-nix&quot;&gt;&quot;goodbye ${ { d = &quot;world&quot;;}.d}&quot;
-&lt;/code&gt;&lt;/pre&gt;
-</content></entry><entry><title>Encrypted DNS on Arch</title><id>/arch/enc_dns.html</id><updated>2025-12-05T00:00:00+00:00</updated><link href="/arch/enc_dns.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted DNS ArchLinux with dnscrypt-proxy &amp;amp; dnsmasq&lt;/h1&gt;
+</content></entry><entry><title>Encrypted DNS on Arch</title><id>https://mako088.github.io/arch/enc_dns.html</id><updated>2025-12-05T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/enc_dns.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted DNS ArchLinux with dnscrypt-proxy &amp;amp; dnsmasq&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
@@ -2114,7 +2209,7 @@ net.ipv6.conf.wlp3s0.use_tempaddr = 2
 &lt;pre&gt;&lt;code class=&quot;language-conf&quot;&gt;[connection]
 ipv6.ip6-privacy=2
 &lt;/code&gt;&lt;/pre&gt;
-</content></entry><entry><title>index</title><id>/index.html</id><updated>2025-12-03T00:05:27+00:00</updated><link href="/index.html" rel="alternate"/><content type="html"></content></entry><entry><title>Hardening Networking</title><id>/arch/hardening_networking.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="/arch/hardening_networking.html" rel="alternate"/><content type="html">&lt;pre&gt;&lt;code class=&quot;language-nix&quot;&gt;2 + 2
+</content></entry><entry><title>index</title><id>https://mako088.github.io/index.html</id><updated>2025-12-03T00:05:27+00:00</updated><link href="https://mako088.github.io/index.html" rel="alternate"/><content type="html"></content></entry><entry><title>Hardening Networking</title><id>https://mako088.github.io/arch/hardening_networking.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/hardening_networking.html" rel="alternate"/><content type="html">&lt;pre&gt;&lt;code class=&quot;language-nix&quot;&gt;2 + 2
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1&gt;Hardening Networking&lt;/h1&gt;
 &lt;p&gt;NetworkManagers global config is &lt;code&gt;/etc/NetworkManager/NetworkManager.conf&lt;/code&gt;.
@@ -2243,7 +2338,7 @@ recommended.&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://wiki.archlinux.org/title/NetworkManager&quot;&gt;Arch Wiki NetworkManager&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-</content></entry><entry><title>Encrypted Arch Install</title><id>/arch/enc_install.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="/arch/enc_install.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted Arch Install for UEFI Systems with UKI and Secure Boot&lt;/h1&gt;
+</content></entry><entry><title>Encrypted Arch Install</title><id>https://mako088.github.io/arch/enc_install.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/enc_install.html" rel="alternate"/><content type="html">&lt;h1&gt;Encrypted Arch Install for UEFI Systems with UKI and Secure Boot&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
@@ -3002,7 +3097,7 @@ reboot
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
-</content></entry><entry><title>Hardening Firefox</title><id>/arch/hardening_firefox.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="/arch/hardening_firefox.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Firefox on Arch&lt;/h1&gt;
+</content></entry><entry><title>Hardening Firefox</title><id>https://mako088.github.io/arch/hardening_firefox.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/hardening_firefox.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Firefox on Arch&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;
@@ -3891,7 +3986,7 @@ also lets you create phone number aliases that forward to your phone number.&lt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/details&gt;
-</content></entry><entry><title>Hardening Arch</title><id>/arch/hardening_arch.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="/arch/hardening_arch.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Arch Linux&lt;/h1&gt;
+</content></entry><entry><title>Hardening Arch</title><id>https://mako088.github.io/arch/hardening_arch.html</id><updated>2025-11-28T00:00:00+00:00</updated><link href="https://mako088.github.io/arch/hardening_arch.html" rel="alternate"/><content type="html">&lt;h1&gt;Hardening Arch Linux&lt;/h1&gt;
 &lt;details&gt;
 &lt;summary&gt; ✔️ Click to Expand Table of Contents&lt;/summary&gt;
 &lt;!-- toc --&gt;

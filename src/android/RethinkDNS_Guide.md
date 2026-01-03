@@ -10,7 +10,7 @@ draft: false
 # RethinkDNS
 
 <details>
-<summary> ✔️ Click to Expand Table of Contents</summary>
+<summary> ✔️ Table of Contents</summary>
 
 <!-- toc -->
 
@@ -214,7 +214,8 @@ I will share how I use RethinkDNS, obviously feel free to make changes based on
 your threat model and needs.
 
 Different versions of the RethinkDNS have different features and capabilities.
-The best version in my opinion is the F-Droid version.
+The best version in my opinion is the F-Droid version. Rather than try to cover
+all versions, I will only cover the F-Droid version in this guide.
 
 - [F-Droid Download](https://f-droid.org/en/)
 
@@ -261,20 +262,21 @@ A few examples:
   first to use DNSSEC cryptographic validation.
   - [Quad9 privacy policy](https://quad9.net/privacy/policy/)
 
-- Mullvad DNS
+- **Mullvad DNS**
   - [Mullvad privacy policy](https://mullvad.net/en/help/privacy-policy)
 
-- NextDNS
+- **NextDNS**
   - [NextDNS privacy policy](https://nextdns.io/privacy)
 
-- Cloudflare publishes regular transparency reports and undergoes independent
-  audits and have a great blog explaining the technology which is a major plus.
-  GrapheneOS sets Cloudflare as the fallback due to their good privacy policy,
-  and widespread usage.
+- **Cloudflare** publishes regular transparency reports and undergoes
+  independent audits and have a great blog explaining the technology which is a
+  major plus. GrapheneOS sets Cloudflare as the fallback due to their good
+  privacy policy, and widespread usage.
   - [Cloudflare Privacy Policy](https://www.cloudflare.com/privacypolicy/)
 
-- RethinkDNS: Their DNS code is open source so anyone can audit it themselves.
-  They do not collect PII nor seek to profile its users, transparency is great.
+- **RethinkDNS**: Their DNS code is open source so anyone can audit it
+  themselves. They do not collect PII nor seek to profile its users,
+  transparency is great.
   - [DNS Privacy Policy for stub resolvers](https://rethinkdns.com/privacy)
   - [Fly.io privacy policy for the recursive resolver](https://fly.io/legal/privacy-policy/)
 
@@ -299,6 +301,8 @@ Unfortunately, with a VPN you are also just shifting the trust. Don't blindly
 choose a VPN either.
 
 - [ISP data-collection](https://cyberinsider.com/internet-service-providers-isp-privacy-data-collection/)
+
+### Configuring DNS
 
 `Configure -> DNS -> Other DNS`:
 
@@ -325,10 +329,6 @@ choose a VPN either.
 Leave all the `Advanced` defaults unless you plan on setting up a SOCKS5 proxy,
 in which case you will want to enable `Configure -> DNS -> Never proxy DNS`.
 
----
-
-F-Droid Specific:
-
 - `Split DNS (experimental)`: Forward DNS queries from proxied apps to the
   proxy's DNS servers.
 
@@ -350,12 +350,11 @@ This is a cool feature, similar to NextDNS if I understand correctly. Since it's
 a system-wide DNS filter it applys to any app that is run through Rethink, not
 only your browser, **every app**.
 
-Blocklists are available when you use Rethink's DNS.
-
 `Configure -> DNS -> Rethink DNS`:
 
-- Choose between `Sky` with higher uptime and a stub resolver at cloudflare.com,
-  OR `Max` which is more private and has its recursive resolver at fly.io.
+- Choose between `Sky` with higher uptime and a stub resolver at
+  `cloudflare.com`, OR `Max` which is more private and has its recursive
+  resolver at `fly.io`.
 
 - Choose between the preconfigured blocklists, OR Click `RDNS Plus`, `EDIT`,
   `ADVANCED`, Search blocklists: `hagezi`, `Multi Pro++ (HaGeZi)`,
@@ -371,17 +370,8 @@ Blocklists are available when you use Rethink's DNS.
 
 ---
 
-**F-Droid & Github Versions**
-
-When on the F-Droid and GitHub versions of the Rethink, you can download
-blocklists from `Configure -> DNS -> On-device blocklists`, and have them setup
-for **any** DNS upstream.
-
-There is a known bug where it sometimes when you click `DOWNLOAD BLOCKLISTS` it
-just keeps listening and never receives anything. The GitHub `v05.5n` was
-affected by this.
-
-This **does work** on the F-Droid version.
+You can download blocklists from `Configure -> DNS -> On-device blocklists`, and
+have them setup for **any** DNS upstream.
 
 For example, if you want to use ODoH with the HAGEZI Blocklist you could:
 
@@ -397,8 +387,7 @@ Now any app that doesn't bypass Rethink will use your chosen blocklists, denying
 access to malicious URLs.
 
 The HAGEZI blocklists are respected for being updated frequently. There are
-different levels with MULTI PRO++ (HAGEZI) being the highest and 4 other lest
-strict levels.
+different levels with `Ultimate (HAGEZI)` being the highest.
 
 ---
 
@@ -423,6 +412,32 @@ Settings explained:
   queries made by the app itself, back into the encrypted tunnel through the
   loopback device.
 
+**Proxy**
+
+- **Do not randomize WireGuard listen port**: Keep WireGuard listen ports fixed
+  (no randomization) in Advanced mode. Enabling it makes the tunnel’s local UDP
+  port predictable, which is useful for port-forwarding, firewall rules, and any
+  setup where the device must be reachable on a known port.
+
+- **Endpoint-Independent mapping**: When enabled, UDP sockets maintain a fixed
+  address and port for all destinations. Turn this on for UDP-based
+  P2P/NAT-traversal scenarios: it keeps one stable UDP mapping for a socket
+  across multiple destinations, improving compatibility with hole punching /
+  ICE-style flows.
+
+**TCP / IP**
+
+- **Shorter TCP keep alive**: Quickly close TCP sockets with no recent activity.
+  Use when the device is accumulating lots of idle TCP connections and you’d
+  rather reclaim resources quickly (and accept that some apps may need to
+  reconnect more often).
+
+- **Idle timeout**: Close idle TCP and UDP sockets after this duration. It
+  closes TCP/UDP sockets that have had no traffic for the configured duration,
+  which reduces the amount of long-lived idle state your device (and the network
+  path) has to keep around. I am testing **5 minutes** now, lower is more
+  aggressive, set it higher if you notice reconnect churn or app breakage.
+
 | Setting                       | Function                                                                   | When to Use                                               |
 | ----------------------------- | -------------------------------------------------------------------------- | --------------------------------------------------------- |
 | Loopback Proxy Forwarder Apps | Route proxy-forwarder app traffic back into Rethink VPN tunnel             | When you want consistent VPN/privacy coverage for proxies |
@@ -433,6 +448,8 @@ NOTE: The above settings are disabled by default because some are experimental
 and can easily break functionality. I have found that the settings below give
 the most functionality without breakage 👇️:
 
+### Configuring Networking
+
 `Configure -> Network`:
 
 - Set `Use all available networks` to ON. This enables Wifi and mobile data to
@@ -441,9 +458,23 @@ the most functionality without breakage 👇️:
 - **Set your IP version**: The default is `IPv4`, you can choose between
   `IPv6 (experimental)` and `Auto (experimental)`.
 
+- **Stall on network loss**: Not a full VPN kill switch, but kill-switch-like on
+  outages: when the device has no connectivity, Rethink stalls all traffic so
+  apps can’t keep retrying or leaking during the gap.
+
+- **Meter mobile networks**: It reduces mobile data usage by telling Android/app
+  code that cellular is a metered link, so background transfers and heavy
+  downloads are more likely to wait for Wi‑Fi. (Optional)
+
+- **Connection change policy**:
+  - Most users should leave set to **Auto** because it aims to react to
+    _important_ changes without trashing the tunnel on noisy events.
+  - If connectivity doesn’t recover fast on transitions: try **Sensitive**.
+  - If Rethink seems to flap/restart too often on your network: try **Relaxed**.
+
 - **Choose fallback DNS**: When your user-preferred DNS is not reachable,
   fallback DNS will used.
-  - With the F-Droid version in `Configure -> DNS -> ADVANCED`. You can enable
+  - In `Configure -> DNS -> ADVANCED`. You can enable
     `Use fallback DNS as bypass`, which always uses fallback DNS for bypassed
     apps, domains, and IPs.
 
@@ -456,7 +487,7 @@ the most functionality without breakage 👇️:
 
 ---
 
-### Firewall
+### Configuring the Firewall
 
 `Configure -> Firewall -> Universal firewall rules` and set the following to ON:
 
@@ -465,6 +496,31 @@ the most functionality without breakage 👇️:
 - `Block when DNS is bypassed`
 
 - `Block port 80 (insecure HTTP) traffic`
+
+**Optional**
+
+- `Block on metered (mobile) network`: Use if you have limited data and want to
+  do the heavy lifting with WiFi.
+
+- `Block when source app is unknown`: Enable this for a stricter, ‘block
+  unattributed traffic’ posture; if anything breaks (missing notifications /
+  random app connectivity issues), disable it first and check logs for ‘unknown’
+  blocks.
+
+- Use `Block UDP except DNS and NTP` when the goal is to make the device behave
+  like a “TCP-only internet client” (plus the minimum UDP needed for name
+  resolution and time sync), which can reduce attack surface and shut down whole
+  classes of UDP-based bypass channels. Avoid if you need UDP-heavy apps: WebRTC
+  voice/video, many online games, some VPNs, some streaming/live calls, device
+  discovery, and some enterprise tooling will degrade or fail when UDP is
+  broadly blocked.
+
+- `Block all except bypassed apps and IPs`: All traffic is blocked to everything
+  **except** apps you've marked as bypassed (_Bypass Universal_, _Bypass DNS &
+  Firewall_, _Isolate_) and IPs you've explicitly trusted/allowed. Expect
+  breakage until bypasses are configured. If an app is "bypassed" Rethink is
+  still able to monitor/apply app-specific rules, whereas exclude removes the
+  app from Rethink's control entirely (last resort).
 
 You can get more restrictive from here, but it will take some manual
 intervention to get everything working correctly.
@@ -500,7 +556,7 @@ blocked by the firewall.
 
 ---
 
-### Apps that Don't work
+### Apps that Don't Work
 
 I will use Reddit as an example, the process is the same for any app. Reddit’s
 app and website rely on multiple third-party services and external domains
@@ -796,7 +852,7 @@ network access to every app. We will then go through and only enable networking
 for the apps that we need and trust.
 
 <details>
-<summary> ✔️ Click to Expand Android Privacy Tips for the paranoid </summary>
+<summary> ✔️ Android Privacy Tips for the paranoid </summary>
 
 If you don't like the idea of someone forcing you to unlock your phone so they
 can sift through your data:
@@ -966,7 +1022,24 @@ that lets you support devs without PII.
 
 ---
 
+#### Default Search Engines
+
+**Startpage**: Advertised as the world's most private search engine. "Startpage
+delivers Google search results via their proprietary personal data protection
+technology."
+
+- [Startpage](https://www.startpage.com/)
+
+- To add Startpage as a search engine, add
+  `https://www.startpage.com/sp/search?query=%s`.
+
 **SearXNG**
+
+> ❗️ NOTE: SearXNGs google results are not working as of 11-17-25 and haven't
+> for a while now leading to bad results being returned for most instances. It's
+> my understanding this is because Google is actively blocking automated
+> requests from SearXNG. Devs sometimes publish patches or workarounds, but
+> these are quickly blocked when Google changes their back-end.
 
 While we're on the topic of browsers, it's worth considering a privacy-focused
 metasearch engine like SearXNG. SearXNG anonymizes your search queries and
@@ -1000,6 +1073,8 @@ solved by using a different instance.
 > best option—though it requires more setup. Using public instances is a great
 > way to get started and improve privacy compared to regular search engines.
 
+---
+
 **Browser compartmentalization** is a technique where you use multiple browsers
 to separate different types of online activities. Instead of doing all browsing
 in a single browser, you dedicate specific browsers to distinct tasks, for
@@ -1026,7 +1101,7 @@ the major browsers and browser engines:
 ---
 
 <details>
-<summary> ✔️ Click to Expand uBlock Guide </summary>
+<summary> ✔️ uBlock Guide </summary>
 
 ## uBlock Origin
 
@@ -1654,7 +1729,3 @@ can click on to get the address.
 - [Sypware Watchdog](https://spyware.neocities.org/)
 
 </details>
-
-```nix repl
-"goodbye ${ { d = "world";}.d}"
-```

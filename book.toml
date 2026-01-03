@@ -36,12 +36,14 @@ inject_all = true
 # Output
 [output.html]
 default-theme = "coal"
-preferred-dark-theme = "navy"
-site-url = "https://saylesss88.github.io/privacy-book/"
+preferred-dark-theme = "coal"
+# site-url = "https://saylesss88.github.io/privacy-book/"
+site-url = "https://mako088.github.io/"
 additional-css = [
 	"theme/header-buttons.css",
 	"theme/css/kanagawa-code.css",
-	"theme/css/catppuccin-mocha-code.css",
+	# "theme/css/catppuccin-mocha-code.css",
+	"theme/css/tokyo-night-code.css",
 ]
 additional-js = ["theme/header-buttons.js", "theme/nix_http.js"]
 git-repository-url = "https://github.com/saylesss88/privacy-book.git"
@@ -61,13 +63,16 @@ header_tags = "Popular tags"
 
 # Optional: have the generated theme/kanagawa.css import another palette
 # This path is relative to the compiled book root, same as additional-css.
-css_import = "/assets/catppuccin-mocha.css"
+# css_import = "/assets/catppuccin-mocha.css"
+css_import = "/assets/tokyo-night.css"
 
 card_layout = "wide"
+
+support_footer = true
 
 # Optional: if true, the preprocessor will NOT write theme/kanagawa.css
 disable_builtin_css = false
 
-[preprocessor.nix-repl]
-command = "mdbook-nix-repl"
-renderers = ["html"]
+# [preprocessor.nix-repl]
+# command = "mdbook-nix-repl"
+# renderers = ["html"]
